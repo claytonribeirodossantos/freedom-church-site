@@ -1,0 +1,81 @@
+---
+import PageHero from '../PageHero.astro';
+import Section from '../Section.astro';
+import SectionHeader from '../SectionHeader.astro';
+import { getLangFromUrl, localizedPath } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+
+const items = {
+  pt: [
+    { icon: '✚', t: 'Batismo', d: 'Selamos publicamente sua decisão de seguir Jesus. Realizamos batismos algumas vezes ao ano após um curso preparatório.' },
+    { icon: '♥', t: 'Casamento', d: 'Cerimônias de casamento cristão para membros e visitantes regulares. Inclui aconselhamento pré-marital.' },
+    { icon: '✦', t: 'Apresentação de filhos', d: 'Cerimônia de dedicação dos seus filhos ao Senhor, com bênção pastoral e oração da igreja.' },
+    { icon: '✝', t: 'Aconselhamento pastoral', d: 'Conversa confidencial com um dos pastores para crises, dúvidas espirituais ou direção.' },
+    { icon: '☖', t: 'Visita pastoral', d: 'Visitamos enfermos, idosos e famílias em momentos de luto ou alegria. Solicite quando precisar.' },
+    { icon: '✠', t: 'Funeral / Memorial', d: 'Acompanhamos famílias enlutadas com cerimônia, oração e suporte espiritual.' },
+  ],
+  en: [
+    { icon: '✚', t: 'Baptism', d: 'We publicly seal your decision to follow Jesus. We hold baptisms a few times a year after a preparatory course.' },
+    { icon: '♥', t: 'Wedding', d: 'Christian wedding ceremonies for members and regular visitors. Includes pre-marital counseling.' },
+    { icon: '✦', t: 'Child dedication', d: 'A ceremony to dedicate your children to the Lord, with pastoral blessing and church prayer.' },
+    { icon: '✝', t: 'Pastoral counseling', d: 'A confidential conversation with a pastor for crises, spiritual questions, or direction.' },
+    { icon: '☖', t: 'Pastoral visit', d: 'We visit the sick, elderly, and families in moments of grief or joy. Request when you need.' },
+    { icon: '✠', t: 'Funeral / Memorial', d: 'We walk with grieving families through ceremony, prayer, and spiritual support.' },
+  ],
+  es: [
+    { icon: '✚', t: 'Bautismo', d: 'Sellamos públicamente tu decisión de seguir a Jesús. Realizamos bautismos algunas veces al año tras un curso preparatorio.' },
+    { icon: '♥', t: 'Boda', d: 'Ceremonias de boda cristiana para miembros y visitantes regulares. Incluye consejería prematrimonial.' },
+    { icon: '✦', t: 'Presentación de hijos', d: 'Ceremonia para dedicar a tus hijos al Señor, con bendición pastoral y oración de la iglesia.' },
+    { icon: '✝', t: 'Consejería pastoral', d: 'Conversación confidencial con un pastor para crisis, dudas espirituales o dirección.' },
+    { icon: '☖', t: 'Visita pastoral', d: 'Visitamos a los enfermos, ancianos y familias en momentos de duelo o alegría. Solicítalo cuando necesites.' },
+    { icon: '✠', t: 'Funeral / Memorial', d: 'Acompañamos a familias en duelo con ceremonia, oración y apoyo espiritual.' },
+  ],
+}[lang];
+
+const headings = {
+  pt: { what: 'O que oferecemos', request: 'Como solicitar', step1: 'Preencha o formulário de contato escolhendo o serviço.', step2: 'Um pastor entra em contato em até 48h.', step3: 'Agendamos uma conversa para entender e organizar.', cta: 'Solicitar agora', btn: 'Ir para Contato' },
+  en: { what: 'What we offer', request: 'How to request', step1: 'Fill out the contact form choosing the service.', step2: 'A pastor reaches out within 48h.', step3: 'We schedule a conversation to understand and organize.', cta: 'Request now', btn: 'Go to Contact' },
+  es: { what: 'Lo que ofrecemos', request: 'Cómo solicitar', step1: 'Llena el formulario de contacto eligiendo el servicio.', step2: 'Un pastor te contacta en hasta 48h.', step3: 'Agendamos una conversación para entender y organizar.', cta: 'Solicitar ahora', btn: 'Ir a Contacto' },
+}[lang];
+---
+
+<PageHero pageKey="pastoralServices" />
+
+<Section bg="light">
+  <SectionHeader eyebrow={headings.what} title={headings.what} />
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-ink-200 rounded-2xl overflow-hidden">
+    {items.map((it) => (
+      <div class="bg-ink-50 p-8 group hover:bg-ink-950 transition-colors duration-300">
+        <div class="text-3xl text-gold-500 mb-4">{it.icon}</div>
+        <h3 class="text-xl text-ink-950 group-hover:text-ink-50 transition-colors">{it.t}</h3>
+        <p class="mt-3 text-sm text-ink-600 group-hover:text-ink-300 leading-relaxed transition-colors">{it.d}</p>
+      </div>
+    ))}
+  </div>
+</Section>
+
+<Section bg="dark">
+  <div class="grid lg:grid-cols-12 gap-10 items-center">
+    <div class="lg:col-span-7">
+      <span class="eyebrow !text-gold-400">{headings.request}</span>
+      <h2 class="mt-4 text-3xl lg:text-4xl text-ink-50 leading-tight">{headings.request}</h2>
+      <ol class="mt-8 space-y-4">
+        {[headings.step1, headings.step2, headings.step3].map((s, i) => (
+          <li class="flex gap-4">
+            <span class="shrink-0 w-8 h-8 rounded-full bg-gold-500 text-ink-950 flex items-center justify-center font-display font-medium">
+              {i + 1}
+            </span>
+            <span class="pt-1 text-ink-200">{s}</span>
+          </li>
+        ))}
+      </ol>
+    </div>
+    <div class="lg:col-span-5 lg:text-right">
+      <a href={localizedPath(lang, '/contato')} class="btn btn-primary !bg-gold-500 !text-ink-950 hover:!bg-gold-400">
+        {headings.btn}
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</Section>

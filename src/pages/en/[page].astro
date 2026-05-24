@@ -1,0 +1,92 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AboutPageContent from '../../components/pages/AboutPageContent.astro';
+import ServicesPageContent from '../../components/pages/ServicesPageContent.astro';
+import SermonsPageContent from '../../components/pages/SermonsPageContent.astro';
+import EventsPageContent from '../../components/pages/EventsPageContent.astro';
+import MinistriesPageContent from '../../components/pages/MinistriesPageContent.astro';
+import GivePageContent from '../../components/pages/GivePageContent.astro';
+import NewHerePageContent from '../../components/pages/NewHerePageContent.astro';
+import PrayerPageContent from '../../components/pages/PrayerPageContent.astro';
+import ContactPageContent from '../../components/pages/ContactPageContent.astro';
+import LeadershipPageContent from '../../components/pages/LeadershipPageContent.astro';
+import LivePageContent from '../../components/pages/LivePageContent.astro';
+import KidsPageContent from '../../components/pages/KidsPageContent.astro';
+import YouthPageContent from '../../components/pages/YouthPageContent.astro';
+import GalleryPageContent from '../../components/pages/GalleryPageContent.astro';
+import ResourcesPageContent from '../../components/pages/ResourcesPageContent.astro';
+import PastoralServicesPageContent from '../../components/pages/PastoralServicesPageContent.astro';
+import NewsletterPageContent from '../../components/pages/NewsletterPageContent.astro';
+import PrivacyPageContent from '../../components/pages/PrivacyPageContent.astro';
+import TermsPageContent from '../../components/pages/TermsPageContent.astro';
+
+export function getStaticPaths() {
+  return [
+    { params: { page: 'sobre' }, props: { component: 'about' } },
+    { params: { page: 'cultos' }, props: { component: 'services' } },
+    { params: { page: 'pregacoes' }, props: { component: 'sermons' } },
+    { params: { page: 'eventos' }, props: { component: 'events' } },
+    { params: { page: 'ministerios' }, props: { component: 'ministries' } },
+    { params: { page: 'contribua' }, props: { component: 'give' } },
+    { params: { page: 'sou-novo-aqui' }, props: { component: 'newHere' } },
+    { params: { page: 'pedidos-de-oracao' }, props: { component: 'prayer' } },
+    { params: { page: 'contato' }, props: { component: 'contact' } },
+    { params: { page: 'lideranca' }, props: { component: 'leadership' } },
+    { params: { page: 'live' }, props: { component: 'live' } },
+    { params: { page: 'kids' }, props: { component: 'kids' } },
+    { params: { page: 'jovens' }, props: { component: 'youth' } },
+    { params: { page: 'galeria' }, props: { component: 'gallery' } },
+    { params: { page: 'recursos' }, props: { component: 'resources' } },
+    { params: { page: 'servicos-pastorais' }, props: { component: 'pastoralServices' } },
+    { params: { page: 'newsletter' }, props: { component: 'newsletter' } },
+    { params: { page: 'privacidade' }, props: { component: 'privacy' } },
+    { params: { page: 'termos' }, props: { component: 'terms' } },
+  ];
+}
+
+const { component } = Astro.props;
+
+const titlesEn: Record<string, string> = {
+  about: 'About',
+  services: 'Services',
+  sermons: 'Sermons',
+  events: 'Events',
+  ministries: 'Ministries',
+  give: 'Give',
+  newHere: "I'm New Here",
+  prayer: 'Prayer Requests',
+  contact: 'Contact',
+  leadership: 'Leadership',
+  live: 'Live',
+  kids: 'Freedom Kids',
+  youth: 'Freedom Youth',
+  gallery: 'Gallery',
+  resources: 'Resources',
+  pastoralServices: 'Pastoral Services',
+  newsletter: 'Newsletter',
+  privacy: 'Privacy',
+  terms: 'Terms',
+};
+---
+
+<BaseLayout title={titlesEn[component]}>
+  {component === 'about' && <AboutPageContent />}
+  {component === 'services' && <ServicesPageContent />}
+  {component === 'sermons' && <SermonsPageContent />}
+  {component === 'events' && <EventsPageContent />}
+  {component === 'ministries' && <MinistriesPageContent />}
+  {component === 'give' && <GivePageContent />}
+  {component === 'newHere' && <NewHerePageContent />}
+  {component === 'prayer' && <PrayerPageContent />}
+  {component === 'contact' && <ContactPageContent />}
+  {component === 'leadership' && <LeadershipPageContent />}
+  {component === 'live' && <LivePageContent />}
+  {component === 'kids' && <KidsPageContent />}
+  {component === 'youth' && <YouthPageContent />}
+  {component === 'gallery' && <GalleryPageContent />}
+  {component === 'resources' && <ResourcesPageContent />}
+  {component === 'pastoralServices' && <PastoralServicesPageContent />}
+  {component === 'newsletter' && <NewsletterPageContent />}
+  {component === 'privacy' && <PrivacyPageContent />}
+  {component === 'terms' && <TermsPageContent />}
+</BaseLayout>

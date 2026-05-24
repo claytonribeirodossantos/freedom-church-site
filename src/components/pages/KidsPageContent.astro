@@ -1,0 +1,96 @@
+---
+import PageHero from '../PageHero.astro';
+import Section from '../Section.astro';
+import SectionHeader from '../SectionHeader.astro';
+import { getLangFromUrl } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+
+const pillars = {
+  pt: [
+    { icon: '✦', t: 'Bíblia ensinada com criatividade', d: 'Histórias bíblicas com música, teatro e arte que prendem a atenção e marcam o coração.' },
+    { icon: '✚', t: 'Ambiente seguro', d: 'Equipe treinada, sistema de check-in com pulseira e protocolos de segurança em cada culto.' },
+    { icon: '♥', t: 'Diversão de verdade', d: 'Jogos, lanche, momentos de oração e amizades que duram. As crianças amam vir.' },
+  ],
+  en: [
+    { icon: '✦', t: 'Bible taught creatively', d: 'Bible stories with music, drama, and art that capture attention and mark the heart.' },
+    { icon: '✚', t: 'Safe environment', d: 'Trained team, check-in system with wristbands, and safety protocols at every service.' },
+    { icon: '♥', t: 'Real fun', d: 'Games, snacks, prayer moments, and friendships that last. Kids love coming.' },
+  ],
+  es: [
+    { icon: '✦', t: 'Biblia enseñada con creatividad', d: 'Historias bíblicas con música, teatro y arte que captan la atención y marcan el corazón.' },
+    { icon: '✚', t: 'Ambiente seguro', d: 'Equipo entrenado, sistema de check-in con pulseras y protocolos de seguridad en cada culto.' },
+    { icon: '♥', t: 'Diversión de verdad', d: 'Juegos, merienda, momentos de oración y amistades que duran. Los niños aman venir.' },
+  ],
+}[lang];
+
+const faq = {
+  pt: [
+    { q: 'Em que idade meu filho participa?', a: '0 a 11 anos, divididos em três turmas por faixa etária.' },
+    { q: 'Como funciona o check-in?', a: 'Você recebe uma pulseira com um código que combina com a do seu filho. Só você retira ele no final.' },
+    { q: 'É seguro?', a: 'Sim. Todos os voluntários passam por triagem e treinamento. Câmeras nas salas, banheiros monitorados e protocolo de emergência.' },
+    { q: 'E se for a primeira vez?', a: 'Chegue 15 minutos antes. Nossa equipe te recebe, apresenta o espaço e tira todas as dúvidas.' },
+  ],
+  en: [
+    { q: 'What age can my child join?', a: 'Ages 0–11, divided into three groups by age range.' },
+    { q: 'How does check-in work?', a: 'You receive a wristband with a code that matches your child\'s. Only you can pick them up at the end.' },
+    { q: 'Is it safe?', a: 'Yes. All volunteers go through screening and training. Cameras in rooms, monitored restrooms, and emergency protocol.' },
+    { q: 'What if it is our first time?', a: 'Arrive 15 minutes early. Our team welcomes you, shows the space, and answers all questions.' },
+  ],
+  es: [
+    { q: '¿A qué edad puede participar mi hijo?', a: 'De 0 a 11 años, divididos en tres grupos por edad.' },
+    { q: '¿Cómo funciona el check-in?', a: 'Recibes una pulsera con un código que combina con la de tu hijo. Solo tú lo retiras al final.' },
+    { q: '¿Es seguro?', a: 'Sí. Todos los voluntarios pasan por evaluación y entrenamiento. Cámaras en las salas, baños monitoreados y protocolo de emergencia.' },
+    { q: '¿Y si es la primera vez?', a: 'Llega 15 minutos antes. Nuestro equipo te recibe, muestra el espacio y aclara todas las dudas.' },
+  ],
+}[lang];
+
+const heading = {
+  pt: { pillars: 'Como cuidamos das suas crianças', faq: 'Perguntas dos pais', cta: 'Traga seu filho neste domingo', sub: 'Vamos te receber com tudo organizado.', btn: 'Visitar' },
+  en: { pillars: 'How we care for your children', faq: 'Parents\' questions', cta: 'Bring your child this Sunday', sub: 'We will welcome you with everything ready.', btn: 'Visit' },
+  es: { pillars: 'Cómo cuidamos a tus niños', faq: 'Preguntas de los padres', cta: 'Trae a tu hijo este domingo', sub: 'Te recibiremos con todo organizado.', btn: 'Visitar' },
+}[lang];
+---
+
+<PageHero pageKey="kids" />
+
+<Section bg="light">
+  <SectionHeader eyebrow={heading.pillars} title={heading.pillars} />
+  <div class="grid md:grid-cols-3 gap-6">
+    {pillars.map((p) => (
+      <div class="bg-ink-50 border border-ink-200 rounded-2xl p-8 hover:border-ink-950 hover:shadow-lg transition-all">
+        <div class="text-4xl text-gold-500 mb-4">{p.icon}</div>
+        <h3 class="text-xl text-ink-950">{p.t}</h3>
+        <p class="mt-3 text-sm text-ink-600 leading-relaxed">{p.d}</p>
+      </div>
+    ))}
+  </div>
+</Section>
+
+<Section bg="tint">
+  <SectionHeader eyebrow={heading.faq} title={heading.faq} />
+  <div class="max-w-3xl space-y-3">
+    {faq.map((f) => (
+      <details class="group bg-ink-50 rounded-xl border border-ink-200 overflow-hidden">
+        <summary class="cursor-pointer p-5 lg:p-6 flex items-center justify-between gap-4 font-medium text-ink-950">
+          {f.q}
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" class="transition-transform group-open:rotate-180 shrink-0">
+            <path d="m5 8 5 5 5-5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </summary>
+        <div class="px-5 lg:px-6 pb-5 text-ink-700 leading-relaxed">{f.a}</div>
+      </details>
+    ))}
+  </div>
+</Section>
+
+<Section bg="dark">
+  <div class="text-center max-w-2xl mx-auto">
+    <h2 class="text-3xl lg:text-4xl text-ink-50 leading-tight">{heading.cta}</h2>
+    <p class="mt-4 text-ink-300">{heading.sub}</p>
+    <a href="#" class="mt-8 inline-flex btn btn-primary !bg-gold-500 !text-ink-950 hover:!bg-gold-400">
+      {heading.btn}
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</Section>

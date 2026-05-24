@@ -1,0 +1,61 @@
+---
+import PageHero from '../PageHero.astro';
+import Section from '../Section.astro';
+import { getLangFromUrl } from '../../i18n/utils';
+import { church } from '../../data/church';
+
+const lang = getLangFromUrl(Astro.url);
+
+const labels = {
+  pt: { follow: 'Seguir', team: 'Equipe que serve com a gente', teamDesc: 'A Freedom Church é sustentada por voluntários generosos em cada área. Quer fazer parte?', joinUs: 'Quero servir' },
+  en: { follow: 'Follow', team: 'The team that serves with us', teamDesc: 'Freedom Church is sustained by generous volunteers in every area. Want to join?', joinUs: 'I want to serve' },
+  es: { follow: 'Seguir', team: 'El equipo que sirve con nosotros', teamDesc: 'Freedom Church se sostiene por voluntarios generosos en cada área. ¿Quieres formar parte?', joinUs: 'Quiero servir' },
+}[lang];
+---
+
+<PageHero pageKey="leadership" />
+
+<Section bg="light">
+  <div class="grid lg:grid-cols-2 gap-12 lg:gap-16">
+    {church.pastors.map((p, i) => (
+      <article class="group">
+        <div class="relative aspect-[4/5] rounded-3xl overflow-hidden bg-ink-100">
+          <div
+            class="absolute inset-0"
+            style={`background: linear-gradient(135deg, ${i === 0 ? '#0F0F0E, #2D2616' : '#1C1917, #4A3E25'});`}
+          ></div>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span class="font-display text-7xl lg:text-8xl text-gold-500/40">
+              {p.name.split(' ').map((n) => n[0]).join('').slice(0, 2)}
+            </span>
+          </div>
+          <div class="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-ink-950 to-transparent">
+            <div class="text-xs uppercase tracking-widest text-gold-400 mb-1">{p.role[lang]}</div>
+            <div class="font-display text-3xl text-ink-50">{p.name}</div>
+          </div>
+        </div>
+        <p class="mt-6 text-lg text-ink-700 leading-relaxed">{p.bio[lang]}</p>
+        <a
+          href={p.instagram}
+          target="_blank"
+          rel="noopener"
+          class="mt-5 inline-flex items-center gap-2 text-sm font-medium text-gold-600 hover:text-gold-700 transition-colors"
+        >
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.72 3.72 0 0 1-1.38-.9 3.72 3.72 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16Z"/></svg>
+          {p.handle}
+        </a>
+      </article>
+    ))}
+  </div>
+</Section>
+
+<Section bg="dark">
+  <div class="text-center max-w-2xl mx-auto">
+    <h2 class="text-3xl lg:text-4xl text-ink-50 leading-tight">{labels.team}</h2>
+    <p class="mt-4 text-ink-300">{labels.teamDesc}</p>
+    <a href="#" class="mt-8 inline-flex btn btn-primary !bg-gold-500 !text-ink-950 hover:!bg-gold-400">
+      {labels.joinUs}
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</Section>

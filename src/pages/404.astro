@@ -1,0 +1,72 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getLangFromUrl, localizedPath } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+
+const copy = {
+  pt: {
+    eyebrow: 'Erro 404',
+    title: 'Essa página\nse perdeu.',
+    subtitle: 'Mas você não. Vamos te levar de volta para casa.',
+    home: 'Voltar para a Home',
+    contact: 'Falar com a gente',
+    verse: '"Tudo posso naquele que me fortalece." — Filipenses 4:13',
+  },
+  en: {
+    eyebrow: 'Error 404',
+    title: 'This page\ngot lost.',
+    subtitle: 'But you didn\'t. Let us take you back home.',
+    home: 'Back to Home',
+    contact: 'Talk to us',
+    verse: '"I can do all things through him who strengthens me." — Philippians 4:13',
+  },
+  es: {
+    eyebrow: 'Error 404',
+    title: 'Esta página\nse perdió.',
+    subtitle: 'Pero tú no. Te llevamos de vuelta a casa.',
+    home: 'Volver al inicio',
+    contact: 'Hablar con nosotros',
+    verse: '"Todo lo puedo en Cristo que me fortalece." — Filipenses 4:13',
+  },
+}[lang];
+const titleLines = copy.title.split('\n');
+---
+
+<BaseLayout title={copy.eyebrow}>
+  <section class="relative bg-ink-950 text-ink-50 min-h-[80vh] flex items-center overflow-hidden">
+    <div
+      class="absolute inset-0 opacity-40"
+      style="background-image: radial-gradient(circle at 30% 30%, rgba(201,169,97,0.25), transparent 60%);"
+    ></div>
+    <div
+      class="absolute inset-0 opacity-[0.04]"
+      style="background-image: linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px); background-size: 80px 80px;"
+    ></div>
+    <div class="container-page relative z-10 py-24 lg:py-32">
+      <div class="max-w-2xl">
+        <span class="eyebrow !text-gold-400">{copy.eyebrow}</span>
+        <h1 class="mt-6 font-display text-5xl sm:text-6xl lg:text-7xl font-medium leading-[1.05] tracking-tight">
+          {titleLines.map((line, i) => (
+            <span class="block">
+              {i === titleLines.length - 1
+                ? <span class="italic text-gold-400 font-light">{line}</span>
+                : line}
+            </span>
+          ))}
+        </h1>
+        <p class="mt-8 text-lg text-ink-300 max-w-xl leading-relaxed">{copy.subtitle}</p>
+        <div class="mt-10 flex flex-wrap gap-3">
+          <a href={localizedPath(lang, '/')} class="btn btn-primary !bg-gold-500 !text-ink-950 hover:!bg-gold-400">
+            {copy.home}
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href={localizedPath(lang, '/contato')} class="btn btn-ghost !text-ink-50 !border-ink-700 hover:!bg-ink-50 hover:!text-ink-950">
+            {copy.contact}
+          </a>
+        </div>
+        <p class="mt-12 font-display italic text-gold-400/80 text-sm">{copy.verse}</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

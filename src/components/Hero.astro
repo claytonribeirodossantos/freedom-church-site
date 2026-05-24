@@ -1,0 +1,70 @@
+---
+import { getLangFromUrl, useTranslations, localizedPath } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const title = t('hero.title');
+---
+
+<section class="relative overflow-hidden bg-ink-950 text-ink-50 min-h-[88vh] flex items-center">
+  <div class="absolute inset-0">
+    <div
+      class="absolute inset-0 opacity-40"
+      style="background-image: radial-gradient(circle at 30% 30%, rgba(201,169,97,0.25), transparent 60%), radial-gradient(circle at 80% 70%, rgba(201,169,97,0.10), transparent 50%);"
+    >
+    </div>
+    <div
+      class="absolute inset-0 opacity-[0.04]"
+      style="background-image: linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px); background-size: 80px 80px;"
+    >
+    </div>
+  </div>
+
+  <div class="container-page relative z-10 py-24 lg:py-32">
+    <div class="max-w-3xl">
+      <span class="eyebrow !text-gold-400 animate-(--animate-fade-in)">
+        {t('hero.eyebrow')}
+      </span>
+
+      <h1
+        class="mt-6 font-display text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-medium leading-[1.02] tracking-tight text-ink-50 animate-(--animate-fade-up)"
+        style="animation-delay: 100ms"
+      >
+        {title.split('\n').map((line, i) => (
+          <span class="block">
+            {i === title.split('\n').length - 1
+              ? <span class="italic text-gold-400 font-light">{line}</span>
+              : line}
+          </span>
+        ))}
+      </h1>
+
+      <p
+        class="mt-8 text-lg lg:text-xl text-ink-300 max-w-xl leading-relaxed animate-(--animate-fade-up)"
+        style="animation-delay: 250ms"
+      >
+        {t('hero.subtitle')}
+      </p>
+
+      <div
+        class="mt-10 flex flex-wrap gap-3 animate-(--animate-fade-up)"
+        style="animation-delay: 400ms"
+      >
+        <a href={localizedPath(lang, '/sou-novo-aqui')} class="btn btn-primary !bg-gold-500 !text-ink-950 hover:!bg-gold-400">
+          {t('hero.cta.primary')}
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#" class="btn btn-ghost !text-ink-50 !border-ink-700 hover:!bg-ink-50 hover:!text-ink-950">
+          <svg width="14" height="14" fill="currentColor"><path d="M2 1.5v11l9-5.5z"/></svg>
+          {t('hero.cta.secondary')}
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 text-ink-500 animate-bounce">
+    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M10 4v12m0 0-4-4m4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+</section>

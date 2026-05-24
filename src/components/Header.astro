@@ -1,0 +1,108 @@
+---
+import { getLangFromUrl, useTranslations, localizedPath } from '../i18n/utils';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const nav = [
+  { key: 'nav.about' as const, href: '/sobre' },
+  { key: 'nav.services' as const, href: '/cultos' },
+  { key: 'nav.sermons' as const, href: '/pregacoes' },
+  { key: 'nav.events' as const, href: '/eventos' },
+  { key: 'nav.ministries' as const, href: '/ministerios' },
+  { key: 'nav.give' as const, href: '/contribua' },
+];
+
+const liveLabel = { pt: 'Ao vivo', en: 'Live', es: 'En vivo' }[lang];
+---
+
+<header class="sticky top-0 z-40 bg-ink-50/80 backdrop-blur-md border-b border-ink-200/60">
+  <div class="container-page flex items-center justify-between h-16 lg:h-20">
+    <a href={localizedPath(lang, '/')} class="flex items-center gap-2 group">
+      <span
+        class="font-display text-xl lg:text-2xl font-semibold tracking-tight text-ink-950 group-hover:text-gold-600 transition-colors"
+      >
+        Freedom <span class="text-gold-500">Church</span>
+      </span>
+    </a>
+
+    <nav class="hidden lg:flex items-center gap-7">
+      {nav.map((item) => (
+        <a
+          href={localizedPath(lang, item.href)}
+          class="text-sm font-medium text-ink-700 hover:text-ink-950 transition-colors"
+        >
+          {t(item.key)}
+        </a>
+      ))}
+      <a
+        href={localizedPath(lang, '/live')}
+        class="inline-flex items-center gap-1.5 text-sm font-medium text-ink-700 hover:text-ink-950 transition-colors"
+      >
+        <span class="relative flex w-2 h-2">
+          <span class="absolute inline-flex w-full h-full rounded-full bg-red-500 opacity-75 animate-ping"></span>
+          <span class="relative inline-flex w-2 h-2 rounded-full bg-red-500"></span>
+        </span>
+        {liveLabel}
+      </a>
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <LanguageSwitcher />
+      <a
+        href={localizedPath(lang, '/sou-novo-aqui')}
+        class="hidden md:inline-flex btn btn-primary text-sm py-2.5 px-5"
+      >
+        {t('nav.newHere')}
+      </a>
+      <button
+        type="button"
+        class="lg:hidden p-2 -mr-2 text-ink-900"
+        aria-label="Menu"
+        data-mobile-menu-toggle
+      >
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div
+    class="lg:hidden hidden border-t border-ink-200/60 bg-ink-50"
+    data-mobile-menu
+  >
+    <nav class="container-page py-4 flex flex-col gap-1">
+      {nav.map((item) => (
+        <a
+          href={localizedPath(lang, item.href)}
+          class="py-3 text-base font-medium text-ink-800 hover:text-gold-600 transition-colors"
+        >
+          {t(item.key)}
+        </a>
+      ))}
+      <a
+        href={localizedPath(lang, '/live')}
+        class="py-3 inline-flex items-center gap-2 text-base font-medium text-ink-800 hover:text-gold-600 transition-colors"
+      >
+        <span class="w-2 h-2 rounded-full bg-red-500"></span>
+        {liveLabel}
+      </a>
+      <a
+        href={localizedPath(lang, '/sou-novo-aqui')}
+        class="mt-2 btn btn-primary"
+      >
+        {t('nav.newHere')}
+      </a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector('[data-mobile-menu-toggle]');
+  const menu = document.querySelector('[data-mobile-menu]');
+  toggle?.addEventListener('click', () => {
+    menu?.classList.toggle('hidden');
+  });
+</script>

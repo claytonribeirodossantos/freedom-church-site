@@ -1,0 +1,56 @@
+---
+import PageHero from '../PageHero.astro';
+import Section from '../Section.astro';
+import { getLangFromUrl } from '../../i18n/utils';
+import { church } from '../../data/church';
+
+const lang = getLangFromUrl(Astro.url);
+
+const labels = {
+  pt: { now: 'Estamos no ar', off: 'No momento estamos offline', nextLabel: 'Próximo culto', nextWhen: 'Domingo às 10h30', join: 'Toque o sino no YouTube e seja avisado quando entrarmos ao vivo.', subscribe: 'Inscrever no canal', recent: 'Último culto disponível', share: 'Compartilhe', invite: 'Convide alguém', message: 'Olá! Estamos ao vivo na Freedom Church. Venha adorar com a gente:' },
+  en: { now: 'We are live', off: "We're currently offline", nextLabel: 'Next service', nextWhen: 'Sunday at 10:30 AM', join: 'Ring the bell on YouTube and get notified when we go live.', subscribe: 'Subscribe to channel', recent: 'Latest service', share: 'Share', invite: 'Invite someone', message: 'Hi! We are live at Freedom Church. Come worship with us:' },
+  es: { now: 'Estamos en vivo', off: 'En este momento estamos fuera de línea', nextLabel: 'Próximo culto', nextWhen: 'Domingo a las 10:30 AM', join: 'Toca la campana en YouTube y recibe aviso cuando estemos en vivo.', subscribe: 'Suscribirse al canal', recent: 'Último culto disponible', share: 'Compartir', invite: 'Invita a alguien', message: '¡Hola! Estamos en vivo en Freedom Church. Ven a adorar con nosotros:' },
+}[lang];
+---
+
+<PageHero pageKey="live" />
+
+<Section bg="light">
+  <div class="max-w-5xl mx-auto">
+    <div class="aspect-video rounded-2xl overflow-hidden bg-ink-950 shadow-2xl">
+      <iframe
+        class="w-full h-full"
+        src={`https://www.youtube.com/embed/live_stream?channel=UC&autoplay=0&rel=0`}
+        title="Freedom Church Live"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <div class="mt-6 grid sm:grid-cols-2 gap-4">
+      <div class="bg-ink-100 rounded-xl p-5">
+        <div class="text-xs uppercase tracking-widest text-gold-600 mb-2">{labels.nextLabel}</div>
+        <div class="font-display text-2xl text-ink-950">{labels.nextWhen}</div>
+        <p class="mt-2 text-sm text-ink-600 leading-relaxed">{labels.join}</p>
+        <a href={church.social.youtube} target="_blank" rel="noopener" class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-gold-600 hover:text-gold-700">
+          {labels.subscribe}
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <div class="bg-ink-950 text-ink-50 rounded-xl p-5">
+        <div class="text-xs uppercase tracking-widest text-gold-400 mb-2">{labels.invite}</div>
+        <p class="text-sm text-ink-300 leading-relaxed">{labels.message}</p>
+        <a
+          href={`https://wa.me/?text=${encodeURIComponent(labels.message + ' https://ourfreedomchurch.com/live')}`}
+          target="_blank"
+          rel="noopener"
+          class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-gold-400 hover:text-gold-300"
+        >
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.4-.1-.6.1l-.9 1c-.2.2-.3.3-.6.1-.3-.1-1.2-.4-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.7-.8c.1-.1.2-.3.1-.4-.1-.1-.6-1.5-.9-2-.2-.5-.5-.4-.6-.4h-.5c-.2 0-.4 0-.7.3-.2.3-.9.9-.9 2.2 0 1.3.9 2.5 1.1 2.7.1.2 1.9 2.9 4.6 4.1 1.8.8 2.5.9 3.5.8.6-.1 1.7-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.1-.3-.2-.6-.3ZM12 .5C5.7.5.5 5.7.5 12c0 2 .5 4 1.5 5.7L.5 23.5l5.9-1.5c1.7.9 3.6 1.4 5.6 1.4 6.3 0 11.5-5.2 11.5-11.5S18.3.5 12 .5Zm0 21c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7.9.9-3.6-.2-.4c-.9-1.5-1.4-3.3-1.4-5.1C2.2 6.7 6.6 2.3 12 2.3S21.8 6.7 21.8 12 17.4 21.5 12 21.5Z"/></svg>
+          {labels.share} WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+</Section>

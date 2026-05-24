@@ -1,0 +1,76 @@
+---
+import PageHero from '../PageHero.astro';
+import Section from '../Section.astro';
+import { getLangFromUrl } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+
+const albums = {
+  pt: [
+    { tag: 'Conferência', title: 'Liberdade 2025', date: 'Set 2025', count: 24 },
+    { tag: 'Batismos', title: 'Batismos de outono', date: 'Out 2025', count: 18 },
+    { tag: 'Jovens', title: 'Retiro Freedom Youth', date: 'Jul 2025', count: 32 },
+    { tag: 'Família', title: 'Almoço da família', date: 'Jun 2025', count: 16 },
+    { tag: 'Ação social', title: 'Páscoa no bairro', date: 'Abr 2025', count: 28 },
+    { tag: 'Casais', title: 'Encontro de casais', date: 'Mar 2025', count: 14 },
+  ],
+  en: [
+    { tag: 'Conference', title: 'Freedom 2025', date: 'Sep 2025', count: 24 },
+    { tag: 'Baptisms', title: 'Fall baptisms', date: 'Oct 2025', count: 18 },
+    { tag: 'Youth', title: 'Freedom Youth Retreat', date: 'Jul 2025', count: 32 },
+    { tag: 'Family', title: 'Family lunch', date: 'Jun 2025', count: 16 },
+    { tag: 'Outreach', title: 'Easter in the neighborhood', date: 'Apr 2025', count: 28 },
+    { tag: 'Couples', title: 'Couples gathering', date: 'Mar 2025', count: 14 },
+  ],
+  es: [
+    { tag: 'Conferencia', title: 'Libertad 2025', date: 'Sep 2025', count: 24 },
+    { tag: 'Bautismos', title: 'Bautismos de otoño', date: 'Oct 2025', count: 18 },
+    { tag: 'Jóvenes', title: 'Retiro Freedom Youth', date: 'Jul 2025', count: 32 },
+    { tag: 'Familia', title: 'Almuerzo familiar', date: 'Jun 2025', count: 16 },
+    { tag: 'Acción social', title: 'Pascua en el barrio', date: 'Abr 2025', count: 28 },
+    { tag: 'Parejas', title: 'Encuentro de parejas', date: 'Mar 2025', count: 14 },
+  ],
+}[lang];
+
+const labels = {
+  pt: { view: 'Ver álbum', photos: 'fotos', follow: 'Veja mais no nosso Instagram' },
+  en: { view: 'View album', photos: 'photos', follow: 'See more on our Instagram' },
+  es: { view: 'Ver álbum', photos: 'fotos', follow: 'Ve más en nuestro Instagram' },
+}[lang];
+
+const gradients = [
+  'linear-gradient(135deg, #2D2616, #050505)',
+  'linear-gradient(135deg, #3F3F46, #1C1917)',
+  'linear-gradient(135deg, #4A3E25, #2D2616)',
+  'linear-gradient(135deg, #1C1917, #0F0F0E)',
+  'linear-gradient(135deg, #6B5832, #2D2616)',
+  'linear-gradient(135deg, #2D2616, #4A3E25)',
+];
+---
+
+<PageHero pageKey="gallery" />
+
+<Section bg="light">
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {albums.map((a, i) => (
+      <article class="group cursor-pointer">
+        <div class="relative aspect-[4/5] rounded-2xl overflow-hidden">
+          <div class="absolute inset-0" style={`background: ${gradients[i % gradients.length]};`}></div>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span class="font-display text-6xl text-gold-500/30">{String(a.count).padStart(2, '0')}</span>
+          </div>
+          <div class="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-ink-950 to-transparent">
+            <div class="text-xs uppercase tracking-widest text-gold-400 mb-1">{a.tag}</div>
+            <div class="font-display text-2xl text-ink-50">{a.title}</div>
+            <div class="mt-1 text-xs text-ink-300">{a.date} · {a.count} {labels.photos}</div>
+          </div>
+          <div class="absolute inset-0 bg-ink-950/0 group-hover:bg-ink-950/30 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+            <span class="bg-gold-500 text-ink-950 px-4 py-2 rounded-full text-sm font-medium">
+              {labels.view}
+            </span>
+          </div>
+        </div>
+      </article>
+    ))}
+  </div>
+</Section>

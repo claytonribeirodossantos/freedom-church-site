@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+import PageHero from '../PageHero.astro';
+import Section from '../Section.astro';
+import { getLangFromUrl } from '../../i18n/utils';
+import { formatMonthDay, pickLocalized } from '../../i18n/format';
+
+const lang = getLangFromUrl(Astro.url);
+const now = new Date();
+
+const events = (await getCollection('events'))
+  .filter((e) => e.data.date.valueOf() >= now.valueOf() - 24 * 60 * 60 * 1000)
+  .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
+
+const labels = {
+  pt: { save: 'Salvar no calendário', details: 'Detalhes', empty: 'Nenhum evento agendado no momento. Volte em breve!' },
+  en: { save: 'Save to calendar', details: 'Details', empty: 'No upcoming events. Check back soon!' },
+  es: { save: 'Guardar en el calendario', details: 'Detalles', empty: 'No hay eventos programados. ¡Vuelve pronto!' },
+}[lang];
+---
+
+<PageHero pageKey="events" />
+
+<Section bg="light">
+  {events.length === 0 ? (
+    <p class="text-center text-ink-500 py-12">{labels.empty}</p>
+  ) : (
+    <div class="flex flex-col gap-6">
+      {events.map((e) => {
+        const { day, month } = formatMonthDay(e.data.date, lang);
+        const title = pickLocalized(e.data, 'title', lang);
+        const desc = pickLocalized(e.data, 'description', lang);
+        return (
+          <article class="group bg-ink-50 border border-ink-200 rounded-2xl p-6 lg:p-8 flex flex-col md:flex-row gap-6 hover:border-ink-950 hover:shadow-xl transition-all">
+            <div class="md:w-32 shrink-0">
+              <div class="bg-ink-950 text-ink-50 rounded-xl px-4 py-3 text-center group-hover:bg-gold-500 group-hover:text-ink-950 transition-colors">
+                <div class="font-display text-2xl font-medium leading-none">{day}</div>
+                <div class="text-xs uppercase tracking-widest mt-1.5">{month}</div>
+              </div>
+            </div>
+            <div class="flex-1">
+              <div class="flex flex-wrap items-center gap-3 mb-2">
+                <span class="text-xs uppercase tracking-widest text-gold-600 font-medium">{e.data.tag}</span>
+                <span class="text-sm text-ink-500">{e.data.time} · {e.data.place}</span>
+              </div>
+              <h3 class="text-2xl text-ink-950 leading-tight">{title}</h3>
+              <p class="mt-3 text-ink-700 leading-relaxed">{desc}</p>
+              <div class="mt-5 flex gap-3">
+                <button class="text-sm font-medium text-ink-950 hover:text-gold-600 transition-colors inline-flex items-center gap-1">
+                  {labels.details}
+                  <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button class="text-sm font-medium text-ink-500 hover:text-ink-950 transition-colors">
+                  {labels.save}
+                </button>
+              </div>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  )}
+</Section>

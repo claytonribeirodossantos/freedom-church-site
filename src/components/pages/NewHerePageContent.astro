@@ -1,0 +1,73 @@
+---
+import PageHero from '../PageHero.astro';
+import Section from '../Section.astro';
+import { getLangFromUrl } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+
+const steps = {
+  pt: [
+    { n: '01', t: 'Chegue como quiser', d: 'Sem dress code. Sem expectativa. Use o que te faz bem.' },
+    { n: '02', t: 'Estacionamento fácil', d: 'Há voluntários para te receber e indicar tudo.' },
+    { n: '03', t: 'Pegue um café', d: 'Quinze minutos antes do culto começa a comunhão.' },
+    { n: '04', t: 'Curta o culto', d: 'Cerca de 80 minutos. Música, Palavra e oração.' },
+    { n: '05', t: 'Crianças cuidadas', d: 'Sala dos kids com equipe treinada e segura.' },
+    { n: '06', t: 'Conecte-se depois', d: 'Sem pressão. Quando estiver pronto, te apresentamos à família.' },
+  ],
+  en: [
+    { n: '01', t: 'Come as you are', d: 'No dress code. No expectations. Wear what feels right.' },
+    { n: '02', t: 'Easy parking', d: 'Volunteers are there to greet you and show you around.' },
+    { n: '03', t: 'Grab a coffee', d: 'Fifteen minutes before service the fellowship begins.' },
+    { n: '04', t: 'Enjoy the service', d: 'About 80 minutes. Music, the Word and prayer.' },
+    { n: '05', t: 'Kids well cared for', d: 'Kids room with a trained and safe team.' },
+    { n: '06', t: 'Connect afterward', d: 'No pressure. When you are ready, we introduce you to the family.' },
+  ],
+  es: [
+    { n: '01', t: 'Ven como eres', d: 'Sin código de vestimenta. Sin expectativas. Usa lo que te haga bien.' },
+    { n: '02', t: 'Estacionamiento fácil', d: 'Hay voluntarios para recibirte e indicarte todo.' },
+    { n: '03', t: 'Toma un café', d: 'Quince minutos antes del culto empieza la comunión.' },
+    { n: '04', t: 'Disfruta el culto', d: 'Cerca de 80 minutos. Música, Palabra y oración.' },
+    { n: '05', t: 'Niños bien cuidados', d: 'Sala infantil con equipo entrenado y seguro.' },
+    { n: '06', t: 'Conéctate después', d: 'Sin presión. Cuando estés listo, te presentamos a la familia.' },
+  ],
+}[lang];
+
+const labels = {
+  pt: { what: 'O que esperar', cta: 'Quer que avisemos que você vem?', sub: 'Mandamos um WhatsApp lembrando do horário e te recebemos pessoalmente.', btn: 'Avise que vou', skip: 'Prefiro chegar de surpresa' },
+  en: { what: 'What to expect', cta: 'Want us to know you are coming?', sub: 'We send a WhatsApp reminder and welcome you in person.', btn: 'Let them know', skip: 'I will surprise you' },
+  es: { what: 'Qué esperar', cta: '¿Quieres que sepamos que vienes?', sub: 'Te enviamos un recordatorio por WhatsApp y te recibimos en persona.', btn: 'Avísales que voy', skip: 'Prefiero llegar de sorpresa' },
+}[lang];
+---
+
+<PageHero pageKey="newHere" />
+
+<Section bg="light">
+  <div class="max-w-2xl mb-12">
+    <span class="eyebrow">{labels.what}</span>
+    <h2 class="mt-4 text-3xl lg:text-4xl text-ink-950 leading-tight">{labels.what}</h2>
+  </div>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {steps.map((s) => (
+      <div class="bg-ink-50 border border-ink-200 rounded-2xl p-6 hover:border-ink-950 hover:shadow-lg transition-all">
+        <div class="text-gold-500 font-display text-3xl font-light mb-3">{s.n}</div>
+        <h3 class="text-lg text-ink-950">{s.t}</h3>
+        <p class="mt-2 text-sm text-ink-600 leading-relaxed">{s.d}</p>
+      </div>
+    ))}
+  </div>
+</Section>
+
+<Section bg="dark">
+  <div class="text-center max-w-2xl mx-auto">
+    <h2 class="text-3xl lg:text-4xl text-ink-50 leading-tight">{labels.cta}</h2>
+    <p class="mt-4 text-ink-300">{labels.sub}</p>
+    <div class="mt-8 flex flex-wrap gap-3 justify-center">
+      <a href="#" class="btn btn-primary !bg-gold-500 !text-ink-950 hover:!bg-gold-400">
+        {labels.btn}
+      </a>
+      <a href="#" class="btn btn-ghost !text-ink-50 !border-ink-700 hover:!bg-ink-50 hover:!text-ink-950">
+        {labels.skip}
+      </a>
+    </div>
+  </div>
+</Section>

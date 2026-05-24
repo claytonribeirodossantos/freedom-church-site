@@ -1,0 +1,27 @@
+---
+interface Props {
+  bg?: 'light' | 'dark' | 'tint';
+  spacing?: 'sm' | 'md' | 'lg';
+  class?: string;
+}
+
+const { bg = 'light', spacing = 'lg', class: extraClass = '' } = Astro.props;
+
+const bgClass = {
+  light: 'bg-ink-50',
+  dark: 'bg-ink-950 text-ink-50',
+  tint: 'bg-ink-100',
+}[bg];
+
+const spaceClass = {
+  sm: 'py-16',
+  md: 'py-20 lg:py-24',
+  lg: 'py-24 lg:py-32',
+}[spacing];
+---
+
+<section class:list={[bgClass, spaceClass, extraClass]}>
+  <div class="container-page">
+    <slot />
+  </div>
+</section>

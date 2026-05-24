@@ -1,0 +1,84 @@
+---
+import { getCollection } from 'astro:content';
+import PageHero from '../PageHero.astro';
+import Section from '../Section.astro';
+import { getLangFromUrl } from '../../i18n/utils';
+import { formatDate, pickLocalized } from '../../i18n/format';
+
+const lang = getLangFromUrl(Astro.url);
+
+const sermons = (await getCollection('sermons')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+const labels = {
+  pt: { all: 'Todas', filter: 'Filtrar por série', empty: 'Nenhuma pregação ainda. Em breve!' },
+  en: { all: 'All', filter: 'Filter by series', empty: 'No sermons yet. Coming soon!' },
+  es: { all: 'Todas', filter: 'Filtrar por serie', empty: 'Aún no hay prédicas. ¡Pronto!' },
+}[lang];
+
+const seriesList = Array.from(new Set(sermons.map((s) => s.data.series)));
+---
+
+<PageHero pageKey="sermons" />
+
+<Section bg="light">
+  {sermons.length === 0 ? (
+    <p class="text-center text-ink-500 py-12">{labels.empty}</p>
+  ) : (
+    <>
+      <div class="flex flex-wrap items-center gap-3 mb-12">
+        <span class="text-sm text-ink-600 mr-2">{labels.filter}:</span>
+        <button class="px-4 py-2 rounded-full text-sm border border-ink-950 bg-ink-950 text-ink-50">
+          {labels.all}
+        </button>
+        {seriesList.map((s) => (
+          <button class="px-4 py-2 rounded-full text-sm border border-ink-200 text-ink-700 hover:border-ink-950 hover:text-ink-950 transition-colors">
+            {s}
+          </button>
+        ))}
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {sermons.map((s) => {
+          const title = pickLocalized(s.data, 'title', lang);
+          const date = formatDate(s.data.date, lang);
+          const thumb = `https://i.ytimg.com/vi/${s.data.youtubeId}/hqdefault.jpg`;
+          const watchUrl = `https://www.youtube.com/watch?v=${s.data.youtubeId}`;
+          return (
+            <a href={watchUrl} target="_blank" rel="noopener" class="group block">
+              <div class="relative aspect-video rounded-xl overflow-hidden bg-ink-950">
+                <img
+                  src={thumb}
+                  alt={title}
+                  class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-ink-950/70 via-transparent to-transparent"></div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <div class="w-14 h-14 rounded-full bg-gold-500 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
+                    <svg width="20" height="20" fill="currentColor" class="text-ink-950 ml-0.5"><path d="M5 3v22l18-11z"/></svg>
+                  </div>
+                </div>
+                <div class="absolute top-3 left-3 text-xs uppercase tracking-widest text-gold-400 bg-ink-950/70 backdrop-blur px-2.5 py-1 rounded">
+                  {s.data.series}
+                </div>
+                <div class="absolute bottom-3 right-3 text-xs text-ink-50 bg-ink-950/70 backdrop-blur px-2.5 py-1 rounded">
+                  {s.data.duration}
+                </div>
+              </div>
+              <h3 class="mt-4 text-xl text-ink-950 group-hover:text-gold-600 transition-colors">
+                {title}
+              </h3>
+              <div class="mt-2 flex items-center gap-2 text-sm text-ink-500">
+                <span>{s.data.pastor}</span>
+                <span class="w-1 h-1 rounded-full bg-ink-400"></span>
+                <span>{date}</span>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </>
+  )}
+</Section>

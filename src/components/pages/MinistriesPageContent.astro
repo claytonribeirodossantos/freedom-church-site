@@ -1,0 +1,77 @@
+---
+import PageHero from '../PageHero.astro';
+import Section from '../Section.astro';
+import { getLangFromUrl } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+
+const ministries = {
+  pt: [
+    { icon: '✚', name: 'Kids', d: 'Crianças aprendendo a amar a Jesus com criatividade e segurança.' },
+    { icon: '✦', name: 'Jovens', d: 'A próxima geração vivendo uma fé real, no mundo real.' },
+    { icon: '♥', name: 'Casais', d: 'Encontros e mentoria para casamentos saudáveis e duradouros.' },
+    { icon: '✿', name: 'Mulheres', d: 'Mulheres que se fortalecem na Palavra e na irmandade.' },
+    { icon: '⬢', name: 'Homens', d: 'Homens vivendo integridade, paternidade e propósito.' },
+    { icon: '♪', name: 'Louvor', d: 'Adoração com excelência e coração diante do Senhor.' },
+    { icon: '☖', name: 'Células', d: 'Pequenos grupos nas casas para crescer juntos durante a semana.' },
+    { icon: '✝', name: 'Missões', d: 'Levar o amor de Cristo dentro e fora do bairro.' },
+  ],
+  en: [
+    { icon: '✚', name: 'Kids', d: 'Children learning to love Jesus with creativity and safety.' },
+    { icon: '✦', name: 'Youth', d: 'The next generation living a real faith in the real world.' },
+    { icon: '♥', name: 'Couples', d: 'Gatherings and mentoring for healthy and lasting marriages.' },
+    { icon: '✿', name: 'Women', d: 'Women growing strong in the Word and in sisterhood.' },
+    { icon: '⬢', name: 'Men', d: 'Men living integrity, fatherhood and purpose.' },
+    { icon: '♪', name: 'Worship', d: 'Worship with excellence and heart before the Lord.' },
+    { icon: '☖', name: 'Small groups', d: 'Small groups in homes to grow together during the week.' },
+    { icon: '✝', name: 'Missions', d: 'Bringing the love of Christ inside and beyond the neighborhood.' },
+  ],
+  es: [
+    { icon: '✚', name: 'Niños', d: 'Niños aprendiendo a amar a Jesús con creatividad y seguridad.' },
+    { icon: '✦', name: 'Jóvenes', d: 'La próxima generación viviendo una fe real, en el mundo real.' },
+    { icon: '♥', name: 'Parejas', d: 'Encuentros y mentoría para matrimonios sanos y duraderos.' },
+    { icon: '✿', name: 'Mujeres', d: 'Mujeres que se fortalecen en la Palabra y en la hermandad.' },
+    { icon: '⬢', name: 'Hombres', d: 'Hombres viviendo integridad, paternidad y propósito.' },
+    { icon: '♪', name: 'Alabanza', d: 'Adoración con excelencia y corazón delante del Señor.' },
+    { icon: '☖', name: 'Grupos pequeños', d: 'Grupos pequeños en casas para crecer juntos durante la semana.' },
+    { icon: '✝', name: 'Misiones', d: 'Llevar el amor de Cristo dentro y fuera del barrio.' },
+  ],
+}[lang];
+
+const labels = {
+  pt: { learn: 'Saiba mais', cta: 'Quer fazer parte de um ministério?', ctaSub: 'Conte para a gente onde você gostaria de servir.', ctaBtn: 'Quero servir' },
+  en: { learn: 'Learn more', cta: 'Want to be part of a ministry?', ctaSub: 'Tell us where you would like to serve.', ctaBtn: 'I want to serve' },
+  es: { learn: 'Saber más', cta: '¿Quieres formar parte de un ministerio?', ctaSub: 'Cuéntanos dónde te gustaría servir.', ctaBtn: 'Quiero servir' },
+}[lang];
+---
+
+<PageHero pageKey="ministries" />
+
+<Section bg="light">
+  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    {ministries.map((m) => (
+      <article class="bg-ink-50 border border-ink-200 rounded-2xl p-6 group hover:border-ink-950 hover:shadow-lg transition-all cursor-pointer">
+        <div class="text-3xl text-gold-500 mb-4 group-hover:scale-110 transition-transform inline-block">
+          {m.icon}
+        </div>
+        <h3 class="text-xl text-ink-950">{m.name}</h3>
+        <p class="mt-2 text-sm text-ink-600 leading-relaxed">{m.d}</p>
+        <div class="mt-4 text-sm font-medium text-gold-600 inline-flex items-center gap-1">
+          {labels.learn}
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </article>
+    ))}
+  </div>
+</Section>
+
+<Section bg="dark">
+  <div class="text-center max-w-2xl mx-auto">
+    <h2 class="text-3xl lg:text-4xl text-ink-50 leading-tight">{labels.cta}</h2>
+    <p class="mt-4 text-ink-300">{labels.ctaSub}</p>
+    <a href="#" class="mt-8 inline-flex btn btn-primary !bg-gold-500 !text-ink-950 hover:!bg-gold-400">
+      {labels.ctaBtn}
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</Section>

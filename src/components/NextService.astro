@@ -1,0 +1,48 @@
+---
+import { getLangFromUrl, useTranslations, localizedPath } from '../i18n/utils';
+import { church } from '../data/church';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const main = church.services[lang][0];
+
+const labels = {
+  pt: { when: 'Quando', where: 'Onde', addr: `${church.address.street}, ${church.address.city}, ${church.address.state}`, cta: 'Como chegar', first: 'Primeira visita?', firstDesc: 'Te esperamos com um café e um abraço. Sem julgamentos, sem cobranças.', more: 'Saiba mais' },
+  en: { when: 'When', where: 'Where', addr: `${church.address.street}, ${church.address.city}, ${church.address.state}`, cta: 'Get directions', first: 'First visit?', firstDesc: "We'll welcome you with coffee and a hug. No judgment, no pressure.", more: 'Learn more' },
+  es: { when: 'Cuándo', where: 'Dónde', addr: `${church.address.street}, ${church.address.city}, ${church.address.state}`, cta: 'Cómo llegar', first: '¿Primera visita?', firstDesc: 'Te esperamos con un café y un abrazo. Sin juicios, sin presiones.', more: 'Saber más' },
+}[lang];
+---
+
+<section class="container-page py-24 lg:py-32">
+  <div class="max-w-2xl">
+    <span class="eyebrow">{t('section.next.eyebrow')}</span>
+    <h2 class="mt-4 text-4xl lg:text-5xl text-ink-950">{t('section.next.title')}</h2>
+  </div>
+
+  <div class="mt-12 grid md:grid-cols-3 gap-px bg-ink-200 rounded-2xl overflow-hidden">
+    <div class="bg-ink-50 p-8 lg:p-10">
+      <div class="text-xs uppercase tracking-widest text-ink-500 mb-3">{labels.when}</div>
+      <div class="font-display text-3xl text-ink-950">{main.day}</div>
+      <div class="mt-1 text-2xl text-gold-600 font-display">{main.time}</div>
+    </div>
+    <div class="bg-ink-50 p-8 lg:p-10">
+      <div class="text-xs uppercase tracking-widest text-ink-500 mb-3">{labels.where}</div>
+      <div class="text-base text-ink-800 leading-relaxed">{labels.addr}</div>
+      <a href={church.address.googleMapsUrl} target="_blank" rel="noopener" class="inline-flex items-center gap-1 mt-3 text-sm text-gold-600 hover:text-gold-700 font-medium">
+        {labels.cta}
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+    <div class="bg-ink-950 text-ink-50 p-8 lg:p-10 flex flex-col justify-between">
+      <div>
+        <div class="text-xs uppercase tracking-widest text-ink-400 mb-3">{labels.first}</div>
+        <p class="text-base text-ink-200 leading-relaxed">{labels.firstDesc}</p>
+      </div>
+      <a href={localizedPath(lang, '/sou-novo-aqui')} class="mt-6 inline-flex items-center gap-1 text-sm text-gold-400 hover:text-gold-300 font-medium">
+        {labels.more}
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</section>

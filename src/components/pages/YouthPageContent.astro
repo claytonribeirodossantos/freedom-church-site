@@ -1,0 +1,91 @@
+---
+import PageHero from '../PageHero.astro';
+import Section from '../Section.astro';
+import SectionHeader from '../SectionHeader.astro';
+import { getLangFromUrl } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+
+const meta = {
+  pt: { age: '12 a 24 anos', when: 'Sexta-feira • 19h30', where: 'No nosso espaço em Kensington' },
+  en: { age: 'Ages 12–24', when: 'Friday • 7:30 PM', where: 'At our space in Kensington' },
+  es: { age: '12 a 24 años', when: 'Viernes • 7:30 PM', where: 'En nuestro espacio en Kensington' },
+}[lang];
+
+const drops = {
+  pt: [
+    { t: 'Adoração ao vivo', d: 'Banda de jovens, atmosfera de oração, sem encenação.' },
+    { t: 'Mensagem direta', d: 'Conversa franca sobre fé, identidade, sexualidade, propósito e dúvidas reais.' },
+    { t: 'Conexão verdadeira', d: 'Pequenos grupos por idade onde você é escutado pelo nome.' },
+    { t: 'Lanche pós-encontro', d: 'Pizza e papo. A melhor parte da noite acontece depois.' },
+  ],
+  en: [
+    { t: 'Live worship', d: 'Youth band, prayer atmosphere, no performance.' },
+    { t: 'Straight talk', d: 'Honest conversation about faith, identity, sexuality, purpose, and real questions.' },
+    { t: 'Real connection', d: 'Small groups by age where you are heard by name.' },
+    { t: 'After hangout', d: 'Pizza and talk. The best part of the night happens after.' },
+  ],
+  es: [
+    { t: 'Alabanza en vivo', d: 'Banda juvenil, atmósfera de oración, sin actuación.' },
+    { t: 'Mensaje directo', d: 'Conversación franca sobre fe, identidad, sexualidad, propósito y dudas reales.' },
+    { t: 'Conexión verdadera', d: 'Grupos pequeños por edad donde te escuchan por tu nombre.' },
+    { t: 'Lonche después', d: 'Pizza y charla. La mejor parte de la noche pasa después.' },
+  ],
+}[lang];
+
+const heading = {
+  pt: { quote: 'Não chamamos vocês de jovens da igreja. Vocês são a igreja agora.', drops: 'O que rola nas sextas', cta: 'Primeira vez? Avise que vou', btn: 'Marcar minha primeira vez' },
+  en: { quote: "We don't call you 'church youth.' You are the church now.", drops: 'What goes down on Fridays', cta: 'First time? Let us know', btn: 'Mark my first time' },
+  es: { quote: 'No los llamamos «jóvenes de la iglesia». Ustedes son la iglesia ahora.', drops: 'Lo que pasa los viernes', cta: '¿Primera vez? Avísanos', btn: 'Marcar mi primera vez' },
+}[lang];
+---
+
+<PageHero pageKey="youth" />
+
+<Section bg="light">
+  <div class="grid md:grid-cols-3 gap-4">
+    {[
+      { label: lang === 'pt' ? 'Idade' : lang === 'en' ? 'Age' : 'Edad', value: meta.age },
+      { label: lang === 'pt' ? 'Quando' : lang === 'en' ? 'When' : 'Cuándo', value: meta.when },
+      { label: lang === 'pt' ? 'Onde' : lang === 'en' ? 'Where' : 'Dónde', value: meta.where },
+    ].map((m) => (
+      <div class="bg-ink-100 rounded-2xl p-6">
+        <div class="text-xs uppercase tracking-widest text-gold-600 mb-2">{m.label}</div>
+        <div class="text-lg text-ink-950 font-medium">{m.value}</div>
+      </div>
+    ))}
+  </div>
+</Section>
+
+<Section bg="tint">
+  <div class="max-w-3xl mx-auto text-center">
+    <blockquote class="font-display text-3xl lg:text-4xl text-ink-950 leading-tight italic">
+      "{heading.quote}"
+    </blockquote>
+  </div>
+</Section>
+
+<Section bg="light">
+  <SectionHeader eyebrow={heading.drops} title={heading.drops} />
+  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    {drops.map((d, i) => (
+      <div class="bg-ink-50 border border-ink-200 rounded-2xl p-6 group hover:border-ink-950 transition-colors">
+        <div class="text-gold-500 font-display text-3xl font-light mb-3">
+          {String(i + 1).padStart(2, '0')}
+        </div>
+        <h3 class="text-lg text-ink-950">{d.t}</h3>
+        <p class="mt-2 text-sm text-ink-600 leading-relaxed">{d.d}</p>
+      </div>
+    ))}
+  </div>
+</Section>
+
+<Section bg="dark">
+  <div class="text-center max-w-2xl mx-auto">
+    <h2 class="text-3xl lg:text-4xl text-ink-50 leading-tight">{heading.cta}</h2>
+    <a href="#" class="mt-8 inline-flex btn btn-primary !bg-gold-500 !text-ink-950 hover:!bg-gold-400">
+      {heading.btn}
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</Section>
