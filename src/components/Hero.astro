@@ -54,10 +54,10 @@ const sub = {
   </div>
 
   <!-- Mega headline -->
-  <div class="relative z-10 container-page min-h-screen flex flex-col justify-center pt-32 pb-32">
+  <div class="relative z-10 container-page min-h-screen flex flex-col justify-center pt-44 pb-32">
     <h1
-      class="mega text-ink-50"
-      style="font-size: clamp(4rem, 14vw, 14rem)"
+      class="mega mt-12 text-ink-50"
+      style="font-size: clamp(3.5rem, 11vw, 11rem)"
     >
       {headline.map((word, i) => (
         <span
@@ -72,7 +72,7 @@ const sub = {
     </h1>
 
     <p
-      class="mt-12 lg:mt-16 text-xl lg:text-2xl text-ink-200 leading-relaxed max-w-xl whitespace-pre-line animate-(--animate-fade-up)"
+      class="mt-12 lg:mt-14 text-xl lg:text-2xl text-ink-200 leading-relaxed max-w-xl whitespace-pre-line animate-(--animate-fade-up)"
       style="animation-delay: 700ms"
     >
       {sub}
@@ -86,12 +86,12 @@ const sub = {
         {t('hero.cta.primary')}
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
-      <a href={localizedPath(lang, '/live')} class="btn btn-ghost-light">
-        <span class="relative flex w-2 h-2">
-          <span class="absolute inline-flex w-full h-full rounded-full bg-gold-500 opacity-75 animate-ping"></span>
-          <span class="relative inline-flex w-2 h-2 rounded-full bg-gold-500"></span>
+      <a href={localizedPath(lang, '/live')} class="btn btn-ghost-light" data-live-cta>
+        <span class="relative flex w-2 h-2" data-live-dot>
+          <span class="absolute inline-flex w-full h-full rounded-full bg-ink-500 opacity-75"></span>
+          <span class="relative inline-flex w-2 h-2 rounded-full bg-ink-500"></span>
         </span>
-        {t('hero.cta.secondary')}
+        <span data-live-label>{t('hero.cta.secondary')}</span>
       </a>
     </div>
   </div>

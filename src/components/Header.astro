@@ -15,6 +15,7 @@ const nav = [
 ];
 
 const liveLabel = { pt: 'Ao vivo', en: 'Live', es: 'En vivo' }[lang];
+const nextLabel = { pt: 'Domingo · 10h30', en: 'Sunday · 10:30 AM', es: 'Domingo · 10:30 AM' }[lang];
 ---
 
 <header
@@ -29,7 +30,7 @@ const liveLabel = { pt: 'Ao vivo', en: 'Live', es: 'En vivo' }[lang];
         class="w-11 h-11 lg:w-12 lg:h-12 object-contain transition-transform duration-500 group-hover:rotate-[8deg]"
       />
       <span class="hidden sm:block font-display text-xl lg:text-2xl font-medium tracking-tight text-ink-950">
-        Freedom <span class="italic font-light text-clay-500">Church</span>
+        Freedom <span class="italic font-light text-gold-500">Church</span>
       </span>
     </a>
 
@@ -37,20 +38,22 @@ const liveLabel = { pt: 'Ao vivo', en: 'Live', es: 'En vivo' }[lang];
       {nav.map((item) => (
         <a
           href={localizedPath(lang, item.href)}
-          class="text-sm font-medium text-ink-700 hover:text-clay-600 transition-colors"
+          class="text-sm font-medium text-ink-700 hover:text-gold-600 transition-colors"
         >
           {t(item.key)}
         </a>
       ))}
       <a
         href={localizedPath(lang, '/live')}
-        class="inline-flex items-center gap-1.5 text-sm font-medium text-ink-700 hover:text-clay-600 transition-colors"
+        class="inline-flex items-center gap-1.5 text-sm font-medium text-ink-700 hover:text-gold-600 transition-colors"
+        data-live-cta
+        title={nextLabel}
       >
-        <span class="relative flex w-2 h-2">
-          <span class="absolute inline-flex w-full h-full rounded-full bg-clay-500 opacity-75 animate-ping"></span>
-          <span class="relative inline-flex w-2 h-2 rounded-full bg-clay-500"></span>
+        <span class="relative flex w-2 h-2" data-live-dot>
+          <span class="absolute inline-flex w-full h-full rounded-full bg-ink-400 opacity-75"></span>
+          <span class="relative inline-flex w-2 h-2 rounded-full bg-ink-400"></span>
         </span>
-        {liveLabel}
+        <span data-live-label>{liveLabel}</span>
       </a>
     </nav>
 
@@ -76,24 +79,25 @@ const liveLabel = { pt: 'Ao vivo', en: 'Live', es: 'En vivo' }[lang];
   </div>
 
   <div
-    class="lg:hidden hidden border-t border-ink-200/60 bg-cream-50/95 backdrop-blur-md"
+    class="lg:hidden hidden border-t border-ink-200/60 bg-ink-50/95 backdrop-blur-md"
     data-mobile-menu
   >
     <nav class="container-page py-6 flex flex-col gap-1">
       {nav.map((item) => (
         <a
           href={localizedPath(lang, item.href)}
-          class="py-3 text-lg font-display font-medium text-ink-900 hover:text-clay-600 transition-colors"
+          class="py-3 text-lg font-display font-medium text-ink-900 hover:text-gold-600 transition-colors"
         >
           {t(item.key)}
         </a>
       ))}
       <a
         href={localizedPath(lang, '/live')}
-        class="py-3 inline-flex items-center gap-2 text-lg font-display font-medium text-ink-900 hover:text-clay-600 transition-colors"
+        class="py-3 inline-flex items-center gap-2 text-lg font-display font-medium text-ink-900 hover:text-gold-600 transition-colors"
+        data-live-cta
       >
-        <span class="w-2 h-2 rounded-full bg-clay-500"></span>
-        {liveLabel}
+        <span class="w-2 h-2 rounded-full bg-ink-400" data-live-dot></span>
+        <span data-live-label>{liveLabel}</span>
       </a>
       <a
         href={localizedPath(lang, '/sou-novo-aqui')}
@@ -114,16 +118,13 @@ const liveLabel = { pt: 'Ao vivo', en: 'Live', es: 'En vivo' }[lang];
     menu?.classList.toggle('hidden');
   });
 
-  // Header com fundo translúcido após scroll
-  let lastScroll = 0;
+  // Header background blur after scroll
   window.addEventListener('scroll', () => {
     if (!header) return;
-    const y = window.scrollY;
-    if (y > 30) {
-      header.classList.add('bg-cream-50/85', 'backdrop-blur-xl', 'border-b', 'border-ink-200/40');
+    if (window.scrollY > 30) {
+      header.classList.add('bg-ink-50/85', 'backdrop-blur-xl', 'border-b', 'border-ink-200/40');
     } else {
-      header.classList.remove('bg-cream-50/85', 'backdrop-blur-xl', 'border-b', 'border-ink-200/40');
+      header.classList.remove('bg-ink-50/85', 'backdrop-blur-xl', 'border-b', 'border-ink-200/40');
     }
-    lastScroll = y;
   }, { passive: true });
 </script>

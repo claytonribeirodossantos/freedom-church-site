@@ -59,8 +59,10 @@ export const church = {
   social: {
     instagram: 'https://www.instagram.com/ourfreedomchurch_md/',
     instagramHandle: '@ourfreedomchurch_md',
-    youtube: 'https://www.youtube.com/@FreedomChurchMaryland',
-    youtubeName: 'Freedom Church Maryland',
+    youtube: 'https://www.youtube.com/@ourfreedomchurch',
+    youtubeHandle: '@ourfreedomchurch',
+    youtubeName: 'Freedom Church',
+    youtubeChannelId: 'UCmItF2T27GJFT6gFJti_9SA',
     facebook: '',
     spotify: '',
     whatsapp: '',

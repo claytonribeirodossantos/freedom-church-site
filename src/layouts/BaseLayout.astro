@@ -84,7 +84,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       );
       document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
 
-      // Parallax sutil em elementos marcados
+      // Parallax
       const parallaxEls = document.querySelectorAll<HTMLElement>('[data-parallax]');
       window.addEventListener('scroll', () => {
         const y = window.scrollY;
@@ -93,6 +93,64 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
           el.style.transform = `translate3d(0, ${y * speed}px, 0)`;
         });
       }, { passive: true });
+
+      // Live status detection
+      // Strategy: Sunday between 10:00 and 12:30 America/New_York → assume live
+      // (the actual stream stays up during/after; this just controls the "pulse")
+      function checkLiveStatus() {
+        const nowET = new Date(
+          new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }),
+        );
+        const day = nowET.getDay(); // 0 = Sunday
+        const minutes = nowET.getHours() * 60 + nowET.getMinutes();
+        const start = 10 * 60;       // 10:00 AM
+        const end = 12 * 60 + 30;    // 12:30 PM
+        const isLive = day === 0 && minutes >= start && minutes <= end;
+
+        document.querySelectorAll('[data-live-cta]').forEach((cta) => {
+          const dot = cta.querySelector<HTMLElement>('[data-live-dot]');
+          const label = cta.querySelector<HTMLElement>('[data-live-label]');
+          if (!dot) return;
+
+          // Clear existing color classes
+          const allColors = ['bg-ink-400', 'bg-ink-500', 'bg-clay-500', 'bg-red-500', 'bg-gold-500'];
+          dot.querySelectorAll('span').forEach((s) => {
+            allColors.forEach((c) => s.classList.remove(c));
+          });
+          if (dot.classList.contains('w-2')) {
+            // it's the simple dot (mobile)
+            allColors.forEach((c) => dot.classList.remove(c));
+          }
+
+          if (isLive) {
+            // Make it pulse RED
+            dot.classList.add('animate-pulse');
+            const spans = dot.querySelectorAll('span');
+            if (spans.length > 0) {
+              spans.forEach((s) => s.classList.add('bg-red-500'));
+              // Restore ping animation on first child
+              spans[0]?.classList.add('animate-ping');
+            } else {
+              dot.classList.add('bg-red-500');
+            }
+            cta.setAttribute('data-status', 'live');
+          } else {
+            // Gray dot, no animation
+            dot.classList.remove('animate-pulse');
+            const spans = dot.querySelectorAll('span');
+            if (spans.length > 0) {
+              spans.forEach((s) => s.classList.add('bg-ink-400'));
+              spans[0]?.classList.remove('animate-ping');
+            } else {
+              dot.classList.add('bg-ink-400');
+            }
+            cta.setAttribute('data-status', 'offline');
+          }
+        });
+      }
+      checkLiveStatus();
+      // Re-check every 60 seconds
+      setInterval(checkLiveStatus, 60_000);
     </script>
 
     <style is:global>
