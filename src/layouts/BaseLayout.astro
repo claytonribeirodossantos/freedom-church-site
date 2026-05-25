@@ -19,10 +19,10 @@ const fullTitle = title ? `${title} — ${siteName}` : `${siteName} — ${t('her
 const desc =
   description ??
   (lang === 'pt'
-    ? 'Comunidade brasileira de fé nos Estados Unidos. Cultos, pregações, ministérios e mais.'
+    ? 'Comunidade brasileira de fé em Kensington, Maryland. Cultos aos domingos 10h30. Liberte-se em Cristo.'
     : lang === 'en'
-      ? 'Brazilian community of faith in the United States. Services, sermons, ministries and more.'
-      : 'Comunidad brasileña de fe en Estados Unidos. Cultos, prédicas, ministerios y más.');
+      ? 'Brazilian community of faith in Kensington, Maryland. Sunday services 10:30 AM. Find freedom in Christ.'
+      : 'Comunidad brasileña de fe en Kensington, Maryland. Cultos los domingos 10:30 AM. Libérate en Cristo.');
 const ogImage = image ?? '/og-default.jpg';
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
@@ -32,7 +32,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/logo.png" />
     <link rel="canonical" href={canonical} />
 
     <title>{fullTitle}</title>
@@ -45,10 +45,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary_large_image" />
 
+    <meta name="theme-color" content="#0A0908" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,500&family=Geist:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
 
@@ -57,7 +59,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   <body>
     <a
       href="#main"
-      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:bg-ink-950 focus:text-ink-50 focus:px-4 focus:py-2 focus:rounded-md"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:bg-ink-950 focus:text-cream-50 focus:px-4 focus:py-2 focus:rounded-md"
     >
       Skip to content
     </a>
@@ -66,5 +68,47 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       <slot />
     </main>
     <Footer />
+
+    <script>
+      // Scroll-triggered fade-up
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('in-view');
+              io.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12, rootMargin: '0px 0px -50px 0px' },
+      );
+      document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+
+      // Parallax sutil em elementos marcados
+      const parallaxEls = document.querySelectorAll<HTMLElement>('[data-parallax]');
+      window.addEventListener('scroll', () => {
+        const y = window.scrollY;
+        parallaxEls.forEach((el) => {
+          const speed = parseFloat(el.dataset.parallax ?? '0.2');
+          el.style.transform = `translate3d(0, ${y * speed}px, 0)`;
+        });
+      }, { passive: true });
+    </script>
+
+    <style is:global>
+      [data-reveal] {
+        opacity: 0;
+        transform: translateY(28px);
+        transition: opacity 900ms cubic-bezier(0.16, 1, 0.3, 1), transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      [data-reveal].in-view {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      [data-reveal-delay="1"] { transition-delay: 80ms; }
+      [data-reveal-delay="2"] { transition-delay: 160ms; }
+      [data-reveal-delay="3"] { transition-delay: 240ms; }
+      [data-reveal-delay="4"] { transition-delay: 320ms; }
+    </style>
   </body>
 </html>

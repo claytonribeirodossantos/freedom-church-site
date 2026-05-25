@@ -1,0 +1,106 @@
+---
+import { getLangFromUrl, localizedPath } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+
+const copy = {
+  pt: {
+    eyebrow: 'Nosso manifesto',
+    line1: 'Cremos que',
+    line2_emph: 'a fé verdadeira',
+    line3: 'liberta. Não escraviza.',
+    line4: 'Que ninguém deveria',
+    line5_emph: 'caminhar sozinho',
+    line6: 'na cidade onde Deus o plantou.',
+    body: 'Somos uma igreja para brasileiros longe de casa, americanos curiosos, latinos que chegaram ontem, famílias que perderam o rumo, jovens que ainda procuram, casais que querem recomeçar. Aqui você é esperado pelo nome.',
+    cta: 'Venha como você é',
+    btn: 'Visitar este domingo',
+  },
+  en: {
+    eyebrow: 'Our manifesto',
+    line1: 'We believe',
+    line2_emph: 'true faith',
+    line3: 'sets free. Does not enslave.',
+    line4: 'That no one should',
+    line5_emph: 'walk alone',
+    line6: 'in the city where God planted them.',
+    body: 'We are a church for Brazilians far from home, curious Americans, Latinos who just arrived, families who lost their way, young people still searching, couples wanting a fresh start. Here you are expected by name.',
+    cta: 'Come as you are',
+    btn: 'Visit this Sunday',
+  },
+  es: {
+    eyebrow: 'Nuestro manifiesto',
+    line1: 'Creemos que',
+    line2_emph: 'la fe verdadera',
+    line3: 'libera. No esclaviza.',
+    line4: 'Que nadie debería',
+    line5_emph: 'caminar solo',
+    line6: 'en la ciudad donde Dios lo plantó.',
+    body: 'Somos una iglesia para brasileños lejos de casa, americanos curiosos, latinos recién llegados, familias que perdieron el rumbo, jóvenes que aún buscan, parejas que quieren recomenzar. Aquí te esperan por tu nombre.',
+    cta: 'Ven tal como eres',
+    btn: 'Visitar este domingo',
+  },
+}[lang];
+
+const keywords = {
+  pt: ['Liberdade', 'Família', 'Palavra', 'Esperança', 'Comunidade', 'Missão', 'Gratidão', 'Cura'],
+  en: ['Freedom', 'Family', 'The Word', 'Hope', 'Community', 'Mission', 'Gratitude', 'Healing'],
+  es: ['Libertad', 'Familia', 'La Palabra', 'Esperanza', 'Comunidad', 'Misión', 'Gratitud', 'Sanidad'],
+}[lang];
+---
+
+<section class="relative bg-ink-50 py-32 lg:py-40 overflow-hidden">
+  <!-- decorative cross at edge -->
+  <div
+    class="absolute -top-12 -right-32 w-[36rem] h-[36rem] opacity-[0.03] animate-(--animate-float)"
+    data-parallax="0.1"
+  >
+    <img src="/logo.png" alt="" class="w-full h-full object-contain" loading="lazy" />
+  </div>
+
+  <div class="container-page relative z-10">
+    <div class="grid lg:grid-cols-12 gap-12 lg:gap-16 mb-20" data-reveal>
+      <div class="lg:col-span-7">
+        <span class="eyebrow">{copy.eyebrow}</span>
+      </div>
+    </div>
+
+    <h2
+      class="mega text-ink-950 mb-16"
+      style="font-size: clamp(2.5rem, 8vw, 8rem)"
+      data-reveal
+    >
+      <span class="block">{copy.line1} <em class="italic font-light text-gold-500">{copy.line2_emph}</em></span>
+      <span class="block">{copy.line3}</span>
+      <span class="block mt-4 lg:mt-6">{copy.line4} <em class="italic font-light text-gold-500">{copy.line5_emph}</em></span>
+      <span class="block">{copy.line6}</span>
+    </h2>
+
+    <div class="grid lg:grid-cols-12 gap-12 lg:gap-16 items-end" data-reveal data-reveal-delay="2">
+      <div class="lg:col-span-7">
+        <p class="text-lg lg:text-xl text-ink-700 leading-relaxed max-w-2xl">
+          {copy.body}
+        </p>
+      </div>
+      <div class="lg:col-span-5 lg:text-right">
+        <div class="text-sm text-ink-500 mb-3">{copy.cta}</div>
+        <a href={localizedPath(lang, '/sou-novo-aqui')} class="btn btn-dark">
+          {copy.btn}
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Marquee de palavras-chave -->
+  <div class="relative z-10 mt-32 marquee">
+    <div class="marquee-track">
+      {[...Array(4)].flatMap((_) =>
+        keywords.flatMap((k) => [
+          <span class="font-display text-6xl lg:text-8xl text-ink-200 whitespace-nowrap" style="font-weight: 300">{k}</span>,
+          <span class="text-gold-500 text-3xl">✦</span>,
+        ])
+      )}
+    </div>
+  </div>
+</section>

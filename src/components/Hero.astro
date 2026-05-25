@@ -3,68 +3,123 @@ import { getLangFromUrl, useTranslations, localizedPath } from '../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const title = t('hero.title');
+
+const heroImage = 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=2400&q=85&auto=format&fit=crop';
+
+const headline = {
+  pt: ['Liberte-se', 'em', 'Cristo.'],
+  en: ['Find', 'freedom in', 'Christ.'],
+  es: ['Libérate', 'en', 'Cristo.'],
+}[lang];
+
+const sub = {
+  pt: 'Igreja brasileira em Kensington, Maryland.\nDomingos · 10h30.',
+  en: 'Brazilian church in Kensington, Maryland.\nSundays · 10:30 AM.',
+  es: 'Iglesia brasileña en Kensington, Maryland.\nDomingos · 10:30 AM.',
+}[lang];
 ---
 
-<section class="relative overflow-hidden bg-ink-950 text-ink-50 min-h-[88vh] flex items-center">
-  <div class="absolute inset-0">
-    <div
-      class="absolute inset-0 opacity-40"
-      style="background-image: radial-gradient(circle at 30% 30%, rgba(201,169,97,0.25), transparent 60%), radial-gradient(circle at 80% 70%, rgba(201,169,97,0.10), transparent 50%);"
-    >
-    </div>
-    <div
-      class="absolute inset-0 opacity-[0.04]"
-      style="background-image: linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px); background-size: 80px 80px;"
-    >
-    </div>
+<section class="relative min-h-screen overflow-hidden bg-ink-950 text-ink-50">
+  <!-- Background image with Ken Burns -->
+  <div class="absolute inset-0 overflow-hidden">
+    <img
+      src={heroImage}
+      alt=""
+      class="absolute inset-0 w-full h-full object-cover animate-(--animate-ken-burns)"
+      loading="eager"
+      fetchpriority="high"
+    />
+    <!-- Dark overlay -->
+    <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(5, 5, 5, 0.55) 0%, rgba(5, 5, 5, 0.7) 60%, rgba(5, 5, 5, 0.92) 100%);"></div>
+    <!-- Color gradient -->
+    <div class="absolute inset-0 opacity-30" style="background: radial-gradient(60% 80% at 25% 30%, rgba(201, 169, 97, 0.4), transparent 60%);"></div>
+    <!-- Grain -->
+    <div class="absolute inset-0 grain"></div>
   </div>
 
-  <div class="container-page relative z-10 py-24 lg:py-32">
-    <div class="max-w-3xl">
-      <span class="eyebrow !text-gold-400 animate-(--animate-fade-in)">
+  <!-- Top corner: eyebrow + small info -->
+  <div class="absolute top-24 lg:top-32 left-0 right-0 z-10">
+    <div class="container-page flex items-start justify-between">
+      <span class="eyebrow eyebrow-light animate-(--animate-fade-in)">
         {t('hero.eyebrow')}
       </span>
-
-      <h1
-        class="mt-6 font-display text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-medium leading-[1.02] tracking-tight text-ink-50 animate-(--animate-fade-up)"
-        style="animation-delay: 100ms"
-      >
-        {title.split('\n').map((line, i) => (
-          <span class="block">
-            {i === title.split('\n').length - 1
-              ? <span class="italic text-gold-400 font-light">{line}</span>
-              : line}
-          </span>
-        ))}
-      </h1>
-
-      <p
-        class="mt-8 text-lg lg:text-xl text-ink-300 max-w-xl leading-relaxed animate-(--animate-fade-up)"
-        style="animation-delay: 250ms"
-      >
-        {t('hero.subtitle')}
-      </p>
-
-      <div
-        class="mt-10 flex flex-wrap gap-3 animate-(--animate-fade-up)"
-        style="animation-delay: 400ms"
-      >
-        <a href={localizedPath(lang, '/sou-novo-aqui')} class="btn btn-primary !bg-gold-500 !text-ink-950 hover:!bg-gold-400">
-          {t('hero.cta.primary')}
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-        <a href="#" class="btn btn-ghost !text-ink-50 !border-ink-700 hover:!bg-ink-50 hover:!text-ink-950">
-          <svg width="14" height="14" fill="currentColor"><path d="M2 1.5v11l9-5.5z"/></svg>
-          {t('hero.cta.secondary')}
-        </a>
+      <div class="hidden md:flex items-center gap-3 text-xs uppercase tracking-[0.22em] text-ink-300 animate-(--animate-fade-in)">
+        <span class="relative flex w-2 h-2">
+          <span class="absolute inline-flex w-full h-full rounded-full bg-gold-500 opacity-75 animate-ping"></span>
+          <span class="relative inline-flex w-2 h-2 rounded-full bg-gold-500"></span>
+        </span>
+        <span>{lang === 'pt' ? 'Kensington · Maryland · EUA' : lang === 'en' ? 'Kensington · Maryland · USA' : 'Kensington · Maryland · EUA'}</span>
       </div>
     </div>
   </div>
 
-  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 text-ink-500 animate-bounce">
-    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5">
-      <path d="M10 4v12m0 0-4-4m4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
+  <!-- Mega headline -->
+  <div class="relative z-10 container-page min-h-screen flex flex-col justify-center pt-32 pb-32">
+    <h1
+      class="mega text-ink-50"
+      style="font-size: clamp(4rem, 14vw, 14rem)"
+    >
+      {headline.map((word, i) => (
+        <span
+          class="block animate-(--animate-blur-in)"
+          style={`animation-delay: ${i * 140 + 200}ms`}
+        >
+          {i === headline.length - 1
+            ? <span class="italic font-light text-gold-400">{word}</span>
+            : word}
+        </span>
+      ))}
+    </h1>
+
+    <p
+      class="mt-12 lg:mt-16 text-xl lg:text-2xl text-ink-200 leading-relaxed max-w-xl whitespace-pre-line animate-(--animate-fade-up)"
+      style="animation-delay: 700ms"
+    >
+      {sub}
+    </p>
+
+    <div
+      class="mt-12 flex flex-wrap items-center gap-4 animate-(--animate-fade-up)"
+      style="animation-delay: 900ms"
+    >
+      <a href={localizedPath(lang, '/sou-novo-aqui')} class="btn btn-primary">
+        {t('hero.cta.primary')}
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href={localizedPath(lang, '/live')} class="btn btn-ghost-light">
+        <span class="relative flex w-2 h-2">
+          <span class="absolute inline-flex w-full h-full rounded-full bg-gold-500 opacity-75 animate-ping"></span>
+          <span class="relative inline-flex w-2 h-2 rounded-full bg-gold-500"></span>
+        </span>
+        {t('hero.cta.secondary')}
+      </a>
+    </div>
+  </div>
+
+  <!-- Bottom scroll hint -->
+  <div class="absolute bottom-32 left-0 right-0 z-10">
+    <div class="container-page flex items-center justify-between">
+      <div class="text-xs uppercase tracking-[0.22em] text-ink-400 animate-(--animate-fade-in)" style="animation-delay: 1.1s">
+        ↓ {lang === 'pt' ? 'Role para descobrir' : lang === 'en' ? 'Scroll to explore' : 'Desplázate para explorar'}
+      </div>
+      <div class="hidden lg:block text-right text-xs text-ink-400 animate-(--animate-fade-in)" style="animation-delay: 1.1s">
+        <div class="uppercase tracking-[0.22em] mb-1">Est. 2020</div>
+        <div class="font-display italic text-base text-gold-400">Maryland</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Marquee de versículos -->
+  <div class="absolute bottom-0 left-0 right-0 bg-ink-50 text-ink-950 py-5 overflow-hidden border-y border-ink-200">
+    <div class="marquee">
+      <div class="marquee-track marquee-track-slow">
+        {[...Array(6)].flatMap((_, k) => [
+          <span class="font-display italic text-lg whitespace-nowrap">João 8:32 — "Conhecereis a verdade, e a verdade vos libertará."</span>,
+          <span class="text-gold-500">✦</span>,
+          <span class="font-display italic text-lg whitespace-nowrap">2 Coríntios 3:17 — "Onde está o Espírito do Senhor, aí há liberdade."</span>,
+          <span class="text-gold-500">✦</span>,
+        ])}
+      </div>
+    </div>
   </div>
 </section>

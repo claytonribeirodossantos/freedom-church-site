@@ -5,53 +5,79 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
 const body = {
-  pt: 'Somos uma família de fé que acredita que ninguém deve caminhar sozinho. Brasileiros e amigos vivendo nos Estados Unidos, reunidos pela esperança em Jesus.',
-  en: 'We are a family of faith that believes no one should walk alone. Brazilians and friends living in the United States, gathered by hope in Jesus.',
-  es: 'Somos una familia de fe que cree que nadie debe caminar solo. Brasileños y amigos viviendo en Estados Unidos, reunidos por la esperanza en Jesús.',
+  pt: 'Somos uma família de fé que acredita que ninguém deve caminhar sozinho. Brasileiros e amigos vivendo nos Estados Unidos, reunidos pela esperança em Jesus em Kensington, Maryland.',
+  en: 'We are a family of faith that believes no one should walk alone. Brazilians and friends living in the United States, gathered by hope in Jesus in Kensington, Maryland.',
+  es: 'Somos una familia de fe que cree que nadie debe caminar solo. Brasileños y amigos viviendo en Estados Unidos, reunidos por la esperanza en Jesús en Kensington, Maryland.',
 }[lang];
 
 const pillars = {
   pt: [
-    { t: 'Comunidade', d: 'Grupos pequenos onde você é conhecido pelo nome.' },
-    { t: 'Palavra',    d: 'Ensino bíblico que toca a vida real.' },
-    { t: 'Família',    d: 'Espaço para todas as idades, casais e solteiros.' },
-    { t: 'Missão',     d: 'Servir nossa cidade e enviar o evangelho.' },
+    { num: '01', t: 'Comunidade', d: 'Grupos pequenos onde você é conhecido pelo nome.' },
+    { num: '02', t: 'Palavra',    d: 'Ensino bíblico que toca a vida real.' },
+    { num: '03', t: 'Família',    d: 'Espaço para todas as idades, casais e solteiros.' },
+    { num: '04', t: 'Missão',     d: 'Servir nossa cidade e enviar o evangelho.' },
   ],
   en: [
-    { t: 'Community',  d: 'Small groups where you are known by name.' },
-    { t: 'The Word',   d: 'Biblical teaching that touches real life.' },
-    { t: 'Family',     d: 'Space for all ages, couples and singles.' },
-    { t: 'Mission',    d: 'Serving our city and sending the gospel.' },
+    { num: '01', t: 'Community',  d: 'Small groups where you are known by name.' },
+    { num: '02', t: 'The Word',   d: 'Biblical teaching that touches real life.' },
+    { num: '03', t: 'Family',     d: 'Space for all ages, couples and singles.' },
+    { num: '04', t: 'Mission',    d: 'Serving our city and sending the gospel.' },
   ],
   es: [
-    { t: 'Comunidad',  d: 'Grupos pequeños donde te conocen por tu nombre.' },
-    { t: 'La Palabra', d: 'Enseñanza bíblica que toca la vida real.' },
-    { t: 'Familia',    d: 'Espacio para todas las edades, parejas y solteros.' },
-    { t: 'Misión',     d: 'Servir a nuestra ciudad y enviar el evangelio.' },
+    { num: '01', t: 'Comunidad',  d: 'Grupos pequeños donde te conocen por tu nombre.' },
+    { num: '02', t: 'La Palabra', d: 'Enseñanza bíblica que toca la vida real.' },
+    { num: '03', t: 'Familia',    d: 'Espacio para todas las edades, parejas y solteros.' },
+    { num: '04', t: 'Misión',     d: 'Servir a nuestra ciudad y enviar el evangelio.' },
   ],
 }[lang];
 ---
 
-<section class="container-page py-24 lg:py-32">
-  <div class="max-w-2xl mb-16">
-    <span class="eyebrow">{t('section.about.eyebrow')}</span>
-    <h2 class="mt-4 text-4xl lg:text-5xl text-ink-950">{t('section.about.title')}</h2>
-    <p class="mt-6 text-lg text-ink-700 leading-relaxed">{body}</p>
-    <a href={localizedPath(lang, '/sobre')} class="mt-8 inline-flex btn btn-ghost">
-      {t('section.about.cta')}
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </a>
+<section class="relative py-32 lg:py-40 bg-cream-100 overflow-hidden">
+  <!-- decorative shape -->
+  <div
+    class="absolute top-1/2 -translate-y-1/2 -right-32 lg:-right-20 w-[28rem] h-[28rem] opacity-[0.06]"
+    data-parallax="0.12"
+  >
+    <img src="/logo.png" alt="" class="w-full h-full object-contain" loading="lazy" />
   </div>
 
-  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-ink-200 rounded-2xl overflow-hidden">
-    {pillars.map((p, i) => (
-      <div class="bg-ink-50 p-8 group hover:bg-ink-950 transition-colors duration-300">
-        <div class="text-gold-500 text-3xl font-display font-light mb-3">
-          {String(i + 1).padStart(2, '0')}
-        </div>
-        <h3 class="text-xl text-ink-950 group-hover:text-ink-50 transition-colors">{p.t}</h3>
-        <p class="mt-3 text-sm text-ink-600 group-hover:text-ink-300 leading-relaxed transition-colors">{p.d}</p>
+  <div class="container-page relative z-10">
+    <div class="grid lg:grid-cols-12 gap-12 lg:gap-16 mb-20" data-reveal>
+      <div class="lg:col-span-7">
+        <span class="eyebrow">{t('section.about.eyebrow')}</span>
+        <h2
+          class="mt-6 font-display font-medium tracking-tight leading-[0.95] text-ink-950"
+          style="font-size: clamp(2.5rem, 6vw, 5.5rem)"
+        >
+          {lang === 'pt' ? <>Uma igreja <span class="italic font-light text-clay-500">pra todos.</span></> :
+           lang === 'en' ? <>A church <span class="italic font-light text-clay-500">for everyone.</span></> :
+           <>Una iglesia <span class="italic font-light text-clay-500">para todos.</span></>}
+        </h2>
       </div>
-    ))}
+      <div class="lg:col-span-5 lg:pt-32">
+        <p class="text-lg text-ink-700 leading-relaxed">{body}</p>
+        <a href={localizedPath(lang, '/sobre')} class="mt-8 inline-flex btn btn-ghost">
+          {t('section.about.cta')}
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Pillars com layout editorial assimétrico -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-ink-200 rounded-3xl overflow-hidden">
+      {pillars.map((p, i) => (
+        <div
+          class="group relative bg-cream-50 p-8 lg:p-10 transition-all duration-500 hover:bg-ink-950 hover:text-cream-50"
+          data-reveal
+          data-reveal-delay={i + 1}
+        >
+          <div class="display-num text-7xl lg:text-8xl text-clay-500 group-hover:text-amber-400 transition-colors duration-500">
+            {p.num}
+          </div>
+          <h3 class="mt-6 font-display text-2xl text-ink-950 group-hover:text-cream-50 transition-colors duration-500">{p.t}</h3>
+          <p class="mt-3 text-sm text-ink-600 group-hover:text-cream-300 leading-relaxed transition-colors duration-500">{p.d}</p>
+        </div>
+      ))}
+    </div>
   </div>
 </section>
