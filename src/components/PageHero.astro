@@ -4,45 +4,78 @@ import { getPageContent } from '../i18n/pages';
 
 interface Props {
   pageKey: string;
+  image?: string;
+  height?: 'normal' | 'tall';
 }
 
-const { pageKey } = Astro.props;
+const { pageKey, image, height = 'normal' } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const c = getPageContent(pageKey, lang);
 const titleLines = c.title.split('\n');
+
+const minH = height === 'tall' ? 'min-h-[80vh]' : 'min-h-[65vh]';
+
+// Mapping pageKey → imagem cinematográfica contextual (Unsplash)
+const pageImages: Record<string, string> = {
+  about:             'https://images.unsplash.com/photo-1529390079861-591de354faf5?w=2400&q=85&auto=format&fit=crop',
+  services:          'https://images.unsplash.com/photo-1507692049790-de58290a4334?w=2400&q=85&auto=format&fit=crop',
+  sermons:           'https://images.unsplash.com/photo-1490489944944-49b1c20da414?w=2400&q=85&auto=format&fit=crop',
+  events:            'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=2400&q=85&auto=format&fit=crop',
+  ministries:        'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=2400&q=85&auto=format&fit=crop',
+  give:              'https://images.unsplash.com/photo-1532375810709-75b1da00537c?w=2400&q=85&auto=format&fit=crop',
+  newHere:           'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=2400&q=85&auto=format&fit=crop',
+  prayer:            'https://images.unsplash.com/photo-1490489944944-49b1c20da414?w=2400&q=85&auto=format&fit=crop',
+  contact:           'https://images.unsplash.com/photo-1519892207037-c46bd8ecaace?w=2400&q=85&auto=format&fit=crop',
+  leadership:        'https://images.unsplash.com/photo-1601379760883-1bb497ef661b?w=2400&q=85&auto=format&fit=crop',
+  live:              'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=2400&q=85&auto=format&fit=crop',
+  kids:              'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=2400&q=85&auto=format&fit=crop',
+  youth:             'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=2400&q=85&auto=format&fit=crop',
+  gallery:           'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=2400&q=85&auto=format&fit=crop',
+  resources:         'https://images.unsplash.com/photo-1532383415258-e3c3c4ad1be7?w=2400&q=85&auto=format&fit=crop',
+  pastoralServices:  'https://images.unsplash.com/photo-1495019899232-83f6c4a3a16f?w=2400&q=85&auto=format&fit=crop',
+  newsletter:        'https://images.unsplash.com/photo-1503694978374-8a2fa686963a?w=2400&q=85&auto=format&fit=crop',
+  privacy:           'https://images.unsplash.com/photo-1487014679447-9f8336841d58?w=2400&q=85&auto=format&fit=crop',
+  terms:             'https://images.unsplash.com/photo-1554224155-1696413565d3?w=2400&q=85&auto=format&fit=crop',
+};
+
+const defaultImg = 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=2400&q=85&auto=format&fit=crop';
+const bgImage = image ?? pageImages[pageKey] ?? defaultImg;
 ---
 
-<section class="relative bg-ink-950 text-ink-50 overflow-hidden">
-  <div
-    class="absolute inset-0 opacity-30"
-    style="background-image: radial-gradient(circle at 20% 30%, rgba(201,169,97,0.30), transparent 55%);"
-  ></div>
-  <div
-    class="absolute inset-0 opacity-[0.04]"
-    style="background-image: linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px); background-size: 80px 80px;"
-  ></div>
+<section class:list={['relative overflow-hidden bg-ink-950 text-ink-50 flex items-end pt-32 pb-16 lg:pt-40 lg:pb-20', minH]}>
+  <!-- Background image with Ken Burns -->
+  <div class="absolute inset-0 overflow-hidden">
+    <img
+      src={bgImage}
+      alt=""
+      class="absolute inset-0 w-full h-full object-cover animate-(--animate-ken-burns)"
+      loading="eager"
+      fetchpriority="high"
+    />
+    <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(5,5,5,0.5) 0%, rgba(5,5,5,0.7) 60%, rgba(5,5,5,0.92) 100%);"></div>
+    <div class="absolute inset-0 opacity-25" style="background: radial-gradient(60% 80% at 25% 30%, rgba(201, 169, 97, 0.4), transparent 60%);"></div>
+    <div class="absolute inset-0 grain"></div>
+  </div>
 
-  <div class="container-page relative z-10 py-24 lg:py-32">
-    <div class="max-w-3xl">
-      <span class="eyebrow !text-gold-400 animate-(--animate-fade-in)">{c.eyebrow}</span>
-      <h1
-        class="mt-5 font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-medium leading-[1.05] tracking-tight animate-(--animate-fade-up)"
-        style="animation-delay: 80ms"
-      >
-        {titleLines.map((line, i) => (
-          <span class="block">
-            {i === titleLines.length - 1 && titleLines.length > 1
-              ? <span class="italic text-gold-400 font-light">{line}</span>
-              : line}
-          </span>
-        ))}
-      </h1>
-      <p
-        class="mt-6 text-lg text-ink-300 max-w-2xl leading-relaxed animate-(--animate-fade-up)"
-        style="animation-delay: 200ms"
-      >
-        {c.subtitle}
-      </p>
-    </div>
+  <div class="container-page relative z-10 w-full">
+    <span class="eyebrow eyebrow-light animate-(--animate-fade-in)">{c.eyebrow}</span>
+    <h1
+      class="mega mt-8 text-ink-50"
+      style="font-size: clamp(3rem, 9vw, 9rem)"
+    >
+      {titleLines.map((line, i) => (
+        <span class="block animate-(--animate-blur-in)" style={`animation-delay: ${i * 120 + 100}ms`}>
+          {i === titleLines.length - 1 && titleLines.length > 1
+            ? <span class="italic font-light text-gold-400">{line}</span>
+            : line}
+        </span>
+      ))}
+    </h1>
+    <p
+      class="mt-10 text-lg lg:text-xl text-ink-200 max-w-2xl leading-relaxed animate-(--animate-fade-up)"
+      style="animation-delay: 400ms"
+    >
+      {c.subtitle}
+    </p>
   </div>
 </section>
