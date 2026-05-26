@@ -2,6 +2,7 @@
 import PageHero from '../PageHero.astro';
 import Section from '../Section.astro';
 import { getLangFromUrl } from '../../i18n/utils';
+import { church } from '../../data/church';
 
 const lang = getLangFromUrl(Astro.url);
 
@@ -10,8 +11,6 @@ const verse = {
   en: { ref: '2 Corinthians 9:7', text: 'Each of you should give what you have decided in your heart to give, not reluctantly or under compulsion, for God loves a cheerful giver.' },
   es: { ref: '2 Corintios 9:7', text: 'Cada uno dé como propuso en su corazón: no con tristeza, ni por necesidad, porque Dios ama al dador alegre.' },
 }[lang];
-
-const amounts = [25, 50, 100, 250, 500, 1000];
 
 const purposes = {
   pt: [
@@ -32,16 +31,88 @@ const purposes = {
 }[lang];
 
 const labels = {
-  pt: { quick: 'Doação rápida', custom: 'Outro valor', one: 'Única', recur: 'Mensal', donate: 'Doar com segurança', other: 'Outras formas de contribuir', purpose: 'Para onde vai sua oferta', stripe: 'Pagamento seguro via Stripe (USD)' },
-  en: { quick: 'Quick gift', custom: 'Other amount', one: 'One-time', recur: 'Monthly', donate: 'Give securely', other: 'Other ways to give', purpose: 'Where your gift goes', stripe: 'Secure payment via Stripe (USD)' },
-  es: { quick: 'Donación rápida', custom: 'Otro monto', one: 'Única', recur: 'Mensual', donate: 'Donar de forma segura', other: 'Otras formas de ofrendar', purpose: 'A dónde va tu ofrenda', stripe: 'Pago seguro vía Stripe (USD)' },
+  pt: {
+    intro: 'Sua oferta sustenta vidas',
+    introBody: 'Recebemos suas contribuições por três aplicativos seguros e fáceis. Escolha o que você já usa.',
+    sendVia: 'Enviar via',
+    copy: 'Copiar',
+    copied: 'Copiado!',
+    open: 'Abrir app',
+    note: 'Nenhuma taxa adicional. Todo recurso vai direto pro ministério.',
+    purpose: 'Para onde vai sua oferta',
+    questions: 'Dúvidas sobre dízimos e ofertas?',
+    talk: 'Falar com a pastoria',
+  },
+  en: {
+    intro: 'Your gift sustains lives',
+    introBody: 'We receive your contributions through three safe and easy apps. Choose the one you already use.',
+    sendVia: 'Send via',
+    copy: 'Copy',
+    copied: 'Copied!',
+    open: 'Open app',
+    note: 'No extra fees. Every resource goes directly to the ministry.',
+    purpose: 'Where your gift goes',
+    questions: 'Questions about tithes and offerings?',
+    talk: 'Talk to the pastoral team',
+  },
+  es: {
+    intro: 'Tu ofrenda sostiene vidas',
+    introBody: 'Recibimos tus contribuciones por tres aplicaciones seguras y fáciles. Elige la que ya usas.',
+    sendVia: 'Enviar por',
+    copy: 'Copiar',
+    copied: '¡Copiado!',
+    open: 'Abrir app',
+    note: 'Sin tarifas adicionales. Todo recurso va directo al ministerio.',
+    purpose: 'A dónde va tu ofrenda',
+    questions: '¿Dudas sobre diezmos y ofrendas?',
+    talk: 'Hablar con el pastorado',
+  },
 }[lang];
+
+const methods = [
+  {
+    name: 'Zelle',
+    color: '#6D1ED4',
+    identifier: church.giving.zelle.identifier,
+    instructions: {
+      pt: 'Abra seu banco, escolha Zelle e envie para o email abaixo. Aparece como "Freedom Church".',
+      en: 'Open your bank, choose Zelle and send to the email below. Appears as "Freedom Church".',
+      es: 'Abre tu banco, elige Zelle y envía al correo de abajo. Aparece como "Freedom Church".',
+    }[lang],
+    url: '',
+    icon: 'M12 0L2 7v10l10 7 10-7V7L12 0zm0 4.5l6 4.2v7.6l-6 4.2-6-4.2V8.7l6-4.2z',
+  },
+  {
+    name: 'Venmo',
+    color: '#008CFF',
+    identifier: church.giving.venmo.handle,
+    instructions: {
+      pt: 'Abra o app Venmo e busque o usuário abaixo. Confirme o nome "Freedom Church" antes de enviar.',
+      en: 'Open the Venmo app and search for the username below. Confirm "Freedom Church" before sending.',
+      es: 'Abre la app Venmo y busca el usuario de abajo. Confirma "Freedom Church" antes de enviar.',
+    }[lang],
+    url: church.giving.venmo.url,
+    icon: 'M19.5 4c.5 1.5.5 3 .5 4.5 0 5-3.5 10-7 14h-5L4 6h5l1.5 11C12 14 14 9.5 14 6.5c0-.7 0-1.3-.5-2L19.5 4z',
+  },
+  {
+    name: 'Cash App',
+    color: '#00D54B',
+    identifier: church.giving.cashapp.handle,
+    instructions: {
+      pt: 'Abra o Cash App, toque em "Send" e digite o $cashtag abaixo.',
+      en: 'Open Cash App, tap "Send" and enter the $cashtag below.',
+      es: 'Abre Cash App, toca "Send" e ingresa el $cashtag de abajo.',
+    }[lang],
+    url: church.giving.cashapp.url,
+    icon: 'M20.5 8.4l-1.4-.8c-1.4-.8-3-1.4-4.6-1.4-1.6 0-2.5.7-2.5 1.7 0 1 .9 1.5 3 2.2 3.4 1.2 5 2.7 5 5.3 0 3-2.5 5.2-6.5 5.5l-.3 1.6c0 .3-.3.5-.6.5h-1.4c-.4 0-.7-.4-.6-.7l.3-1.6c-1.7-.3-3.3-1-4.6-2-.3-.3-.3-.7 0-.9l1.5-1.4c.2-.2.5-.2.7 0 1.1.9 2.5 1.5 4 1.5 1.8 0 3-.8 3-2 0-1.2-1-1.6-3.5-2.5-2.8-1-4.5-2.4-4.5-5 0-2.7 2.1-4.6 5.6-5l.3-1.6c0-.3.3-.5.6-.5h1.4c.4 0 .7.4.6.7l-.3 1.5c1.4.3 2.7.9 3.8 1.7.3.2.3.6.1.9l-1.4 1.4c-.2.2-.5.2-.7.1z',
+  },
+];
 ---
 
 <PageHero pageKey="give" />
 
 <Section bg="light">
-  <div class="max-w-3xl mx-auto text-center">
+  <div class="max-w-3xl mx-auto text-center" data-reveal>
     <blockquote class="font-display text-2xl lg:text-3xl text-ink-900 leading-relaxed italic">
       "{verse.text}"
     </blockquote>
@@ -50,39 +121,59 @@ const labels = {
 </Section>
 
 <Section bg="tint">
-  <div class="max-w-2xl mx-auto">
-    <div class="bg-ink-50 rounded-3xl p-8 lg:p-12 shadow-xl border border-ink-200">
-      <div class="flex gap-2 mb-6">
-        <button class="flex-1 py-3 rounded-lg text-sm font-medium bg-ink-950 text-ink-50">
-          {labels.one}
-        </button>
-        <button class="flex-1 py-3 rounded-lg text-sm font-medium bg-ink-100 text-ink-700 hover:bg-ink-200 transition-colors">
-          {labels.recur}
-        </button>
-      </div>
-
-      <div class="text-xs uppercase tracking-widest text-ink-500 mb-3">{labels.quick}</div>
-      <div class="grid grid-cols-3 gap-2 mb-3">
-        {amounts.map((a) => (
-          <button class="py-3 rounded-lg border border-ink-200 text-ink-900 font-medium hover:border-gold-500 hover:text-gold-600 transition-colors">
-            ${a}
-          </button>
-        ))}
-      </div>
-      <input
-        type="number"
-        placeholder={labels.custom}
-        class="w-full px-4 py-3 rounded-lg border border-ink-200 focus:border-ink-950 focus:outline-none text-ink-900"
-      />
-
-      <a href="#" class="mt-6 w-full btn btn-primary !bg-gold-500 !text-ink-950 hover:!bg-gold-400">
-        {labels.donate}
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 8h10m0 0L9 4m4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-
-      <p class="mt-4 text-xs text-center text-ink-500">{labels.stripe}</p>
-    </div>
+  <div class="max-w-2xl mb-12" data-reveal>
+    <span class="eyebrow">{labels.intro}</span>
+    <h2 class="mt-4 mega text-ink-950" style="font-size: clamp(2rem, 5vw, 3.5rem)">{labels.intro}</h2>
+    <p class="mt-5 text-lg text-ink-700 leading-relaxed">{labels.introBody}</p>
   </div>
+
+  <div class="grid md:grid-cols-3 gap-6">
+    {methods.map((m, i) => (
+      <article
+        class="bg-ink-50 rounded-3xl p-8 lg:p-10 border border-ink-200 hover:border-ink-950 hover:shadow-xl transition-all card-editorial"
+        data-reveal
+        data-reveal-delay={i + 1}
+      >
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-6" style={`background: ${m.color};`}>
+          <svg width="28" height="28" fill="white" viewBox="0 0 24 24">
+            <path d={m.icon} />
+          </svg>
+        </div>
+        <h3 class="font-display text-2xl text-ink-950">{m.name}</h3>
+        <p class="mt-3 text-sm text-ink-600 leading-relaxed min-h-[3rem]">{m.instructions}</p>
+
+        <div class="mt-6 p-4 rounded-xl bg-ink-100 border border-ink-200">
+          <div class="text-xs uppercase tracking-widest text-ink-500 mb-2">{labels.sendVia} {m.name}</div>
+          <div class="flex items-center justify-between gap-3">
+            <code class="text-base text-ink-950 font-medium font-mono truncate" data-copy-target>{m.identifier}</code>
+            <button
+              type="button"
+              class="shrink-0 text-xs font-medium uppercase tracking-wider text-gold-600 hover:text-gold-700 transition-colors"
+              data-copy={m.identifier}
+              data-label-copy={labels.copy}
+              data-label-copied={labels.copied}
+            >
+              {labels.copy}
+            </button>
+          </div>
+        </div>
+
+        {m.url && (
+          <a
+            href={m.url}
+            target="_blank"
+            rel="noopener"
+            class="mt-4 w-full inline-flex items-center justify-center gap-2 py-3 rounded-full text-sm font-medium border border-ink-200 text-ink-900 hover:bg-ink-950 hover:text-ink-50 hover:border-ink-950 transition-all"
+          >
+            {labels.open}
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        )}
+      </article>
+    ))}
+  </div>
+
+  <p class="mt-10 text-center text-sm text-ink-500">{labels.note}</p>
 </Section>
 
 <Section bg="light">
@@ -99,3 +190,34 @@ const labels = {
     ))}
   </div>
 </Section>
+
+<Section bg="dark">
+  <div class="text-center max-w-2xl mx-auto">
+    <h2 class="text-3xl lg:text-4xl text-ink-50 leading-tight">{labels.questions}</h2>
+    <a href={`mailto:${church.contact.email}`} class="mt-8 inline-flex btn btn-primary">
+      {labels.talk}
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</Section>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('button[data-copy]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const text = btn.dataset.copy ?? '';
+      const labelCopy = btn.dataset.labelCopy ?? 'Copy';
+      const labelCopied = btn.dataset.labelCopied ?? 'Copied!';
+      try {
+        await navigator.clipboard.writeText(text);
+        btn.textContent = labelCopied;
+        btn.classList.add('text-green-600');
+        setTimeout(() => {
+          btn.textContent = labelCopy;
+          btn.classList.remove('text-green-600');
+        }, 2000);
+      } catch (err) {
+        console.warn('clipboard failed:', err);
+      }
+    });
+  });
+</script>

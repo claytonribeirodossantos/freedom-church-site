@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import { church } from '../data/church';
 
 interface Props {
   title?: string;
@@ -23,8 +24,48 @@ const desc =
     : lang === 'en'
       ? 'Brazilian community of faith in Kensington, Maryland. Sunday services 10:30 AM. Find freedom in Christ.'
       : 'Comunidad brasileña de fe en Kensington, Maryland. Cultos los domingos 10:30 AM. Libérate en Cristo.');
-const ogImage = image ?? '/og-default.jpg';
+const ogImage = image ?? '/logo.png';
 const canonical = new URL(Astro.url.pathname, Astro.site);
+
+// JSON-LD structured data: Church + Organization
+const churchSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Church',
+  name: church.name,
+  alternateName: church.brandHandle,
+  url: 'https://ourfreedomchurch.com',
+  logo: 'https://ourfreedomchurch.com/logo.png',
+  image: 'https://ourfreedomchurch.com/logo.png',
+  description: desc,
+  email: church.contact.email,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: church.address.street,
+    addressLocality: church.address.city,
+    addressRegion: church.address.state,
+    postalCode: church.address.zip,
+    addressCountry: 'US',
+  },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: 'Sunday',
+      opens: '10:30',
+      closes: '12:00',
+    },
+  ],
+  sameAs: [
+    church.social.instagram,
+    church.social.youtube,
+  ].filter(Boolean),
+  founder: church.pastors.map((p) => ({
+    '@type': 'Person',
+    name: p.name,
+    jobTitle: p.role[lang],
+    sameAs: p.instagram,
+  })),
+  knowsLanguage: ['pt-BR', 'en-US', 'es-ES'],
+};
 ---
 
 <!doctype html>
@@ -55,6 +96,15 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     />
 
     <meta name="generator" content={Astro.generator} />
+
+    <!-- Alternate language links -->
+    <link rel="alternate" hreflang="pt-BR" href={`https://ourfreedomchurch.com${Astro.url.pathname.replace(/^\/(en|es)/, '')}`} />
+    <link rel="alternate" hreflang="en-US" href={`https://ourfreedomchurch.com/en${Astro.url.pathname.replace(/^\/(en|es)/, '')}`} />
+    <link rel="alternate" hreflang="es-ES" href={`https://ourfreedomchurch.com/es${Astro.url.pathname.replace(/^\/(en|es)/, '')}`} />
+    <link rel="alternate" hreflang="x-default" href={`https://ourfreedomchurch.com${Astro.url.pathname.replace(/^\/(en|es)/, '')}`} />
+
+    <!-- Structured data: Church schema -->
+    <script type="application/ld+json" set:html={JSON.stringify(churchSchema)} />
   </head>
   <body>
     <a

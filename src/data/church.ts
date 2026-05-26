@@ -79,6 +79,31 @@ export const church = {
     phone: '',
   },
 
+  giving: {
+    zelle: {
+      identifier: 'contato@ourfreedomchurch.com',
+      identifierType: 'email',
+      label: 'Zelle',
+    },
+    venmo: {
+      handle: '@ourfreedomchurch',
+      url: 'https://venmo.com/u/ourfreedomchurch',
+      label: 'Venmo',
+    },
+    cashapp: {
+      handle: '$ourfreedomchurch',
+      url: 'https://cash.app/$ourfreedomchurch',
+      label: 'Cash App',
+    },
+  },
+
+  /**
+   * Web3Forms access key for prayer + contact forms.
+   * Free account at https://web3forms.com — Clayton needs to swap this
+   * placeholder for the real key generated for ourfreedomchurch.com.
+   */
+  web3FormsAccessKey: 'REPLACE_WITH_WEB3FORMS_ACCESS_KEY',
+
   ministries: {
     pt: ['Kids', 'Jovens', 'Casais', 'Mulheres', 'Homens', 'Louvor', 'Células'],
     en: ['Kids', 'Youth', 'Couples', 'Women', 'Men', 'Worship', 'Small Groups'],

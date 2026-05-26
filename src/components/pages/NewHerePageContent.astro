@@ -1,55 +1,126 @@
 ---
 import PageHero from '../PageHero.astro';
 import Section from '../Section.astro';
-import { getLangFromUrl } from '../../i18n/utils';
+import { getLangFromUrl, localizedPath } from '../../i18n/utils';
+import { church } from '../../data/church';
 
 const lang = getLangFromUrl(Astro.url);
+
+const manifestoLines = {
+  pt: [
+    { text: 'Você não precisa', emph: false },
+    { text: 'estar pronto.', emph: true },
+    { text: 'Só precisa', emph: false },
+    { text: 'aparecer.', emph: true },
+  ],
+  en: [
+    { text: "You don't have to be", emph: false },
+    { text: 'ready.', emph: true },
+    { text: 'Just', emph: false },
+    { text: 'show up.', emph: true },
+  ],
+  es: [
+    { text: 'No tienes que', emph: false },
+    { text: 'estar listo.', emph: true },
+    { text: 'Solo necesitas', emph: false },
+    { text: 'aparecer.', emph: true },
+  ],
+}[lang];
 
 const steps = {
   pt: [
     { n: '01', t: 'Chegue como quiser', d: 'Sem dress code. Sem expectativa. Use o que te faz bem.' },
-    { n: '02', t: 'Estacionamento fácil', d: 'Há voluntários para te receber e indicar tudo.' },
-    { n: '03', t: 'Pegue um café', d: 'Quinze minutos antes do culto começa a comunhão.' },
+    { n: '02', t: 'Estacionamento fácil', d: 'Voluntários te recebem na entrada e indicam tudo.' },
+    { n: '03', t: 'Pegue um café', d: 'Quinze minutos antes do culto a comunhão começa.' },
     { n: '04', t: 'Curta o culto', d: 'Cerca de 80 minutos. Música, Palavra e oração.' },
-    { n: '05', t: 'Crianças cuidadas', d: 'Sala dos kids com equipe treinada e segura.' },
-    { n: '06', t: 'Conecte-se depois', d: 'Sem pressão. Quando estiver pronto, te apresentamos à família.' },
+    { n: '05', t: 'Kids cuidados', d: 'Sala segura com equipe treinada para os pequenos.' },
+    { n: '06', t: 'Conecte-se depois', d: 'Sem pressão. Quando estiver pronto, apresentamos a família.' },
   ],
   en: [
     { n: '01', t: 'Come as you are', d: 'No dress code. No expectations. Wear what feels right.' },
-    { n: '02', t: 'Easy parking', d: 'Volunteers are there to greet you and show you around.' },
+    { n: '02', t: 'Easy parking', d: 'Volunteers greet you at the entrance and guide you.' },
     { n: '03', t: 'Grab a coffee', d: 'Fifteen minutes before service the fellowship begins.' },
-    { n: '04', t: 'Enjoy the service', d: 'About 80 minutes. Music, the Word and prayer.' },
-    { n: '05', t: 'Kids well cared for', d: 'Kids room with a trained and safe team.' },
-    { n: '06', t: 'Connect afterward', d: 'No pressure. When you are ready, we introduce you to the family.' },
+    { n: '04', t: 'Enjoy the service', d: 'About 80 minutes. Music, the Word, and prayer.' },
+    { n: '05', t: 'Kids well cared for', d: 'Safe room with trained team for the little ones.' },
+    { n: '06', t: 'Connect afterward', d: 'No pressure. When you are ready, we introduce the family.' },
   ],
   es: [
     { n: '01', t: 'Ven como eres', d: 'Sin código de vestimenta. Sin expectativas. Usa lo que te haga bien.' },
-    { n: '02', t: 'Estacionamiento fácil', d: 'Hay voluntarios para recibirte e indicarte todo.' },
+    { n: '02', t: 'Estacionamiento fácil', d: 'Voluntarios te reciben en la entrada y te guían.' },
     { n: '03', t: 'Toma un café', d: 'Quince minutos antes del culto empieza la comunión.' },
     { n: '04', t: 'Disfruta el culto', d: 'Cerca de 80 minutos. Música, Palabra y oración.' },
-    { n: '05', t: 'Niños bien cuidados', d: 'Sala infantil con equipo entrenado y seguro.' },
-    { n: '06', t: 'Conéctate después', d: 'Sin presión. Cuando estés listo, te presentamos a la familia.' },
+    { n: '05', t: 'Niños bien cuidados', d: 'Sala segura con equipo entrenado para los pequeños.' },
+    { n: '06', t: 'Conéctate después', d: 'Sin presión. Cuando estés listo, presentamos a la familia.' },
+  ],
+}[lang];
+
+const faq = {
+  pt: [
+    { q: 'Preciso me cadastrar antes?', a: 'Não. É só chegar. Se quiser nos avisar, mandamos um WhatsApp lembrando do horário.' },
+    { q: 'Vou ter que falar na frente das pessoas?', a: 'Jamais. Ninguém te apresenta sem você pedir. Você decide quando e como se conectar.' },
+    { q: 'E se eu não tiver dinheiro pra oferta?', a: 'Não precisa dar nada. Oferta é decisão pessoal, não cobrança. Tem ofertório no culto, mas é totalmente opcional.' },
+    { q: 'Posso levar minhas crianças?', a: 'Por favor, leve! O Freedom Kids cuida deles com segurança e diversão enquanto você está no culto.' },
+    { q: 'É só pra brasileiros?', a: 'Não. Recebemos brasileiros, americanos, latinos, e qualquer pessoa que queira conhecer Jesus. O culto é em português mas com tradução visual.' },
+    { q: 'E se eu tiver perguntas durante o culto?', a: 'Anote ou guarde pra depois. Tem sempre alguém disponível pra conversar ao final.' },
+  ],
+  en: [
+    { q: 'Do I need to register first?', a: 'No. Just show up. If you let us know, we send a WhatsApp reminder.' },
+    { q: 'Will I have to speak in front of people?', a: 'Never. No one introduces you unless you ask. You decide when and how to connect.' },
+    { q: "What if I can't afford an offering?", a: 'You do not need to give anything. Offering is a personal decision, not a charge. There is offering time, but it is fully optional.' },
+    { q: 'Can I bring my kids?', a: 'Please do! Freedom Kids takes care of them with safety and fun while you are in service.' },
+    { q: 'Is it only for Brazilians?', a: 'No. We welcome Brazilians, Americans, Latinos, and anyone wanting to know Jesus. The service is in Portuguese with visual translation.' },
+    { q: 'What if I have questions during service?', a: 'Write down or save for later. There is always someone available to talk afterward.' },
+  ],
+  es: [
+    { q: '¿Necesito registrarme antes?', a: 'No. Solo aparece. Si nos avisas, te enviamos un recordatorio por WhatsApp.' },
+    { q: '¿Tendré que hablar frente a las personas?', a: 'Jamás. Nadie te presenta sin que tú lo pidas. Tú decides cuándo y cómo conectarte.' },
+    { q: '¿Y si no tengo dinero para la ofrenda?', a: 'No necesitas dar nada. La ofrenda es decisión personal, no cobro. Hay tiempo de ofrenda, pero es totalmente opcional.' },
+    { q: '¿Puedo llevar a mis niños?', a: '¡Por favor, hazlo! Freedom Kids los cuida con seguridad y diversión mientras estás en el culto.' },
+    { q: '¿Es solo para brasileños?', a: 'No. Recibimos a brasileños, americanos, latinos y a cualquier persona que quiera conocer a Jesús. El culto es en portugués con traducción visual.' },
+    { q: '¿Y si tengo preguntas durante el culto?', a: 'Anota o guarda para después. Siempre hay alguien disponible para conversar al final.' },
   ],
 }[lang];
 
 const labels = {
-  pt: { what: 'O que esperar', cta: 'Quer que avisemos que você vem?', sub: 'Mandamos um WhatsApp lembrando do horário e te recebemos pessoalmente.', btn: 'Avise que vou', skip: 'Prefiro chegar de surpresa' },
-  en: { what: 'What to expect', cta: 'Want us to know you are coming?', sub: 'We send a WhatsApp reminder and welcome you in person.', btn: 'Let them know', skip: 'I will surprise you' },
-  es: { what: 'Qué esperar', cta: '¿Quieres que sepamos que vienes?', sub: 'Te enviamos un recordatorio por WhatsApp y te recibimos en persona.', btn: 'Avísales que voy', skip: 'Prefiero llegar de sorpresa' },
+  pt: { steps: 'Como vai ser', faq: 'Perguntas reais, respostas reais', cta: 'Quer que te esperemos?', sub: 'Mandamos um WhatsApp lembrando do horário e te recebemos pessoalmente na porta.', btn: 'Avise que vou', when: 'Domingo · 10h30', map: 'Como chegar' },
+  en: { steps: 'How it will be', faq: 'Real questions, real answers', cta: 'Want us to expect you?', sub: 'We send a WhatsApp reminder and welcome you personally at the door.', btn: 'Let them know', when: 'Sunday · 10:30 AM', map: 'Get directions' },
+  es: { steps: 'Cómo será', faq: 'Preguntas reales, respuestas reales', cta: '¿Quieres que te esperemos?', sub: 'Te enviamos un recordatorio por WhatsApp y te recibimos personalmente en la puerta.', btn: 'Avísales que voy', when: 'Domingo · 10:30 AM', map: 'Cómo llegar' },
 }[lang];
 ---
 
 <PageHero pageKey="newHere" />
 
+<!-- Manifesto -->
 <Section bg="light">
-  <div class="max-w-2xl mb-12">
-    <span class="eyebrow">{labels.what}</span>
-    <h2 class="mt-4 text-3xl lg:text-4xl text-ink-950 leading-tight">{labels.what}</h2>
+  <h2
+    class="mega text-ink-950"
+    style="font-size: clamp(2.5rem, 8vw, 7rem)"
+    data-reveal
+  >
+    {manifestoLines.map((line) => (
+      <span class="block">
+        {line.emph
+          ? <em class="italic font-light text-gold-500">{line.text}</em>
+          : line.text}
+      </span>
+    ))}
+  </h2>
+</Section>
+
+<!-- Steps -->
+<Section bg="tint">
+  <div class="max-w-2xl mb-16" data-reveal>
+    <span class="eyebrow">{labels.steps}</span>
+    <h2 class="mt-4 text-3xl lg:text-4xl text-ink-950 leading-tight">{labels.steps}</h2>
   </div>
   <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    {steps.map((s) => (
-      <div class="bg-ink-50 border border-ink-200 rounded-2xl p-6 hover:border-ink-950 hover:shadow-lg transition-all">
-        <div class="text-gold-500 font-display text-3xl font-light mb-3">{s.n}</div>
+    {steps.map((s, i) => (
+      <div
+        class="bg-ink-50 border border-ink-200 rounded-2xl p-7 group hover:border-ink-950 hover:shadow-lg transition-all"
+        data-reveal
+        data-reveal-delay={i + 1}
+      >
+        <div class="display-num text-5xl mb-4">{s.n}</div>
         <h3 class="text-lg text-ink-950">{s.t}</h3>
         <p class="mt-2 text-sm text-ink-600 leading-relaxed">{s.d}</p>
       </div>
@@ -57,16 +128,80 @@ const labels = {
   </div>
 </Section>
 
-<Section bg="dark">
-  <div class="text-center max-w-2xl mx-auto">
-    <h2 class="text-3xl lg:text-4xl text-ink-50 leading-tight">{labels.cta}</h2>
-    <p class="mt-4 text-ink-300">{labels.sub}</p>
-    <div class="mt-8 flex flex-wrap gap-3 justify-center">
-      <a href="#" class="btn btn-primary !bg-gold-500 !text-ink-950 hover:!bg-gold-400">
-        {labels.btn}
+<!-- Address + map -->
+<Section bg="light">
+  <div class="grid lg:grid-cols-2 gap-12 items-center">
+    <div data-reveal>
+      <span class="eyebrow">{labels.when}</span>
+      <h2 class="mt-4 mega text-ink-950" style="font-size: clamp(2rem, 5vw, 3.5rem)">
+        {labels.when}
+      </h2>
+      <address class="not-italic mt-8 text-lg text-ink-700 leading-relaxed">
+        {church.address.street}<br />
+        {church.address.city}, {church.address.state} {church.address.zip}
+      </address>
+      <a href={church.address.googleMapsUrl} target="_blank" rel="noopener" class="mt-6 inline-flex btn btn-ghost">
+        {labels.map}
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
-      <a href="#" class="btn btn-ghost !text-ink-50 !border-ink-700 hover:!bg-ink-50 hover:!text-ink-950">
-        {labels.skip}
+    </div>
+    <div class="aspect-square lg:aspect-[4/5] rounded-3xl overflow-hidden bg-ink-200" data-reveal data-reveal-delay="1">
+      <iframe
+        src={`https://www.google.com/maps?q=${encodeURIComponent(church.address.full)}&output=embed`}
+        width="100%"
+        height="100%"
+        style="border:0;"
+        loading="lazy"
+        title="Freedom Church location"
+      ></iframe>
+    </div>
+  </div>
+</Section>
+
+<!-- FAQ -->
+<Section bg="tint">
+  <div class="max-w-2xl mb-12" data-reveal>
+    <span class="eyebrow">{labels.faq}</span>
+    <h2 class="mt-4 text-3xl lg:text-4xl text-ink-950 leading-tight">{labels.faq}</h2>
+  </div>
+  <div class="max-w-3xl space-y-3">
+    {faq.map((f, i) => (
+      <details
+        class="group bg-ink-50 rounded-xl border border-ink-200 overflow-hidden"
+        data-reveal
+        data-reveal-delay={(i % 4) + 1}
+      >
+        <summary class="cursor-pointer p-6 flex items-center justify-between gap-4 font-display text-lg text-ink-950">
+          {f.q}
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" class="transition-transform group-open:rotate-180 shrink-0 text-gold-500">
+            <path d="m5 8 5 5 5-5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </summary>
+        <div class="px-6 pb-6 text-ink-700 leading-relaxed">{f.a}</div>
+      </details>
+    ))}
+  </div>
+</Section>
+
+<!-- Final CTA -->
+<Section bg="dark">
+  <div class="text-center max-w-2xl mx-auto" data-reveal>
+    <h2 class="mega text-ink-50" style="font-size: clamp(2rem, 5vw, 4rem)">
+      {labels.cta}
+    </h2>
+    <p class="mt-6 text-lg text-ink-300">{labels.sub}</p>
+    <div class="mt-10 flex flex-wrap gap-3 justify-center">
+      <a
+        href={`https://wa.me/?text=${encodeURIComponent(lang === 'pt' ? 'Olá! Vou visitar a Freedom Church neste domingo.' : lang === 'en' ? 'Hi! I will visit Freedom Church this Sunday.' : '¡Hola! Voy a visitar Freedom Church este domingo.')}`}
+        target="_blank"
+        rel="noopener"
+        class="btn btn-primary"
+      >
+        {labels.btn}
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href={localizedPath(lang, '/contato')} class="btn btn-ghost-light">
+        {lang === 'pt' ? 'Prefiro mandar uma mensagem' : lang === 'en' ? 'I prefer to send a message' : 'Prefiero enviar un mensaje'}
       </a>
     </div>
   </div>
