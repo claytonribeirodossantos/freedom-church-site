@@ -145,48 +145,29 @@ const churchSchema = {
       }, { passive: true });
 
       // Live status detection
-      // Strategy: Sunday between 10:00 and 12:30 America/New_York → assume live
-      // (the actual stream stays up during/after; this just controls the "pulse")
-      function checkLiveStatus() {
-        const nowET = new Date(
-          new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }),
-        );
-        const day = nowET.getDay(); // 0 = Sunday
-        const minutes = nowET.getHours() * 60 + nowET.getMinutes();
-        const start = 10 * 60;       // 10:00 AM
-        const end = 12 * 60 + 30;    // 12:30 PM
-        const isLive = day === 0 && minutes >= start && minutes <= end;
-
+      // Strategy: fetch /api/live-status.json (Cloudflare Worker that checks YouTube
+      // in real-time). Falls back to Sunday 10:00-12:30 ET heuristic if API fails.
+      function setLiveDot(isLive: boolean) {
         document.querySelectorAll('[data-live-cta]').forEach((cta) => {
           const dot = cta.querySelector<HTMLElement>('[data-live-dot]');
-          const label = cta.querySelector<HTMLElement>('[data-live-label]');
           if (!dot) return;
 
-          // Clear existing color classes
           const allColors = ['bg-ink-400', 'bg-ink-500', 'bg-clay-500', 'bg-red-500', 'bg-gold-500'];
           dot.querySelectorAll('span').forEach((s) => {
             allColors.forEach((c) => s.classList.remove(c));
           });
-          if (dot.classList.contains('w-2')) {
-            // it's the simple dot (mobile)
-            allColors.forEach((c) => dot.classList.remove(c));
-          }
+          allColors.forEach((c) => dot.classList.remove(c));
 
           if (isLive) {
-            // Make it pulse RED
-            dot.classList.add('animate-pulse');
             const spans = dot.querySelectorAll('span');
             if (spans.length > 0) {
               spans.forEach((s) => s.classList.add('bg-red-500'));
-              // Restore ping animation on first child
               spans[0]?.classList.add('animate-ping');
             } else {
-              dot.classList.add('bg-red-500');
+              dot.classList.add('bg-red-500', 'animate-pulse');
             }
             cta.setAttribute('data-status', 'live');
           } else {
-            // Gray dot, no animation
-            dot.classList.remove('animate-pulse');
             const spans = dot.querySelectorAll('span');
             if (spans.length > 0) {
               spans.forEach((s) => s.classList.add('bg-ink-400'));
@@ -198,6 +179,62 @@ const churchSchema = {
           }
         });
       }
+
+      const YT_CHANNEL = 'UCmItF2T27GJFT6gFJti_9SA';
+
+      async function detectLiveFromYouTube(): Promise<boolean> {
+        // Strategy: try multiple CORS proxies to fetch the channel's /live page.
+        // YouTube serves a video page if live, channel page if not.
+        const targetUrl = `https://www.youtube.com/channel/${YT_CHANNEL}/live`;
+        const proxies = [
+          `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`,
+          `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`,
+        ];
+
+        for (const proxyUrl of proxies) {
+          try {
+            const r = await fetch(proxyUrl, { cache: 'no-store' });
+            if (!r.ok) continue;
+            const html = await r.text();
+            // Detect live indicators in the HTML
+            if (
+              /"isLive":true/.test(html) ||
+              /"liveBroadcastDetails":\{"isLiveNow":true/.test(html) ||
+              /<meta itemprop="isLiveBroadcast" content="True">/i.test(html)
+            ) {
+              return true;
+            }
+            // If the page is clearly the channel home (not a live), short-circuit false
+            if (/"videoTab"|"playlistTab"/.test(html) && !/"isLive":true/.test(html)) {
+              return false;
+            }
+          } catch {
+            // try next proxy
+          }
+        }
+        // All proxies failed — fall through to heuristic
+        throw new Error('live-check unavailable');
+      }
+
+      function heuristicLive(): boolean {
+        const nowET = new Date(
+          new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }),
+        );
+        const day = nowET.getDay();
+        const minutes = nowET.getHours() * 60 + nowET.getMinutes();
+        return day === 0 && minutes >= 600 && minutes <= 750;
+      }
+
+      async function checkLiveStatus() {
+        try {
+          const live = await detectLiveFromYouTube();
+          setLiveDot(live);
+        } catch {
+          // Fallback: schedule-based heuristic
+          setLiveDot(heuristicLive());
+        }
+      }
+
       checkLiveStatus();
       // Re-check every 60 seconds
       setInterval(checkLiveStatus, 60_000);
