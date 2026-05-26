@@ -20,10 +20,10 @@ const fullTitle = title ? `${title} — ${siteName}` : `${siteName} — ${t('her
 const desc =
   description ??
   (lang === 'pt'
-    ? 'Comunidade brasileira de fé em Kensington, Maryland. Cultos aos domingos 10h30. Liberte-se em Cristo.'
+    ? 'Igreja para todas as nações em Kensington, Maryland. Cultos aos domingos 10h30. Liberte-se em Cristo.'
     : lang === 'en'
-      ? 'Brazilian community of faith in Kensington, Maryland. Sunday services 10:30 AM. Find freedom in Christ.'
-      : 'Comunidad brasileña de fe en Kensington, Maryland. Cultos los domingos 10:30 AM. Libérate en Cristo.');
+      ? 'A church for every nation in Kensington, Maryland. Sunday services 10:30 AM. Find freedom in Christ.'
+      : 'Iglesia para todas las naciones en Kensington, Maryland. Cultos los domingos 10:30 AM. Libérate en Cristo.');
 const ogImage = image ?? '/logo.png';
 const canonical = new URL(Astro.url.pathname, Astro.site);
 

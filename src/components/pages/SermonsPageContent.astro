@@ -2,47 +2,52 @@
 import PageHero from '../PageHero.astro';
 import Section from '../Section.astro';
 import { getLangFromUrl } from '../../i18n/utils';
-import { formatDate } from '../../i18n/format';
-import { getChannelVideos, extractSeries, extractPastor, cleanTitle } from '../../lib/youtube';
 import { church } from '../../data/church';
 
 const lang = getLangFromUrl(Astro.url);
 
-const videos = await getChannelVideos();
-const sermons = videos.map((v) => ({
-  ...v,
-  series: extractSeries(v.title),
-  pastor: extractPastor(v.title),
-  cleanTitle: cleanTitle(v.title),
-}));
-
-const seriesList = Array.from(new Set(sermons.map((s) => s.series)));
-
 const labels = {
-  pt: { all: 'Todas', filter: 'Filtrar por série', empty: 'Carregando pregações...', subscribe: 'Inscrever no canal' },
-  en: { all: 'All', filter: 'Filter by series', empty: 'Loading sermons...', subscribe: 'Subscribe to channel' },
-  es: { all: 'Todas', filter: 'Filtrar por serie', empty: 'Cargando prédicas...', subscribe: 'Suscribirse al canal' },
+  pt: { all: 'Todas', filter: 'Filtrar por série', loading: 'Carregando pregações...', error: 'Não conseguimos carregar agora. Veja no canal direto.', subscribe: 'Inscrever no canal', watch: 'Assistir' },
+  en: { all: 'All', filter: 'Filter by series', loading: 'Loading sermons...', error: "Couldn't load right now. View directly on the channel.", subscribe: 'Subscribe to channel', watch: 'Watch' },
+  es: { all: 'Todas', filter: 'Filtrar por serie', loading: 'Cargando prédicas...', error: 'No pudimos cargar ahora. Ver en el canal directamente.', subscribe: 'Suscribirse al canal', watch: 'Ver' },
 }[lang];
+
+const dateLocale = lang === 'pt' ? 'pt-BR' : lang === 'en' ? 'en-US' : 'es-ES';
 ---
 
 <PageHero pageKey="sermons" />
 
 <Section bg="light">
-  {sermons.length === 0 ? (
-    <p class="text-center text-ink-500 py-12">{labels.empty}</p>
-  ) : (
-    <>
+  <div
+    id="sermon-state"
+    data-channel-id={church.social.youtubeChannelId}
+    data-lang={lang}
+    data-date-locale={dateLocale}
+    data-label-all={labels.all}
+    data-label-filter={labels.filter}
+    data-label-watch={labels.watch}
+  >
+    <!-- Initial loading state -->
+    <div id="sermon-loading" class="flex flex-col items-center justify-center py-24">
+      <div class="w-16 h-16 rounded-full border-4 border-ink-200 border-t-gold-500 animate-spin"></div>
+      <p class="mt-6 text-ink-500 text-sm">{labels.loading}</p>
+    </div>
+
+    <!-- Error state -->
+    <div id="sermon-error" class="hidden text-center py-24">
+      <p class="text-ink-700 text-lg">{labels.error}</p>
+      <a href={church.social.youtube} target="_blank" rel="noopener" class="mt-6 inline-flex btn btn-primary">
+        {labels.subscribe}
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+
+    <!-- Content area (populated by JS) -->
+    <div id="sermon-content" class="hidden">
       <div class="flex flex-wrap items-center justify-between gap-4 mb-12">
-        <div class="flex flex-wrap items-center gap-3">
+        <div id="sermon-filters" class="flex flex-wrap items-center gap-3">
           <span class="text-sm text-ink-600 mr-2">{labels.filter}:</span>
-          <button data-filter="all" class="filter-pill px-4 py-2 rounded-full text-sm border border-ink-950 bg-ink-950 text-ink-50">
-            {labels.all}
-          </button>
-          {seriesList.map((s) => (
-            <button data-filter={s} class="filter-pill px-4 py-2 rounded-full text-sm border border-ink-200 text-ink-700 hover:border-ink-950 hover:text-ink-950 transition-colors">
-              {s}
-            </button>
-          ))}
+          <!-- Filter pills inserted by JS -->
         </div>
         <a href={church.social.youtube} target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-sm font-medium text-gold-600 hover:text-gold-700">
           {labels.subscribe}
@@ -50,73 +55,182 @@ const labels = {
         </a>
       </div>
 
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12" data-sermon-grid>
-        {sermons.map((s) => {
-          const date = formatDate(s.publishedAt, lang);
-          return (
-            <a
-              href={s.watchUrl}
-              target="_blank"
-              rel="noopener"
-              class="sermon-card group block"
-              data-series={s.series}
-            >
-              <div class="relative aspect-video rounded-xl overflow-hidden bg-ink-950 card-editorial">
-                <img
-                  src={s.thumbnailUrl}
-                  alt={s.cleanTitle}
-                  class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  loading="lazy"
-                  onerror="this.src = `https://i.ytimg.com/vi/${this.dataset.id}/hqdefault.jpg`"
-                  data-id={s.id}
-                />
-                <div class="absolute inset-0 bg-gradient-to-t from-ink-950/80 via-transparent to-transparent"></div>
-                <div class="absolute inset-0 flex items-center justify-center">
-                  <div class="w-16 h-16 rounded-full bg-gold-500 flex items-center justify-center group-hover:scale-110 transition-transform shadow-xl">
-                    <svg width="22" height="22" fill="currentColor" class="text-ink-950 ml-0.5"><path d="M5 3v22l18-11z"/></svg>
-                  </div>
-                </div>
-                <div class="absolute top-3 left-3 text-xs uppercase tracking-widest text-gold-400 bg-ink-950/80 backdrop-blur px-2.5 py-1 rounded">
-                  {s.series}
-                </div>
-              </div>
-              <h3 class="mt-5 text-xl text-ink-950 group-hover:text-gold-600 transition-colors leading-snug">
-                {s.cleanTitle}
-              </h3>
-              <div class="mt-2 flex items-center gap-2 text-sm text-ink-500">
-                <span>{s.pastor}</span>
-                <span class="w-1 h-1 rounded-full bg-ink-400"></span>
-                <span>{date}</span>
-              </div>
-            </a>
-          );
-        })}
+      <div id="sermon-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
+        <!-- Sermon cards inserted by JS -->
       </div>
-    </>
-  )}
+    </div>
+  </div>
 </Section>
 
 <script>
-  const pills = document.querySelectorAll<HTMLButtonElement>('.filter-pill');
-  const cards = document.querySelectorAll<HTMLAnchorElement>('.sermon-card');
+  type Video = {
+    id: string;
+    title: string;
+    publishedAt: string;
+    series: string;
+    pastor: string;
+    cleanTitle: string;
+    thumbnail: string;
+    watchUrl: string;
+  };
 
-  pills.forEach((pill) => {
-    pill.addEventListener('click', () => {
-      const filter = pill.dataset.filter;
-      pills.forEach((p) => {
-        p.classList.remove('bg-ink-950', 'text-ink-50', 'border-ink-950');
-        p.classList.add('border-ink-200', 'text-ink-700');
-      });
-      pill.classList.add('bg-ink-950', 'text-ink-50', 'border-ink-950');
-      pill.classList.remove('border-ink-200', 'text-ink-700');
+  const state = document.getElementById('sermon-state') as HTMLElement;
+  const loading = document.getElementById('sermon-loading');
+  const errorEl = document.getElementById('sermon-error');
+  const content = document.getElementById('sermon-content');
+  const filtersEl = document.getElementById('sermon-filters');
+  const gridEl = document.getElementById('sermon-grid');
 
-      cards.forEach((card) => {
-        if (filter === 'all' || card.dataset.series === filter) {
-          card.style.display = '';
-        } else {
-          card.style.display = 'none';
-        }
+  const channelId = state?.dataset.channelId ?? '';
+  const lang = state?.dataset.lang ?? 'pt';
+  const dateLocale = state?.dataset.dateLocale ?? 'pt-BR';
+  const labelAll = state?.dataset.labelAll ?? 'All';
+  const labelWatch = state?.dataset.labelWatch ?? 'Watch';
+
+  function decodeEntities(s: string): string {
+    return s.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+            .replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&apos;/g, "'");
+  }
+
+  function extractSeries(title: string): string {
+    const partMatch = title.match(/\|\s*([^|]+?)\s*\|\s*Part\s*\d+/i);
+    if (partMatch) return partMatch[1].trim();
+    const pipes = title.split('|').map(s => s.trim()).filter(Boolean);
+    if (pipes.length >= 3) {
+      const middle = pipes.slice(1, -1);
+      if (middle.length > 0) return middle[0];
+    }
+    if (/sunday\s+service/i.test(title)) return 'Sunday Service';
+    if (/culto/i.test(title)) return 'Culto Dominical';
+    return 'Mensagem';
+  }
+
+  function extractPastor(title: string): string {
+    const m = title.match(/^(Pastor[a]?\.?\s+[A-Za-zÀ-ÿ]+(?:\s+[A-Za-zÀ-ÿ]+)?|Pr\.?[a]?\.?\s+[A-Za-zÀ-ÿ]+(?:\s+[A-Za-zÀ-ÿ]+)?)/i);
+    return m ? m[1].trim() : 'Freedom Church';
+  }
+
+  function cleanTitle(title: string): string {
+    return title
+      .replace(/^(Pastor[a]?\.?|Pr\.?[a]?\.?)\s+[A-Za-zÀ-ÿ]+(?:\s+[A-Za-zÀ-ÿ]+)?\s*\|\s*/i, '')
+      .replace(/\s*\|\s*Freedom Church.*$/i, '')
+      .replace(/\s*-\s*Freedom Church.*$/i, '')
+      .replace(/\s*\|\s*Part\s*(\d+)/i, ' · Parte $1')
+      .trim();
+  }
+
+  async function fetchVideos(): Promise<Video[]> {
+    const feedUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
+    // Use rss2json — free, no API key, no CORS issues
+    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=50`;
+
+    const res = await fetch(apiUrl);
+    if (!res.ok) throw new Error(`rss2json: ${res.status}`);
+    const data = await res.json();
+    if (data.status !== 'ok') throw new Error(`rss2json status: ${data.status}`);
+
+    return (data.items as Array<Record<string, string>>).map((item) => {
+      const title = decodeEntities(item.title);
+      const idMatch = item.guid?.match(/yt:video:([A-Za-z0-9_-]+)/) || item.link?.match(/v=([A-Za-z0-9_-]+)/);
+      const id = idMatch ? idMatch[1] : '';
+      return {
+        id,
+        title,
+        publishedAt: item.pubDate,
+        series: extractSeries(title),
+        pastor: extractPastor(title),
+        cleanTitle: cleanTitle(title),
+        thumbnail: `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`,
+        watchUrl: `https://www.youtube.com/watch?v=${id}`,
+      };
+    }).filter(v => v.id);
+  }
+
+  function formatDate(dateStr: string): string {
+    try {
+      return new Intl.DateTimeFormat(dateLocale, { year: 'numeric', month: 'short', day: 'numeric' })
+        .format(new Date(dateStr));
+    } catch {
+      return dateStr;
+    }
+  }
+
+  let videos: Video[] = [];
+  let currentFilter = 'all';
+
+  function renderFilters() {
+    if (!filtersEl) return;
+    const series = Array.from(new Set(videos.map(v => v.series)));
+    // Clear existing pills (except the label)
+    Array.from(filtersEl.querySelectorAll('button')).forEach(b => b.remove());
+
+    const pills = [labelAll, ...series];
+    pills.forEach((label, i) => {
+      const btn = document.createElement('button');
+      btn.textContent = label;
+      btn.dataset.filter = i === 0 ? 'all' : label;
+      btn.className = 'filter-pill px-4 py-2 rounded-full text-sm transition-colors';
+      const isActive = (currentFilter === 'all' && i === 0) || currentFilter === label;
+      if (isActive) {
+        btn.classList.add('bg-ink-950', 'text-ink-50', 'border', 'border-ink-950');
+      } else {
+        btn.classList.add('border', 'border-ink-200', 'text-ink-700', 'hover:border-ink-950', 'hover:text-ink-950');
+      }
+      btn.addEventListener('click', () => {
+        currentFilter = btn.dataset.filter ?? 'all';
+        renderFilters();
+        renderGrid();
       });
+      filtersEl.appendChild(btn);
     });
-  });
+  }
+
+  function renderGrid() {
+    if (!gridEl) return;
+    gridEl.innerHTML = '';
+
+    const visible = currentFilter === 'all' ? videos : videos.filter(v => v.series === currentFilter);
+
+    visible.forEach((v) => {
+      const date = formatDate(v.publishedAt);
+      const card = document.createElement('a');
+      card.href = v.watchUrl;
+      card.target = '_blank';
+      card.rel = 'noopener';
+      card.className = 'group block';
+      card.innerHTML = `
+        <div class="relative aspect-video rounded-xl overflow-hidden bg-ink-950 card-editorial">
+          <img src="${v.thumbnail}" alt="${v.cleanTitle.replace(/"/g, '&quot;')}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" onerror="this.src='https://i.ytimg.com/vi/${v.id}/hqdefault.jpg'" />
+          <div class="absolute inset-0 bg-gradient-to-t from-ink-950/80 via-transparent to-transparent"></div>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="w-16 h-16 rounded-full bg-gold-500 flex items-center justify-center group-hover:scale-110 transition-transform shadow-xl">
+              <svg width="22" height="22" fill="currentColor" class="text-ink-950 ml-0.5"><path d="M5 3v22l18-11z"/></svg>
+            </div>
+          </div>
+          <div class="absolute top-3 left-3 text-xs uppercase tracking-widest text-gold-400 bg-ink-950/80 backdrop-blur px-2.5 py-1 rounded">${v.series}</div>
+        </div>
+        <h3 class="mt-5 text-xl text-ink-950 group-hover:text-gold-600 transition-colors leading-snug font-display">${v.cleanTitle}</h3>
+        <div class="mt-2 flex items-center gap-2 text-sm text-ink-500">
+          <span>${v.pastor}</span>
+          <span class="w-1 h-1 rounded-full bg-ink-400"></span>
+          <span>${date}</span>
+        </div>
+      `;
+      gridEl.appendChild(card);
+    });
+  }
+
+  fetchVideos()
+    .then((vids) => {
+      videos = vids;
+      loading?.classList.add('hidden');
+      content?.classList.remove('hidden');
+      renderFilters();
+      renderGrid();
+    })
+    .catch((err) => {
+      console.warn('sermon fetch failed:', err);
+      loading?.classList.add('hidden');
+      errorEl?.classList.remove('hidden');
+    });
 </script>
