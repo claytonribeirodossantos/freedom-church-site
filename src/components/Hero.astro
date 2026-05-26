@@ -4,14 +4,9 @@ import { getLangFromUrl, useTranslations, localizedPath } from '../i18n/utils';
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-// Slideshow images — cross-fade automático no hero
-const slides = [
-  'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=2400&q=85&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=2400&q=85&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=2400&q=85&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1601379760883-1bb497ef661b?w=2400&q=85&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1490489944944-49b1c20da414?w=2400&q=85&auto=format&fit=crop',
-];
+// Background video (Pexels CDN, MP4). Fallback automático pro poster se falhar.
+const bgVideo = 'https://videos.pexels.com/video-files/3209828/3209828-uhd_2560_1440_25fps.mp4';
+const bgPoster = 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=2400&q=85&auto=format&fit=crop';
 
 const headline = {
   pt: ['Liberte-se', 'em', 'Cristo.'],
@@ -24,33 +19,39 @@ const sub = {
   en: 'A church for every nation in Kensington, Maryland.\nSundays · 10:30 AM.',
   es: 'Una iglesia para todas las naciones en Kensington, Maryland.\nDomingos · 10:30 AM.',
 }[lang];
-
-const slideDuration = 6; // seconds each slide is visible
-const total = slides.length;
-const totalDuration = total * slideDuration;
 ---
 
 <section class="relative min-h-screen overflow-hidden bg-ink-950 text-ink-50">
-  <!-- Slideshow background -->
+  <!-- Video background with poster fallback -->
   <div class="absolute inset-0 overflow-hidden">
-    {slides.map((src, i) => (
-      <img
-        src={src}
-        alt=""
-        class="hero-slide absolute inset-0 w-full h-full object-cover"
-        style={`animation: hero-fade ${totalDuration}s ease-in-out ${i * slideDuration}s infinite; opacity: ${i === 0 ? 1 : 0};`}
-        loading={i === 0 ? 'eager' : 'lazy'}
-        fetchpriority={i === 0 ? 'high' : 'auto'}
-      />
-    ))}
+    <video
+      class="absolute inset-0 w-full h-full object-cover"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+      poster={bgPoster}
+      data-hero-video
+    >
+      <source src={bgVideo} type="video/mp4" />
+    </video>
+
+    <!-- Fallback poster image (visible if video fails to load — handled via JS) -->
+    <img
+      src={bgPoster}
+      alt=""
+      class="hero-fallback absolute inset-0 w-full h-full object-cover hidden"
+      loading="eager"
+    />
 
     <!-- Overlays -->
-    <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(5,5,5,0.55) 0%, rgba(5,5,5,0.7) 60%, rgba(5,5,5,0.92) 100%);"></div>
+    <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(5,5,5,0.55) 0%, rgba(5,5,5,0.7) 60%, rgba(5,5,5,0.95) 100%);"></div>
     <div class="absolute inset-0 opacity-30" style="background: radial-gradient(60% 80% at 25% 30%, rgba(201, 169, 97, 0.4), transparent 60%);"></div>
     <div class="absolute inset-0 grain"></div>
   </div>
 
-  <!-- Top corner -->
+  <!-- Top corner info -->
   <div class="absolute top-24 lg:top-32 left-0 right-0 z-10">
     <div class="container-page flex items-start justify-between">
       <span class="eyebrow eyebrow-light animate-(--animate-fade-in)">
@@ -70,7 +71,7 @@ const totalDuration = total * slideDuration;
   <div class="relative z-10 container-page min-h-screen flex flex-col justify-center pt-44 pb-32">
     <h1
       class="mega mt-12 text-ink-50"
-      style="font-size: clamp(3.5rem, 11vw, 11rem)"
+      style="font-size: clamp(3rem, 11vw, 11rem)"
     >
       {headline.map((word, i) => (
         <span
@@ -85,14 +86,14 @@ const totalDuration = total * slideDuration;
     </h1>
 
     <p
-      class="mt-12 lg:mt-14 text-xl lg:text-2xl text-ink-200 leading-relaxed max-w-xl whitespace-pre-line animate-(--animate-fade-up)"
+      class="mt-10 lg:mt-14 text-lg sm:text-xl lg:text-2xl text-ink-200 leading-relaxed max-w-xl whitespace-pre-line animate-(--animate-fade-up)"
       style="animation-delay: 700ms"
     >
       {sub}
     </p>
 
     <div
-      class="mt-12 flex flex-wrap items-center gap-4 animate-(--animate-fade-up)"
+      class="mt-10 flex flex-wrap items-center gap-3 lg:gap-4 animate-(--animate-fade-up)"
       style="animation-delay: 900ms"
     >
       <a href={localizedPath(lang, '/sou-novo-aqui')} class="btn btn-primary">
@@ -107,18 +108,6 @@ const totalDuration = total * slideDuration;
         <span data-live-label>{t('hero.cta.secondary')}</span>
       </a>
     </div>
-
-    <!-- Slideshow dots indicator -->
-    <div class="absolute bottom-32 left-0 right-0 z-10">
-      <div class="container-page flex items-center gap-2 justify-center md:justify-start">
-        {slides.map((_, i) => (
-          <span
-            class="hero-dot block w-8 h-0.5 rounded-full bg-ink-50/30"
-            style={`animation: hero-dot-fill ${totalDuration}s linear ${i * slideDuration}s infinite;`}
-          ></span>
-        ))}
-      </div>
-    </div>
   </div>
 
   <!-- Marquee de versículos -->
@@ -126,9 +115,9 @@ const totalDuration = total * slideDuration;
     <div class="marquee">
       <div class="marquee-track marquee-track-slow">
         {[...Array(6)].flatMap((_, k) => [
-          <span class="font-display italic text-lg whitespace-nowrap">João 8:32 — "Conhecereis a verdade, e a verdade vos libertará."</span>,
+          <span class="font-display italic text-base sm:text-lg whitespace-nowrap">João 8:32 — "Conhecereis a verdade, e a verdade vos libertará."</span>,
           <span class="text-gold-500">✦</span>,
-          <span class="font-display italic text-lg whitespace-nowrap">2 Coríntios 3:17 — "Onde está o Espírito do Senhor, aí há liberdade."</span>,
+          <span class="font-display italic text-base sm:text-lg whitespace-nowrap">2 Coríntios 3:17 — "Onde está o Espírito do Senhor, aí há liberdade."</span>,
           <span class="text-gold-500">✦</span>,
         ])}
       </div>
@@ -136,14 +125,37 @@ const totalDuration = total * slideDuration;
   </div>
 </section>
 
-<style is:global>
-  @keyframes hero-fade {
-    0%, 16% { opacity: 1; transform: scale(1.05); }
-    20%, 96% { opacity: 0; transform: scale(1.15); }
-    100% { opacity: 1; transform: scale(1.05); }
+<script>
+  // If video fails to load, show fallback image
+  const video = document.querySelector<HTMLVideoElement>('[data-hero-video]');
+  const fallback = document.querySelector<HTMLImageElement>('.hero-fallback');
+
+  if (video && fallback) {
+    let videoLoaded = false;
+
+    video.addEventListener('loadeddata', () => {
+      videoLoaded = true;
+    });
+
+    video.addEventListener('error', () => {
+      video.classList.add('hidden');
+      fallback.classList.remove('hidden');
+    });
+
+    // If video doesn't load within 5s (slow network or blocked), show fallback
+    setTimeout(() => {
+      if (!videoLoaded) {
+        video.classList.add('hidden');
+        fallback.classList.remove('hidden');
+        fallback.style.animation = 'hero-ken-burns 30s ease-in-out infinite alternate';
+      }
+    }, 5000);
   }
-  @keyframes hero-dot-fill {
-    0%, 16% { background-color: var(--color-gold-500); }
-    20%, 100% { background-color: rgba(250, 250, 247, 0.3); }
+</script>
+
+<style is:global>
+  @keyframes hero-ken-burns {
+    from { transform: scale(1.0); }
+    to   { transform: scale(1.15); }
   }
 </style>

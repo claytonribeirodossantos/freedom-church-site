@@ -1,7 +1,7 @@
 ---
 import PageHero from '../PageHero.astro';
 import Section from '../Section.astro';
-import { getLangFromUrl } from '../../i18n/utils';
+import { getLangFromUrl, localizedPath } from '../../i18n/utils';
 import { church } from '../../data/church';
 
 const lang = getLangFromUrl(Astro.url);
@@ -18,20 +18,29 @@ const labels = {
 <Section bg="light">
   <div class="grid lg:grid-cols-2 gap-12 lg:gap-16">
     {church.pastors.map((p, i) => (
-      <article class="group">
-        <div class="relative aspect-[4/5] rounded-3xl overflow-hidden bg-ink-100">
-          <div
-            class="absolute inset-0"
-            style={`background: linear-gradient(135deg, ${i === 0 ? '#0F0F0E, #2D2616' : '#1C1917, #4A3E25'});`}
-          ></div>
-          <div class="absolute inset-0 flex items-center justify-center">
-            <span class="font-display text-7xl lg:text-8xl text-gold-500/40">
-              {p.name.split(' ').map((n) => n[0]).join('').slice(0, 2)}
-            </span>
+      <article class="group" data-reveal data-reveal-delay={i + 1}>
+        <div class="relative aspect-[4/5] rounded-3xl overflow-hidden bg-ink-900">
+          <!-- Try to load real photo. If missing, show the placeholder underneath -->
+          <img
+            src={p.photo}
+            alt={p.name}
+            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling?.classList.remove('hidden');"
+          />
+          <!-- Placeholder gradient + initials (visible se foto faltar) -->
+          <div class="placeholder absolute inset-0" style={`background: linear-gradient(135deg, ${i === 0 ? '#0F0F0E, #4F3F1F' : '#1C1917, #7E6431'});`}>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <span class="font-display text-7xl lg:text-9xl text-gold-500/40 italic">
+                {p.name.split(' ').filter(w => /^[A-Z]/.test(w)).map(w => w[0]).slice(0, 2).join('')}
+              </span>
+            </div>
           </div>
-          <div class="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-ink-950 to-transparent">
-            <div class="text-xs uppercase tracking-widest text-gold-400 mb-1">{p.role[lang]}</div>
-            <div class="font-display text-3xl text-ink-50">{p.name}</div>
+
+          <!-- Bottom info bar -->
+          <div class="absolute inset-x-0 bottom-0 p-6 lg:p-8 bg-gradient-to-t from-ink-950 via-ink-950/70 to-transparent z-10">
+            <div class="text-xs uppercase tracking-[0.22em] text-gold-400 mb-1">{p.role[lang]}</div>
+            <div class="font-display text-3xl lg:text-4xl text-ink-50">{p.name}</div>
           </div>
         </div>
         <p class="mt-6 text-lg text-ink-700 leading-relaxed">{p.bio[lang]}</p>
@@ -51,9 +60,11 @@ const labels = {
 
 <Section bg="dark">
   <div class="text-center max-w-2xl mx-auto">
-    <h2 class="text-3xl lg:text-4xl text-ink-50 leading-tight">{labels.team}</h2>
-    <p class="mt-4 text-ink-300">{labels.teamDesc}</p>
-    <a href="#" class="mt-8 inline-flex btn btn-primary !bg-gold-500 !text-ink-950 hover:!bg-gold-400">
+    <h2 class="mega text-ink-50" style="font-size: clamp(2rem, 5vw, 4rem)">
+      {labels.team}
+    </h2>
+    <p class="mt-6 text-lg text-ink-300">{labels.teamDesc}</p>
+    <a href={localizedPath(lang, '/contato')} class="mt-10 inline-flex btn btn-primary">
       {labels.joinUs}
       <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </a>

@@ -12,21 +12,24 @@ const flagOf: Record<Lang, string> = {
 };
 ---
 
-<div class="relative group">
+<div class="relative" data-lang-switcher>
   <button
     type="button"
     class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-sm font-medium text-ink-700 hover:text-ink-950 hover:bg-ink-100 transition-colors"
     aria-label="Change language"
+    aria-expanded="false"
+    data-lang-toggle
   >
     <span class="text-base leading-none">{flagOf[current]}</span>
     <span class="uppercase tracking-wide">{current}</span>
-    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" class="transition-transform" data-lang-chevron>
       <path d="m3 4.5 3 3 3-3" stroke-linecap="round" stroke-linejoin="round" />
     </svg>
   </button>
 
   <div
-    class="absolute right-0 top-full mt-1 min-w-[160px] bg-ink-50 border border-ink-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 py-1 z-50"
+    class="absolute right-0 top-full mt-1 min-w-[160px] bg-ink-50 border border-ink-200 rounded-lg shadow-lg opacity-0 invisible transition-all duration-150 py-1 z-50"
+    data-lang-menu
   >
     {entries.map(([code, label]) => (
       <a
@@ -42,3 +45,43 @@ const flagOf: Record<Lang, string> = {
     ))}
   </div>
 </div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-lang-switcher]').forEach((el) => {
+    const toggle = el.querySelector<HTMLButtonElement>('[data-lang-toggle]');
+    const menu = el.querySelector<HTMLElement>('[data-lang-menu]');
+    const chevron = el.querySelector<HTMLElement>('[data-lang-chevron]');
+    if (!toggle || !menu) return;
+
+    let open = false;
+
+    function setOpen(v: boolean) {
+      open = v;
+      toggle!.setAttribute('aria-expanded', String(v));
+      if (v) {
+        menu!.classList.remove('opacity-0', 'invisible');
+        menu!.classList.add('opacity-100', 'visible');
+        chevron?.classList.add('rotate-180');
+      } else {
+        menu!.classList.add('opacity-0', 'invisible');
+        menu!.classList.remove('opacity-100', 'visible');
+        chevron?.classList.remove('rotate-180');
+      }
+    }
+
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setOpen(!open);
+    });
+
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+      if (!el.contains(e.target as Node)) setOpen(false);
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') setOpen(false);
+    });
+  });
+</script>
