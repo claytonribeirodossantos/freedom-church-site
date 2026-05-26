@@ -2,17 +2,34 @@
 import PageHero from '../PageHero.astro';
 import Section from '../Section.astro';
 import { getLangFromUrl } from '../../i18n/utils';
+import { getChannelVideos, extractSeries, extractPastor, cleanTitle } from '../../lib/youtube';
 import { church } from '../../data/church';
 
 const lang = getLangFromUrl(Astro.url);
 
+// Build-time fetch (server-side from Cloudflare during build). Snapshot pra fallback.
+const buildTimeVideos = await getChannelVideos();
+const buildTimeSermons = buildTimeVideos.map((v) => ({
+  id: v.id,
+  title: v.title,
+  publishedAt: v.publishedAt.toISOString(),
+  series: extractSeries(v.title),
+  pastor: extractPastor(v.title),
+  cleanTitle: cleanTitle(v.title),
+  thumbnail: v.thumbnailUrl,
+  watchUrl: v.watchUrl,
+}));
+
+const initialJSON = JSON.stringify(buildTimeSermons);
+
 const labels = {
-  pt: { all: 'Todas', filter: 'Filtrar por série', loading: 'Carregando pregações...', error: 'Não conseguimos carregar agora. Veja no canal direto.', subscribe: 'Inscrever no canal', watch: 'Assistir' },
-  en: { all: 'All', filter: 'Filter by series', loading: 'Loading sermons...', error: "Couldn't load right now. View directly on the channel.", subscribe: 'Subscribe to channel', watch: 'Watch' },
-  es: { all: 'Todas', filter: 'Filtrar por serie', loading: 'Cargando prédicas...', error: 'No pudimos cargar ahora. Ver en el canal directamente.', subscribe: 'Suscribirse al canal', watch: 'Ver' },
+  pt: { all: 'Todas', filter: 'Filtrar por série', loading: 'Carregando pregações...', empty: 'Em breve novas pregações.', subscribe: 'Inscrever no canal', watch: 'Assistir' },
+  en: { all: 'All', filter: 'Filter by series', loading: 'Loading sermons...', empty: 'New sermons coming soon.', subscribe: 'Subscribe to channel', watch: 'Watch' },
+  es: { all: 'Todas', filter: 'Filtrar por serie', loading: 'Cargando prédicas...', empty: 'Pronto nuevas prédicas.', subscribe: 'Suscribirse al canal', watch: 'Ver' },
 }[lang];
 
 const dateLocale = lang === 'pt' ? 'pt-BR' : lang === 'en' ? 'en-US' : 'es-ES';
+const hasBuildData = buildTimeSermons.length > 0;
 ---
 
 <PageHero pageKey="sermons" />
@@ -25,29 +42,24 @@ const dateLocale = lang === 'pt' ? 'pt-BR' : lang === 'en' ? 'en-US' : 'es-ES';
     data-date-locale={dateLocale}
     data-label-all={labels.all}
     data-label-filter={labels.filter}
-    data-label-watch={labels.watch}
+    data-has-initial={hasBuildData ? '1' : '0'}
   >
-    <!-- Initial loading state -->
-    <div id="sermon-loading" class="flex flex-col items-center justify-center py-24">
-      <div class="w-16 h-16 rounded-full border-4 border-ink-200 border-t-gold-500 animate-spin"></div>
-      <p class="mt-6 text-ink-500 text-sm">{labels.loading}</p>
-    </div>
+    <!-- Initial sermons (from build) embedded as JSON -->
+    <script id="sermons-initial" type="application/json" set:html={initialJSON} />
 
-    <!-- Error state -->
-    <div id="sermon-error" class="hidden text-center py-24">
-      <p class="text-ink-700 text-lg">{labels.error}</p>
-      <a href={church.social.youtube} target="_blank" rel="noopener" class="mt-6 inline-flex btn btn-primary">
-        {labels.subscribe}
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-    </div>
+    <!-- Loading state (only shown if no build-time data) -->
+    {!hasBuildData && (
+      <div id="sermon-loading" class="flex flex-col items-center justify-center py-24">
+        <div class="w-16 h-16 rounded-full border-4 border-ink-200 border-t-gold-500 animate-spin"></div>
+        <p class="mt-6 text-ink-500 text-sm">{labels.loading}</p>
+      </div>
+    )}
 
-    <!-- Content area (populated by JS) -->
-    <div id="sermon-content" class="hidden">
+    <!-- Content area -->
+    <div id="sermon-content" class:list={[!hasBuildData && 'hidden']}>
       <div class="flex flex-wrap items-center justify-between gap-4 mb-12">
         <div id="sermon-filters" class="flex flex-wrap items-center gap-3">
           <span class="text-sm text-ink-600 mr-2">{labels.filter}:</span>
-          <!-- Filter pills inserted by JS -->
         </div>
         <a href={church.social.youtube} target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-sm font-medium text-gold-600 hover:text-gold-700">
           {labels.subscribe}
@@ -55,9 +67,16 @@ const dateLocale = lang === 'pt' ? 'pt-BR' : lang === 'en' ? 'en-US' : 'es-ES';
         </a>
       </div>
 
-      <div id="sermon-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
-        <!-- Sermon cards inserted by JS -->
-      </div>
+      <div id="sermon-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12"></div>
+    </div>
+
+    <!-- Empty fallback -->
+    <div id="sermon-empty" class="hidden text-center py-24">
+      <p class="text-ink-700 text-lg">{labels.empty}</p>
+      <a href={church.social.youtube} target="_blank" rel="noopener" class="mt-6 inline-flex btn btn-primary">
+        {labels.subscribe}
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
     </div>
   </div>
 </Section>
@@ -76,16 +95,20 @@ const dateLocale = lang === 'pt' ? 'pt-BR' : lang === 'en' ? 'en-US' : 'es-ES';
 
   const state = document.getElementById('sermon-state') as HTMLElement;
   const loading = document.getElementById('sermon-loading');
-  const errorEl = document.getElementById('sermon-error');
   const content = document.getElementById('sermon-content');
+  const empty = document.getElementById('sermon-empty');
   const filtersEl = document.getElementById('sermon-filters');
   const gridEl = document.getElementById('sermon-grid');
+  const initialScript = document.getElementById('sermons-initial');
 
   const channelId = state?.dataset.channelId ?? '';
-  const lang = state?.dataset.lang ?? 'pt';
   const dateLocale = state?.dataset.dateLocale ?? 'pt-BR';
   const labelAll = state?.dataset.labelAll ?? 'All';
-  const labelWatch = state?.dataset.labelWatch ?? 'Watch';
+
+  let videos: Video[] = [];
+  try {
+    videos = JSON.parse(initialScript?.textContent || '[]');
+  } catch { videos = []; }
 
   function decodeEntities(s: string): string {
     return s.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
@@ -119,32 +142,73 @@ const dateLocale = lang === 'pt' ? 'pt-BR' : lang === 'en' ? 'en-US' : 'es-ES';
       .trim();
   }
 
-  async function fetchVideos(): Promise<Video[]> {
-    const feedUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
-    // Use rss2json — free, no API key, no CORS issues
-    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=50`;
-
-    const res = await fetch(apiUrl);
-    if (!res.ok) throw new Error(`rss2json: ${res.status}`);
-    const data = await res.json();
-    if (data.status !== 'ok') throw new Error(`rss2json status: ${data.status}`);
-
-    return (data.items as Array<Record<string, string>>).map((item) => {
-      const title = decodeEntities(item.title);
-      const idMatch = item.guid?.match(/yt:video:([A-Za-z0-9_-]+)/) || item.link?.match(/v=([A-Za-z0-9_-]+)/);
-      const id = idMatch ? idMatch[1] : '';
-      return {
-        id,
-        title,
-        publishedAt: item.pubDate,
-        series: extractSeries(title),
-        pastor: extractPastor(title),
-        cleanTitle: cleanTitle(title),
-        thumbnail: `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`,
-        watchUrl: `https://www.youtube.com/watch?v=${id}`,
-      };
-    }).filter(v => v.id);
+  function videoFromRss(item: Record<string, any>): Video {
+    const title = decodeEntities(item.title || '');
+    const idMatch = (item.guid || '').match(/yt:video:([A-Za-z0-9_-]+)/)
+      || (item.link || '').match(/v=([A-Za-z0-9_-]+)/);
+    const id = idMatch ? idMatch[1] : '';
+    return {
+      id,
+      title,
+      publishedAt: item.pubDate || item.published || new Date().toISOString(),
+      series: extractSeries(title),
+      pastor: extractPastor(title),
+      cleanTitle: cleanTitle(title),
+      thumbnail: `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`,
+      watchUrl: `https://www.youtube.com/watch?v=${id}`,
+    };
   }
+
+  // Multi-source fetch with fallbacks
+  async function fetchLatest(): Promise<Video[] | null> {
+    const feedUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
+
+    // Source 1: rss2json
+    try {
+      const r = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=50`);
+      if (r.ok) {
+        const d = await r.json();
+        if (d.status === 'ok' && Array.isArray(d.items) && d.items.length > 0) {
+          return d.items.map(videoFromRss).filter((v: Video) => v.id);
+        }
+      }
+    } catch (err) {
+      console.warn('rss2json failed:', err);
+    }
+
+    // Source 2: allorigins.win (CORS proxy)
+    try {
+      const r = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(feedUrl)}`);
+      if (r.ok) {
+        const xml = await r.text();
+        const entries = xml.split('<entry>').slice(1);
+        const vids = entries.map((entry: string) => {
+          const idM = entry.match(/<yt:videoId>([^<]+)<\/yt:videoId>/);
+          const titleM = entry.match(/<title>([^<]+)<\/title>/);
+          const pubM = entry.match(/<published>([^<]+)<\/published>/);
+          if (!idM || !titleM) return null;
+          const title = decodeEntities(titleM[1]);
+          return {
+            id: idM[1],
+            title,
+            publishedAt: pubM ? pubM[1] : new Date().toISOString(),
+            series: extractSeries(title),
+            pastor: extractPastor(title),
+            cleanTitle: cleanTitle(title),
+            thumbnail: `https://i.ytimg.com/vi/${idM[1]}/maxresdefault.jpg`,
+            watchUrl: `https://www.youtube.com/watch?v=${idM[1]}`,
+          } as Video;
+        }).filter((v: Video | null): v is Video => v !== null);
+        if (vids.length > 0) return vids;
+      }
+    } catch (err) {
+      console.warn('allorigins failed:', err);
+    }
+
+    return null;
+  }
+
+  let currentFilter = 'all';
 
   function formatDate(dateStr: string): string {
     try {
@@ -155,26 +219,22 @@ const dateLocale = lang === 'pt' ? 'pt-BR' : lang === 'en' ? 'en-US' : 'es-ES';
     }
   }
 
-  let videos: Video[] = [];
-  let currentFilter = 'all';
-
   function renderFilters() {
     if (!filtersEl) return;
-    const series = Array.from(new Set(videos.map(v => v.series)));
-    // Clear existing pills (except the label)
     Array.from(filtersEl.querySelectorAll('button')).forEach(b => b.remove());
 
+    const series = Array.from(new Set(videos.map(v => v.series)));
     const pills = [labelAll, ...series];
     pills.forEach((label, i) => {
       const btn = document.createElement('button');
       btn.textContent = label;
       btn.dataset.filter = i === 0 ? 'all' : label;
-      btn.className = 'filter-pill px-4 py-2 rounded-full text-sm transition-colors';
+      btn.className = 'filter-pill px-4 py-2 rounded-full text-sm transition-colors border';
       const isActive = (currentFilter === 'all' && i === 0) || currentFilter === label;
       if (isActive) {
-        btn.classList.add('bg-ink-950', 'text-ink-50', 'border', 'border-ink-950');
+        btn.classList.add('bg-ink-950', 'text-ink-50', 'border-ink-950');
       } else {
-        btn.classList.add('border', 'border-ink-200', 'text-ink-700', 'hover:border-ink-950', 'hover:text-ink-950');
+        btn.classList.add('border-ink-200', 'text-ink-700', 'hover:border-ink-950', 'hover:text-ink-950');
       }
       btn.addEventListener('click', () => {
         currentFilter = btn.dataset.filter ?? 'all';
@@ -188,7 +248,6 @@ const dateLocale = lang === 'pt' ? 'pt-BR' : lang === 'en' ? 'en-US' : 'es-ES';
   function renderGrid() {
     if (!gridEl) return;
     gridEl.innerHTML = '';
-
     const visible = currentFilter === 'all' ? videos : videos.filter(v => v.series === currentFilter);
 
     visible.forEach((v) => {
@@ -220,17 +279,26 @@ const dateLocale = lang === 'pt' ? 'pt-BR' : lang === 'en' ? 'en-US' : 'es-ES';
     });
   }
 
-  fetchVideos()
-    .then((vids) => {
-      videos = vids;
+  // Initial render (from build-time snapshot if available)
+  if (videos.length > 0) {
+    loading?.classList.add('hidden');
+    content?.classList.remove('hidden');
+    renderFilters();
+    renderGrid();
+  }
+
+  // Refresh from network in background
+  fetchLatest().then((latest) => {
+    if (latest && latest.length > 0) {
+      videos = latest;
       loading?.classList.add('hidden');
       content?.classList.remove('hidden');
+      empty?.classList.add('hidden');
       renderFilters();
       renderGrid();
-    })
-    .catch((err) => {
-      console.warn('sermon fetch failed:', err);
+    } else if (videos.length === 0) {
       loading?.classList.add('hidden');
-      errorEl?.classList.remove('hidden');
-    });
+      empty?.classList.remove('hidden');
+    }
+  });
 </script>

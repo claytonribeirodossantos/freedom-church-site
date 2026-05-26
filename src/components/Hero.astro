@@ -4,7 +4,14 @@ import { getLangFromUrl, useTranslations, localizedPath } from '../i18n/utils';
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-const heroImage = 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=2400&q=85&auto=format&fit=crop';
+// Slideshow images — cross-fade automático no hero
+const slides = [
+  'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=2400&q=85&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=2400&q=85&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=2400&q=85&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1601379760883-1bb497ef661b?w=2400&q=85&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1490489944944-49b1c20da414?w=2400&q=85&auto=format&fit=crop',
+];
 
 const headline = {
   pt: ['Liberte-se', 'em', 'Cristo.'],
@@ -17,27 +24,33 @@ const sub = {
   en: 'A church for every nation in Kensington, Maryland.\nSundays · 10:30 AM.',
   es: 'Una iglesia para todas las naciones en Kensington, Maryland.\nDomingos · 10:30 AM.',
 }[lang];
+
+const slideDuration = 6; // seconds each slide is visible
+const total = slides.length;
+const totalDuration = total * slideDuration;
 ---
 
 <section class="relative min-h-screen overflow-hidden bg-ink-950 text-ink-50">
-  <!-- Background image with Ken Burns -->
+  <!-- Slideshow background -->
   <div class="absolute inset-0 overflow-hidden">
-    <img
-      src={heroImage}
-      alt=""
-      class="absolute inset-0 w-full h-full object-cover animate-(--animate-ken-burns)"
-      loading="eager"
-      fetchpriority="high"
-    />
-    <!-- Dark overlay -->
-    <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(5, 5, 5, 0.55) 0%, rgba(5, 5, 5, 0.7) 60%, rgba(5, 5, 5, 0.92) 100%);"></div>
-    <!-- Color gradient -->
+    {slides.map((src, i) => (
+      <img
+        src={src}
+        alt=""
+        class="hero-slide absolute inset-0 w-full h-full object-cover"
+        style={`animation: hero-fade ${totalDuration}s ease-in-out ${i * slideDuration}s infinite; opacity: ${i === 0 ? 1 : 0};`}
+        loading={i === 0 ? 'eager' : 'lazy'}
+        fetchpriority={i === 0 ? 'high' : 'auto'}
+      />
+    ))}
+
+    <!-- Overlays -->
+    <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(5,5,5,0.55) 0%, rgba(5,5,5,0.7) 60%, rgba(5,5,5,0.92) 100%);"></div>
     <div class="absolute inset-0 opacity-30" style="background: radial-gradient(60% 80% at 25% 30%, rgba(201, 169, 97, 0.4), transparent 60%);"></div>
-    <!-- Grain -->
     <div class="absolute inset-0 grain"></div>
   </div>
 
-  <!-- Top corner: eyebrow + small info -->
+  <!-- Top corner -->
   <div class="absolute top-24 lg:top-32 left-0 right-0 z-10">
     <div class="container-page flex items-start justify-between">
       <span class="eyebrow eyebrow-light animate-(--animate-fade-in)">
@@ -94,6 +107,18 @@ const sub = {
         <span data-live-label>{t('hero.cta.secondary')}</span>
       </a>
     </div>
+
+    <!-- Slideshow dots indicator -->
+    <div class="absolute bottom-32 left-0 right-0 z-10">
+      <div class="container-page flex items-center gap-2 justify-center md:justify-start">
+        {slides.map((_, i) => (
+          <span
+            class="hero-dot block w-8 h-0.5 rounded-full bg-ink-50/30"
+            style={`animation: hero-dot-fill ${totalDuration}s linear ${i * slideDuration}s infinite;`}
+          ></span>
+        ))}
+      </div>
+    </div>
   </div>
 
   <!-- Marquee de versículos -->
@@ -110,3 +135,15 @@ const sub = {
     </div>
   </div>
 </section>
+
+<style is:global>
+  @keyframes hero-fade {
+    0%, 16% { opacity: 1; transform: scale(1.05); }
+    20%, 96% { opacity: 0; transform: scale(1.15); }
+    100% { opacity: 1; transform: scale(1.05); }
+  }
+  @keyframes hero-dot-fill {
+    0%, 16% { background-color: var(--color-gold-500); }
+    20%, 100% { background-color: rgba(250, 250, 247, 0.3); }
+  }
+</style>
