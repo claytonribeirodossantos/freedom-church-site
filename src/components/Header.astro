@@ -61,9 +61,10 @@ const nextLabel = { pt: 'Domingo · 10h30', en: 'Sunday · 10:30 AM', es: 'Domin
       <LanguageSwitcher />
       <a
         href={localizedPath(lang, '/sou-novo-aqui')}
-        class="hidden md:inline-flex btn btn-dark text-sm py-2.5 px-5"
+        class="hidden md:inline-flex items-center gap-1.5 text-sm font-medium text-ink-900 border border-ink-300/70 hover:border-ink-950 hover:bg-ink-950 hover:text-cream-50 rounded-full py-2 px-5 transition-all"
       >
         {t('nav.newHere')}
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
       <button
         type="button"
