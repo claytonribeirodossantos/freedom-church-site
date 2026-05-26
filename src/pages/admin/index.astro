@@ -3,15 +3,21 @@ export const prerender = true;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
-    <title>Freedom Church — Painel</title>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Freedom Church — Painel de Edição</title>
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Freedom%20Church%20Admin%22%7D" />
   </head>
   <body>
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js" is:inline></script>
+    <!--
+      Sveltia CMS — fork moderno do Decap CMS com GitHub OAuth direta (sem servidor de auth).
+      Lê o mesmo config.yml do Decap (em /admin/config.yml).
+      Compatible 100% com nossa configuração existente.
+    -->
+    <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js" type="module" is:inline></script>
   </body>
 </html>

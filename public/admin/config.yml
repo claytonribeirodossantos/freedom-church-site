@@ -2,7 +2,7 @@ backend:
   name: github
   repo: claytonribeirodossantos/freedom-church-site
   branch: main
-  base_url: https://ourfreedomchurch.com
+  base_url: https://freedom-church-site.claytonribeirodossantos.workers.dev
   auth_endpoint: /api/auth
 
 publish_mode: editorial_workflow
@@ -10,9 +10,9 @@ publish_mode: editorial_workflow
 media_folder: "site/public/uploads"
 public_folder: "/uploads"
 
-site_url: https://ourfreedomchurch.com
-display_url: https://ourfreedomchurch.com
-logo_url: https://ourfreedomchurch.com/favicon.svg
+site_url: https://freedom-church-site.claytonribeirodossantos.workers.dev
+display_url: https://freedom-church-site.claytonribeirodossantos.workers.dev
+logo_url: https://freedom-church-site.claytonribeirodossantos.workers.dev/logo.png
 
 locale: pt
 
@@ -86,20 +86,3 @@ collections:
       - { label: "Capa (opcional)", name: cover, widget: image, required: false }
       - { label: "Tags", name: tags, widget: list, default: [], required: false }
       - { label: "Conteúdo", name: body, widget: markdown }
-
-  - name: config
-    label: "Configurações da Igreja"
-    files:
-      - name: church
-        label: "Dados da igreja"
-        file: "site/src/data/church-cms.json"
-        fields:
-          - { label: "Tagline (PT)", name: taglinePt, widget: string }
-          - { label: "Tagline (EN)", name: taglineEn, widget: string }
-          - { label: "Tagline (ES)", name: taglineEs, widget: string }
-          - { label: "Email de contato", name: contactEmail, widget: string }
-          - { label: "Telefone", name: phone, widget: string, required: false }
-          - { label: "Instagram URL", name: instagram, widget: string }
-          - { label: "YouTube URL", name: youtube, widget: string }
-          - { label: "Facebook URL", name: facebook, widget: string, required: false }
-          - { label: "Spotify URL", name: spotify, widget: string, required: false }
