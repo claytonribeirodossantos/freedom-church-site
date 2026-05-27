@@ -4,9 +4,9 @@ import { getLangFromUrl, useTranslations, localizedPath } from '../i18n/utils';
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-// Background video (Pexels CDN, MP4). Fallback automático pro poster se falhar.
-const bgVideo = 'https://videos.pexels.com/video-files/3209828/3209828-uhd_2560_1440_25fps.mp4';
-const bgPoster = 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=2400&q=85&auto=format&fit=crop';
+// Imagem fixa de adoração — mãos levantadas em silhueta dourada (Unsplash confirmed)
+// Quando Clayton enviar foto/vídeo real da igreja, substituir aqui.
+const heroImage = 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=2400&q=90&auto=format&fit=crop';
 
 const headline = {
   pt: ['Liberte-se', 'em', 'Cristo.'],
@@ -22,32 +22,26 @@ const sub = {
 ---
 
 <section class="relative min-h-screen overflow-hidden bg-ink-950 text-ink-50">
-  <!-- Video background with poster fallback -->
+  <!-- Background image with Ken Burns motion + light leaks -->
   <div class="absolute inset-0 overflow-hidden">
-    <video
-      class="absolute inset-0 w-full h-full object-cover"
-      autoplay
-      muted
-      loop
-      playsinline
-      preload="auto"
-      poster={bgPoster}
-      data-hero-video
-    >
-      <source src={bgVideo} type="video/mp4" />
-    </video>
-
-    <!-- Fallback poster image (visible if video fails to load — handled via JS) -->
     <img
-      src={bgPoster}
-      alt=""
-      class="hero-fallback absolute inset-0 w-full h-full object-cover hidden"
+      src={heroImage}
+      alt="Mãos levantadas em adoração"
+      class="absolute inset-0 w-full h-full object-cover hero-ken-burns"
       loading="eager"
+      fetchpriority="high"
     />
 
-    <!-- Overlays -->
+    <!-- Animated light leak (golden) — adds motion -->
+    <div class="absolute inset-0 hero-light-leak"></div>
+
+    <!-- Dark gradient overlay -->
     <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(5,5,5,0.55) 0%, rgba(5,5,5,0.7) 60%, rgba(5,5,5,0.95) 100%);"></div>
-    <div class="absolute inset-0 opacity-30" style="background: radial-gradient(60% 80% at 25% 30%, rgba(201, 169, 97, 0.4), transparent 60%);"></div>
+
+    <!-- Golden radial accent -->
+    <div class="absolute inset-0 opacity-30" style="background: radial-gradient(60% 80% at 25% 30%, rgba(201, 169, 97, 0.45), transparent 60%);"></div>
+
+    <!-- Grain texture -->
     <div class="absolute inset-0 grain"></div>
   </div>
 
@@ -125,37 +119,28 @@ const sub = {
   </div>
 </section>
 
-<script>
-  // If video fails to load, show fallback image
-  const video = document.querySelector<HTMLVideoElement>('[data-hero-video]');
-  const fallback = document.querySelector<HTMLImageElement>('.hero-fallback');
-
-  if (video && fallback) {
-    let videoLoaded = false;
-
-    video.addEventListener('loadeddata', () => {
-      videoLoaded = true;
-    });
-
-    video.addEventListener('error', () => {
-      video.classList.add('hidden');
-      fallback.classList.remove('hidden');
-    });
-
-    // If video doesn't load within 5s (slow network or blocked), show fallback
-    setTimeout(() => {
-      if (!videoLoaded) {
-        video.classList.add('hidden');
-        fallback.classList.remove('hidden');
-        fallback.style.animation = 'hero-ken-burns 30s ease-in-out infinite alternate';
-      }
-    }, 5000);
-  }
-</script>
-
 <style is:global>
+  /* Ken Burns: slow zoom + pan */
+  .hero-ken-burns {
+    animation: hero-ken-burns 30s ease-in-out infinite alternate;
+    transform-origin: center;
+  }
   @keyframes hero-ken-burns {
-    from { transform: scale(1.0); }
-    to   { transform: scale(1.15); }
+    0%   { transform: scale(1.0) translate(0, 0); }
+    100% { transform: scale(1.12) translate(-2%, -1%); }
+  }
+
+  /* Animated golden light leak — gives a "video" feel */
+  .hero-light-leak {
+    background:
+      radial-gradient(circle at 20% 50%, rgba(201, 169, 97, 0.18), transparent 35%),
+      radial-gradient(circle at 80% 30%, rgba(232, 160, 85, 0.15), transparent 30%);
+    animation: hero-light-leak 12s ease-in-out infinite alternate;
+    mix-blend-mode: screen;
+  }
+  @keyframes hero-light-leak {
+    0%   { transform: translate(0, 0) scale(1); opacity: 0.6; }
+    50%  { transform: translate(3%, -2%) scale(1.05); opacity: 0.9; }
+    100% { transform: translate(-2%, 3%) scale(0.95); opacity: 0.7; }
   }
 </style>
