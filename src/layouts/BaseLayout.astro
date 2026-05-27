@@ -144,6 +144,38 @@ const churchSchema = {
         });
       }, { passive: true });
 
+      // Scroll-triggered scale reveal (more dramatic than fade-up)
+      const scaleObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('in-view');
+              scaleObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.15, rootMargin: '0px 0px -80px 0px' },
+      );
+      document.querySelectorAll('[data-reveal-scale]').forEach((el) => scaleObserver.observe(el));
+
+      // 3D Tilt on hover for .tilt-card
+      const tiltCards = document.querySelectorAll<HTMLElement>('.tilt-card');
+      if (window.matchMedia('(pointer: fine)').matches) {
+        tiltCards.forEach((card) => {
+          card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width - 0.5;
+            const y = (e.clientY - rect.top) / rect.height - 0.5;
+            const rotX = -y * 6;
+            const rotY = x * 6;
+            card.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-4px)`;
+          });
+          card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+          });
+        });
+      }
+
       // Live status detection
       // Strategy: fetch /api/live-status.json (Cloudflare Worker that checks YouTube
       // in real-time). Falls back to Sunday 10:00-12:30 ET heuristic if API fails.

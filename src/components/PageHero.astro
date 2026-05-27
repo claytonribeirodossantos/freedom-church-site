@@ -15,7 +15,6 @@ const titleLines = c.title.split('\n');
 
 const minH = height === 'tall' ? 'min-h-[80vh]' : 'min-h-[65vh]';
 
-// Mapping pageKey → imagem cinematográfica contextual (Unsplash)
 const pageImages: Record<string, string> = {
   about:             'https://images.unsplash.com/photo-1529390079861-591de354faf5?w=2400&q=85&auto=format&fit=crop',
   services:          'https://images.unsplash.com/photo-1507692049790-de58290a4334?w=2400&q=85&auto=format&fit=crop',
@@ -42,16 +41,22 @@ const defaultImg = 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3
 const bgImage = image ?? pageImages[pageKey] ?? defaultImg;
 ---
 
-<section class:list={['relative overflow-hidden bg-ink-950 text-ink-50 flex items-end pt-32 pb-16 lg:pt-40 lg:pb-20', minH]}>
-  <!-- Background image with Ken Burns -->
+<section class:list={['relative overflow-hidden bg-ink-950 text-ink-50 flex items-end pt-32 pb-16 lg:pt-40 lg:pb-20', minH]} data-page-hero>
+  <!-- Background image with motion -->
   <div class="absolute inset-0 overflow-hidden">
-    <img
-      src={bgImage}
-      alt=""
-      class="absolute inset-0 w-full h-full object-cover animate-(--animate-ken-burns)"
-      loading="eager"
-      fetchpriority="high"
-    />
+    <div class="absolute inset-0" data-parallax-layer="0.4">
+      <img
+        src={bgImage}
+        alt=""
+        class="page-hero-image absolute inset-0 w-full h-full object-cover"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
+
+    <!-- Animated light leak -->
+    <div class="absolute inset-0 page-hero-leak" data-parallax-layer="-0.2"></div>
+
     <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(5,5,5,0.5) 0%, rgba(5,5,5,0.7) 60%, rgba(5,5,5,0.92) 100%);"></div>
     <div class="absolute inset-0 opacity-25" style="background: radial-gradient(60% 80% at 25% 30%, rgba(201, 169, 97, 0.4), transparent 60%);"></div>
     <div class="absolute inset-0 grain"></div>
@@ -79,3 +84,57 @@ const bgImage = image ?? pageImages[pageKey] ?? defaultImg;
     </p>
   </div>
 </section>
+
+<style is:global>
+  .page-hero-image {
+    animation: page-hero-zoom 22s ease-in-out infinite alternate;
+    transform-origin: 40% 50%;
+    will-change: transform;
+  }
+  @keyframes page-hero-zoom {
+    0%   { transform: scale(1.0) translate(0, 0); }
+    100% { transform: scale(1.15) translate(-2%, -1%); }
+  }
+
+  .page-hero-leak {
+    background:
+      radial-gradient(circle at 30% 40%, rgba(201, 169, 97, 0.18), transparent 35%),
+      radial-gradient(circle at 70% 60%, rgba(232, 160, 85, 0.14), transparent 30%);
+    animation: page-hero-leak 12s ease-in-out infinite alternate;
+    mix-blend-mode: screen;
+  }
+  @keyframes page-hero-leak {
+    0%   { transform: translate(0, 0) scale(1); opacity: 0.5; }
+    100% { transform: translate(2%, -2%) scale(1.05); opacity: 0.8; }
+  }
+</style>
+
+<script>
+  // Mouse parallax on PageHero (same pattern as Hero)
+  const pageHero = document.querySelector<HTMLElement>('[data-page-hero]');
+  const layers = pageHero?.querySelectorAll<HTMLElement>('[data-parallax-layer]');
+
+  if (pageHero && layers && layers.length > 0 && window.matchMedia('(pointer: fine)').matches) {
+    let targetX = 0, targetY = 0;
+    let currentX = 0, currentY = 0;
+
+    pageHero.addEventListener('mousemove', (e) => {
+      const rect = pageHero.getBoundingClientRect();
+      targetX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+      targetY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+    });
+
+    function animate() {
+      currentX += (targetX - currentX) * 0.06;
+      currentY += (targetY - currentY) * 0.06;
+
+      layers!.forEach((layer) => {
+        const speed = parseFloat(layer.dataset.parallaxLayer ?? '0');
+        layer.style.transform = `translate3d(${currentX * speed * 20}px, ${currentY * speed * 15}px, 0)`;
+      });
+
+      requestAnimationFrame(animate);
+    }
+    animate();
+  }
+</script>

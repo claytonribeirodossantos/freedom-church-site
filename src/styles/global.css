@@ -251,11 +251,47 @@
     position: relative;
     overflow: hidden;
     border-radius: 1.5rem;
-    transition: transform 400ms var(--ease-smooth), box-shadow 400ms var(--ease-smooth);
+    transition: transform 500ms var(--ease-smooth), box-shadow 500ms var(--ease-smooth);
+    transform-style: preserve-3d;
   }
   .card-editorial:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 30px 60px -20px rgba(10, 9, 8, 0.35);
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 30px 60px -20px rgba(10, 9, 8, 0.45),
+                0 0 0 1px rgba(201, 169, 97, 0.2);
+  }
+
+  /* Image-rich card with hover zoom */
+  .card-image-zoom {
+    overflow: hidden;
+    border-radius: 1.25rem;
+  }
+  .card-image-zoom img {
+    transition: transform 800ms var(--ease-smooth), filter 800ms var(--ease-smooth);
+    will-change: transform;
+  }
+  .card-image-zoom:hover img {
+    transform: scale(1.08);
+    filter: brightness(1.1) saturate(1.1);
+  }
+
+  /* Reveal animation when scrolled into view */
+  [data-reveal-scale] {
+    opacity: 0;
+    transform: scale(0.94);
+    filter: blur(8px);
+    transition: opacity 1s var(--ease-smooth), transform 1s var(--ease-smooth), filter 1s var(--ease-smooth);
+  }
+  [data-reveal-scale].in-view {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+
+  /* 3D tilt card */
+  .tilt-card {
+    transition: transform 250ms var(--ease-smooth);
+    transform-style: preserve-3d;
+    will-change: transform;
   }
 
   .display-num {

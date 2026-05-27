@@ -4,8 +4,7 @@ import { getLangFromUrl, useTranslations, localizedPath } from '../i18n/utils';
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-// Imagem fixa de adoração — mãos levantadas em silhueta dourada (Unsplash confirmed)
-// Quando Clayton enviar foto/vídeo real da igreja, substituir aqui.
+// Imagem fixa de adoração — mãos levantadas em silhueta dourada
 const heroImage = 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=2400&q=90&auto=format&fit=crop';
 
 const headline = {
@@ -21,25 +20,37 @@ const sub = {
 }[lang];
 ---
 
-<section class="relative min-h-screen overflow-hidden bg-ink-950 text-ink-50">
-  <!-- Background image with Ken Burns motion + light leaks -->
-  <div class="absolute inset-0 overflow-hidden">
-    <img
-      src={heroImage}
-      alt="Mãos levantadas em adoração"
-      class="absolute inset-0 w-full h-full object-cover hero-ken-burns"
-      loading="eager"
-      fetchpriority="high"
-    />
+<section class="relative min-h-screen overflow-hidden bg-ink-950 text-ink-50" data-hero>
+  <!-- Background layers with depth (mouse parallax) -->
+  <div class="absolute inset-0 overflow-hidden" data-hero-bg>
+    <!-- Main image — moves slower with mouse + zoom Ken Burns -->
+    <div class="absolute inset-0" data-parallax-layer="0.6">
+      <img
+        src={heroImage}
+        alt="Mãos levantadas em adoração"
+        class="hero-image absolute inset-0 w-full h-full object-cover"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
 
-    <!-- Animated light leak (golden) — adds motion -->
-    <div class="absolute inset-0 hero-light-leak"></div>
+    <!-- Animated golden light leak — moves opposite -->
+    <div class="absolute inset-0 hero-light-leak" data-parallax-layer="-0.3"></div>
+
+    <!-- Floating particles (subtle) -->
+    <div class="absolute inset-0 pointer-events-none" data-parallax-layer="-0.8">
+      <div class="hero-particle absolute" style="top: 20%; left: 10%; animation-delay: 0s"></div>
+      <div class="hero-particle absolute" style="top: 50%; left: 80%; animation-delay: 3s"></div>
+      <div class="hero-particle absolute" style="top: 70%; left: 30%; animation-delay: 6s"></div>
+      <div class="hero-particle absolute" style="top: 30%; left: 60%; animation-delay: 9s"></div>
+      <div class="hero-particle absolute" style="top: 80%; left: 70%; animation-delay: 1.5s"></div>
+    </div>
 
     <!-- Dark gradient overlay -->
     <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(5,5,5,0.55) 0%, rgba(5,5,5,0.7) 60%, rgba(5,5,5,0.95) 100%);"></div>
 
     <!-- Golden radial accent -->
-    <div class="absolute inset-0 opacity-30" style="background: radial-gradient(60% 80% at 25% 30%, rgba(201, 169, 97, 0.45), transparent 60%);"></div>
+    <div class="absolute inset-0 opacity-30 hero-glow" style="background: radial-gradient(60% 80% at 25% 30%, rgba(201, 169, 97, 0.45), transparent 60%);"></div>
 
     <!-- Grain texture -->
     <div class="absolute inset-0 grain"></div>
@@ -120,27 +131,92 @@ const sub = {
 </section>
 
 <style is:global>
-  /* Ken Burns: slow zoom + pan */
-  .hero-ken-burns {
-    animation: hero-ken-burns 30s ease-in-out infinite alternate;
-    transform-origin: center;
+  /* Aggressive Ken Burns: zoom + pan continuously */
+  .hero-image {
+    animation: hero-ken-burns 25s ease-in-out infinite alternate;
+    transform-origin: 30% 50%;
+    will-change: transform;
   }
   @keyframes hero-ken-burns {
     0%   { transform: scale(1.0) translate(0, 0); }
-    100% { transform: scale(1.12) translate(-2%, -1%); }
+    50%  { transform: scale(1.1) translate(-1%, -1%); }
+    100% { transform: scale(1.18) translate(-3%, -2%); }
   }
 
-  /* Animated golden light leak — gives a "video" feel */
+  /* Animated golden light leak — moves continuously */
   .hero-light-leak {
     background:
-      radial-gradient(circle at 20% 50%, rgba(201, 169, 97, 0.18), transparent 35%),
-      radial-gradient(circle at 80% 30%, rgba(232, 160, 85, 0.15), transparent 30%);
-    animation: hero-light-leak 12s ease-in-out infinite alternate;
+      radial-gradient(circle at 20% 50%, rgba(201, 169, 97, 0.20), transparent 35%),
+      radial-gradient(circle at 80% 30%, rgba(232, 160, 85, 0.18), transparent 30%),
+      radial-gradient(circle at 50% 70%, rgba(201, 169, 97, 0.12), transparent 40%);
+    animation: hero-light-leak 14s ease-in-out infinite alternate;
     mix-blend-mode: screen;
+    will-change: transform, opacity;
   }
   @keyframes hero-light-leak {
-    0%   { transform: translate(0, 0) scale(1); opacity: 0.6; }
-    50%  { transform: translate(3%, -2%) scale(1.05); opacity: 0.9; }
-    100% { transform: translate(-2%, 3%) scale(0.95); opacity: 0.7; }
+    0%   { transform: translate(0, 0) scale(1) rotate(0deg);    opacity: 0.6; }
+    33%  { transform: translate(3%, -2%) scale(1.05) rotate(2deg);  opacity: 0.9; }
+    66%  { transform: translate(-2%, 3%) scale(0.95) rotate(-1deg); opacity: 0.7; }
+    100% { transform: translate(2%, 2%) scale(1.03) rotate(1deg);   opacity: 0.85; }
+  }
+
+  /* Glow that pulses softly */
+  .hero-glow {
+    animation: hero-glow-pulse 8s ease-in-out infinite alternate;
+  }
+  @keyframes hero-glow-pulse {
+    0%   { opacity: 0.25; }
+    100% { opacity: 0.4; }
+  }
+
+  /* Floating particles */
+  .hero-particle {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--color-gold-400);
+    box-shadow: 0 0 12px var(--color-gold-500), 0 0 24px var(--color-gold-400);
+    animation: hero-particle-float 12s ease-in-out infinite;
+    opacity: 0;
+  }
+  @keyframes hero-particle-float {
+    0%, 100% { opacity: 0; transform: translateY(0) scale(1); }
+    20%      { opacity: 0.9; transform: translateY(-20px) scale(1.2); }
+    50%      { opacity: 0.6; transform: translateY(-60px) scale(1); }
+    80%      { opacity: 0.3; transform: translateY(-100px) scale(0.8); }
   }
 </style>
+
+<script>
+  // Mouse parallax — different layers move at different rates
+  const hero = document.querySelector<HTMLElement>('[data-hero]');
+  const layers = document.querySelectorAll<HTMLElement>('[data-parallax-layer]');
+
+  if (hero && layers.length > 0 && window.matchMedia('(pointer: fine)').matches) {
+    let targetX = 0, targetY = 0;
+    let currentX = 0, currentY = 0;
+
+    hero.addEventListener('mousemove', (e) => {
+      const rect = hero.getBoundingClientRect();
+      // Normalize -1 to 1
+      targetX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+      targetY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+    });
+
+    function animate() {
+      // Smooth follow
+      currentX += (targetX - currentX) * 0.06;
+      currentY += (targetY - currentY) * 0.06;
+
+      layers.forEach((layer) => {
+        const speed = parseFloat(layer.dataset.parallaxLayer ?? '0');
+        const x = currentX * speed * 30;
+        const y = currentY * speed * 20;
+        layer.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+      });
+
+      requestAnimationFrame(animate);
+    }
+    animate();
+  }
+</script>
