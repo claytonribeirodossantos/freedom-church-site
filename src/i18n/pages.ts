@@ -55,9 +55,9 @@ export const pages: PagesMap = {
     es: { eyebrow: 'Contacto', title: 'Habla con\nnosotros.', subtitle: 'Dudas, alianzas, bautismo, bodas, visita pastoral. Estamos aquí.' },
   },
   leadership: {
-    pt: { eyebrow: 'Liderança', title: 'Pastores\ndo coração.', subtitle: 'Conheça quem caminha à frente da Freedom Church servindo, ensinando e amando esta família.' },
-    en: { eyebrow: 'Leadership', title: 'Pastors of\nthe heart.', subtitle: 'Meet those who walk ahead of Freedom Church serving, teaching, and loving this family.' },
-    es: { eyebrow: 'Liderazgo', title: 'Pastores\ndel corazón.', subtitle: 'Conoce a quienes caminan al frente de Freedom Church sirviendo, enseñando y amando a esta familia.' },
+    pt: { eyebrow: 'Liderança', title: 'Pastores.', subtitle: 'Conheça quem caminha à frente da Freedom Church servindo, ensinando e amando esta família.' },
+    en: { eyebrow: 'Leadership', title: 'Pastors.', subtitle: 'Meet those who walk ahead of Freedom Church serving, teaching, and loving this family.' },
+    es: { eyebrow: 'Liderazgo', title: 'Pastores.', subtitle: 'Conoce a quienes caminan al frente de Freedom Church sirviendo, enseñando y amando a esta familia.' },
   },
   live: {
     pt: { eyebrow: 'Ao vivo', title: 'Conecte-se\nde onde estiver.', subtitle: 'Acompanhe nossos cultos ao vivo todo domingo às 10h30. Quando não estamos no ar, assista o último culto abaixo.' },

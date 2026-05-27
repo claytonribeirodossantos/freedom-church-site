@@ -4,7 +4,8 @@ import { getLangFromUrl, useTranslations, localizedPath } from '../i18n/utils';
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-// Imagem fixa de adoração — mãos levantadas em silhueta dourada
+// Vídeo MP4 hospedado direto no projeto + imagem de fallback
+const heroVideo = '/hero/intro.mp4';
 const heroImage = 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=2400&q=90&auto=format&fit=crop';
 
 const headline = {
@@ -23,14 +24,26 @@ const sub = {
 <section class="relative min-h-screen overflow-hidden bg-ink-950 text-ink-50" data-hero>
   <!-- Background layers with depth (mouse parallax) -->
   <div class="absolute inset-0 overflow-hidden" data-hero-bg>
-    <!-- Main image — moves slower with mouse + zoom Ken Burns -->
+    <!-- Main video — moves slower with mouse + Ken Burns subtle -->
     <div class="absolute inset-0" data-parallax-layer="0.6">
+      <video
+        class="hero-video absolute inset-0 w-full h-full object-cover"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+        poster={heroImage}
+        data-hero-video
+      >
+        <source src={heroVideo} type="video/mp4" />
+      </video>
+      <!-- Fallback image (mostrada se vídeo falhar) -->
       <img
         src={heroImage}
-        alt="Mãos levantadas em adoração"
-        class="hero-image absolute inset-0 w-full h-full object-cover"
+        alt=""
+        class="hero-image-fallback absolute inset-0 w-full h-full object-cover hidden"
         loading="eager"
-        fetchpriority="high"
       />
     </div>
 
@@ -131,16 +144,20 @@ const sub = {
 </section>
 
 <style is:global>
-  /* Aggressive Ken Burns: zoom + pan continuously */
-  .hero-image {
+  /* Video subtle Ken Burns (not too aggressive since video already moves) */
+  .hero-video {
+    animation: hero-ken-burns 30s ease-in-out infinite alternate;
+    transform-origin: 50% 50%;
+    will-change: transform;
+  }
+  .hero-image-fallback-anim {
     animation: hero-ken-burns 25s ease-in-out infinite alternate;
     transform-origin: 30% 50%;
     will-change: transform;
   }
   @keyframes hero-ken-burns {
     0%   { transform: scale(1.0) translate(0, 0); }
-    50%  { transform: scale(1.1) translate(-1%, -1%); }
-    100% { transform: scale(1.18) translate(-3%, -2%); }
+    100% { transform: scale(1.08) translate(-1%, -0.5%); }
   }
 
   /* Animated golden light leak — moves continuously */
@@ -188,6 +205,26 @@ const sub = {
 </style>
 
 <script>
+  // Video fallback: if MP4 fails, swap to static image
+  const video = document.querySelector<HTMLVideoElement>('[data-hero-video]');
+  const imgFallback = document.querySelector<HTMLImageElement>('.hero-image-fallback');
+  if (video && imgFallback) {
+    let videoOk = false;
+    video.addEventListener('loadeddata', () => { videoOk = true; });
+    video.addEventListener('error', () => {
+      video.classList.add('hidden');
+      imgFallback.classList.remove('hidden');
+      imgFallback.classList.add('hero-image-fallback-anim');
+    });
+    setTimeout(() => {
+      if (!videoOk) {
+        video.classList.add('hidden');
+        imgFallback.classList.remove('hidden');
+        imgFallback.classList.add('hero-image-fallback-anim');
+      }
+    }, 6000);
+  }
+
   // Mouse parallax — different layers move at different rates
   const hero = document.querySelector<HTMLElement>('[data-hero]');
   const layers = document.querySelectorAll<HTMLElement>('[data-parallax-layer]');

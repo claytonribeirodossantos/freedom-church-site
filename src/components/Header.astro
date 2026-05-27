@@ -5,7 +5,7 @@ import LanguageSwitcher from './LanguageSwitcher.astro';
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-// Mega menu structure (estilo transformchurch.us)
+// Mega menu — simplificado estilo transformchurch.us (4 itens principais)
 const menu = {
   pt: [
     {
@@ -17,8 +17,17 @@ const menu = {
         { label: 'Sou novo aqui', href: '/sou-novo-aqui' },
       ],
     },
-    { label: 'Cultos', href: '/cultos' },
-    { label: 'Pregações', href: '/pregacoes' },
+    {
+      label: 'Conecte-se',
+      href: '/cultos',
+      children: [
+        { label: 'Cultos', href: '/cultos' },
+        { label: 'Pregações', href: '/pregacoes' },
+        { label: 'Eventos', href: '/eventos' },
+        { label: 'Pedidos de Oração', href: '/pedidos-de-oracao' },
+        { label: 'Serviços pastorais', href: '/servicos-pastorais' },
+      ],
+    },
     {
       label: 'Ministérios',
       href: '/ministerios',
@@ -26,11 +35,8 @@ const menu = {
         { label: 'Freedom Kids', href: '/kids' },
         { label: 'Freedom Youth', href: '/jovens' },
         { label: 'Todos os ministérios', href: '/ministerios' },
-        { label: 'Pedidos de Oração', href: '/pedidos-de-oracao' },
-        { label: 'Serviços pastorais', href: '/servicos-pastorais' },
       ],
     },
-    { label: 'Eventos', href: '/eventos' },
     { label: 'Contribua', href: '/contribua' },
   ],
   en: [
@@ -43,8 +49,17 @@ const menu = {
         { label: "I'm new here", href: '/sou-novo-aqui' },
       ],
     },
-    { label: 'Services', href: '/cultos' },
-    { label: 'Sermons', href: '/pregacoes' },
+    {
+      label: 'Connect',
+      href: '/cultos',
+      children: [
+        { label: 'Services', href: '/cultos' },
+        { label: 'Sermons', href: '/pregacoes' },
+        { label: 'Events', href: '/eventos' },
+        { label: 'Prayer Requests', href: '/pedidos-de-oracao' },
+        { label: 'Pastoral services', href: '/servicos-pastorais' },
+      ],
+    },
     {
       label: 'Ministries',
       href: '/ministerios',
@@ -52,11 +67,8 @@ const menu = {
         { label: 'Freedom Kids', href: '/kids' },
         { label: 'Freedom Youth', href: '/jovens' },
         { label: 'All ministries', href: '/ministerios' },
-        { label: 'Prayer Requests', href: '/pedidos-de-oracao' },
-        { label: 'Pastoral services', href: '/servicos-pastorais' },
       ],
     },
-    { label: 'Events', href: '/eventos' },
     { label: 'Give', href: '/contribua' },
   ],
   es: [
@@ -69,8 +81,17 @@ const menu = {
         { label: 'Soy nuevo aquí', href: '/sou-novo-aqui' },
       ],
     },
-    { label: 'Cultos', href: '/cultos' },
-    { label: 'Prédicas', href: '/pregacoes' },
+    {
+      label: 'Conéctate',
+      href: '/cultos',
+      children: [
+        { label: 'Cultos', href: '/cultos' },
+        { label: 'Prédicas', href: '/pregacoes' },
+        { label: 'Eventos', href: '/eventos' },
+        { label: 'Peticiones de oración', href: '/pedidos-de-oracao' },
+        { label: 'Servicios pastorales', href: '/servicos-pastorais' },
+      ],
+    },
     {
       label: 'Ministerios',
       href: '/ministerios',
@@ -78,11 +99,8 @@ const menu = {
         { label: 'Freedom Kids', href: '/kids' },
         { label: 'Freedom Youth', href: '/jovens' },
         { label: 'Todos los ministerios', href: '/ministerios' },
-        { label: 'Peticiones de oración', href: '/pedidos-de-oracao' },
-        { label: 'Servicios pastorales', href: '/servicos-pastorais' },
       ],
     },
-    { label: 'Eventos', href: '/eventos' },
     { label: 'Ofrendar', href: '/contribua' },
   ],
 }[lang];
