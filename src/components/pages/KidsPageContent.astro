@@ -55,6 +55,18 @@ const heading = {
 <PageHero pageKey="kids" />
 
 <Section bg="light">
+  <div class="max-w-4xl mx-auto mb-16 lg:mb-20" data-reveal>
+    <div class="relative aspect-video rounded-3xl overflow-hidden shadow-2xl bg-ink-900">
+      <video
+        src="/kids/freedom-kids.mp4"
+        controls
+        playsinline
+        preload="metadata"
+        class="absolute inset-0 w-full h-full object-cover"
+        poster=""
+      ></video>
+    </div>
+  </div>
   <SectionHeader eyebrow={heading.pillars} title={heading.pillars} />
   <div class="grid md:grid-cols-3 gap-6">
     {pillars.map((p) => (
