@@ -31,3 +31,7 @@ pnpm-debug.log*
 
 # Wrangler local state
 .wrangler/
+
+.dev.vars*
+!.dev.vars.example
+!.env.example
