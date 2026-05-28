@@ -4,8 +4,11 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 
+import cloudflare from '@astrojs/cloudflare';
+
 export default defineConfig({
   site: 'https://ourfreedomchurch.com',
+
   i18n: {
     defaultLocale: 'pt',
     locales: ['pt', 'en', 'es'],
@@ -18,8 +21,11 @@ export default defineConfig({
       es: 'pt',
     },
   },
+
   vite: {
     plugins: [tailwindcss()],
   },
+
   integrations: [sitemap()],
+  adapter: cloudflare(),
 });
