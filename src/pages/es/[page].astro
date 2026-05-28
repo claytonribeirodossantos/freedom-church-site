@@ -7,7 +7,6 @@ import EventsPageContent from '../../components/pages/EventsPageContent.astro';
 import MinistriesPageContent from '../../components/pages/MinistriesPageContent.astro';
 import GivePageContent from '../../components/pages/GivePageContent.astro';
 import NewHerePageContent from '../../components/pages/NewHerePageContent.astro';
-import PrayerPageContent from '../../components/pages/PrayerPageContent.astro';
 import ContactPageContent from '../../components/pages/ContactPageContent.astro';
 import LeadershipPageContent from '../../components/pages/LeadershipPageContent.astro';
 import LivePageContent from '../../components/pages/LivePageContent.astro';
@@ -29,7 +28,6 @@ export function getStaticPaths() {
     { params: { page: 'ministerios' }, props: { component: 'ministries' } },
     { params: { page: 'contribua' }, props: { component: 'give' } },
     { params: { page: 'sou-novo-aqui' }, props: { component: 'newHere' } },
-    { params: { page: 'pedidos-de-oracao' }, props: { component: 'prayer' } },
     { params: { page: 'contato' }, props: { component: 'contact' } },
     { params: { page: 'lideranca' }, props: { component: 'leadership' } },
     { params: { page: 'live' }, props: { component: 'live' } },
@@ -54,7 +52,6 @@ const titlesEs: Record<string, string> = {
   ministries: 'Ministerios',
   give: 'Ofrendar',
   newHere: 'Soy nuevo aquí',
-  prayer: 'Peticiones de oración',
   contact: 'Contacto',
   leadership: 'Liderazgo',
   live: 'En vivo',
@@ -77,7 +74,6 @@ const titlesEs: Record<string, string> = {
   {component === 'ministries' && <MinistriesPageContent />}
   {component === 'give' && <GivePageContent />}
   {component === 'newHere' && <NewHerePageContent />}
-  {component === 'prayer' && <PrayerPageContent />}
   {component === 'contact' && <ContactPageContent />}
   {component === 'leadership' && <LeadershipPageContent />}
   {component === 'live' && <LivePageContent />}

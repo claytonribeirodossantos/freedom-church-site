@@ -9,17 +9,17 @@ const lang = getLangFromUrl(Astro.url);
 const pillars = {
   pt: [
     { icon: '✦', t: 'Bíblia ensinada com criatividade', d: 'Histórias bíblicas com música, teatro e arte que prendem a atenção e marcam o coração.' },
-    { icon: '✚', t: 'Ambiente seguro', d: 'Equipe treinada, sistema de check-in com pulseira e protocolos de segurança em cada culto.' },
+    { icon: '✚', t: 'Ambiente seguro', d: 'Equipe treinada, sistema de check-in com identificação numerada e protocolos rigorosos de segurança em cada culto.' },
     { icon: '♥', t: 'Diversão de verdade', d: 'Jogos, lanche, momentos de oração e amizades que duram. As crianças amam vir.' },
   ],
   en: [
     { icon: '✦', t: 'Bible taught creatively', d: 'Bible stories with music, drama, and art that capture attention and mark the heart.' },
-    { icon: '✚', t: 'Safe environment', d: 'Trained team, check-in system with wristbands, and safety protocols at every service.' },
+    { icon: '✚', t: 'Safe environment', d: 'Trained team, numbered check-in system, and strict safety protocols at every service.' },
     { icon: '♥', t: 'Real fun', d: 'Games, snacks, prayer moments, and friendships that last. Kids love coming.' },
   ],
   es: [
     { icon: '✦', t: 'Biblia enseñada con creatividad', d: 'Historias bíblicas con música, teatro y arte que captan la atención y marcan el corazón.' },
-    { icon: '✚', t: 'Ambiente seguro', d: 'Equipo entrenado, sistema de check-in con pulseras y protocolos de seguridad en cada culto.' },
+    { icon: '✚', t: 'Ambiente seguro', d: 'Equipo entrenado, sistema de check-in con identificación numerada y protocolos estrictos de seguridad en cada culto.' },
     { icon: '♥', t: 'Diversión de verdad', d: 'Juegos, merienda, momentos de oración y amistades que duran. Los niños aman venir.' },
   ],
 }[lang];
@@ -27,19 +27,19 @@ const pillars = {
 const faq = {
   pt: [
     { q: 'Em que idade meu filho participa?', a: '0 a 11 anos, divididos em três turmas por faixa etária.' },
-    { q: 'Como funciona o check-in?', a: 'Você recebe uma pulseira com um código que combina com a do seu filho. Só você retira ele no final.' },
+    { q: 'Como funciona o check-in?', a: 'Na entrada do Freedom Kids, seu filho recebe um adesivo de identificação com um número único. Você recebe uma etiqueta com o mesmo número. Ao final do culto, a criança só é entregue à pessoa que apresentar o número correspondente. Sem o número, não liberamos a criança — é a nossa garantia de segurança.' },
     { q: 'É seguro?', a: 'Sim. Todos os voluntários passam por triagem e treinamento. Câmeras nas salas, banheiros monitorados e protocolo de emergência.' },
     { q: 'E se for a primeira vez?', a: 'Chegue 15 minutos antes. Nossa equipe te recebe, apresenta o espaço e tira todas as dúvidas.' },
   ],
   en: [
     { q: 'What age can my child join?', a: 'Ages 0–11, divided into three groups by age range.' },
-    { q: 'How does check-in work?', a: 'You receive a wristband with a code that matches your child\'s. Only you can pick them up at the end.' },
+    { q: 'How does check-in work?', a: 'When you drop off your child at Freedom Kids, they receive an ID sticker with a unique number. You receive a matching tag with the same number. At the end of service, your child is only released to the person presenting the matching number. No matching number, no pickup — that is our safety guarantee.' },
     { q: 'Is it safe?', a: 'Yes. All volunteers go through screening and training. Cameras in rooms, monitored restrooms, and emergency protocol.' },
     { q: 'What if it is our first time?', a: 'Arrive 15 minutes early. Our team welcomes you, shows the space, and answers all questions.' },
   ],
   es: [
     { q: '¿A qué edad puede participar mi hijo?', a: 'De 0 a 11 años, divididos en tres grupos por edad.' },
-    { q: '¿Cómo funciona el check-in?', a: 'Recibes una pulsera con un código que combina con la de tu hijo. Solo tú lo retiras al final.' },
+    { q: '¿Cómo funciona el check-in?', a: 'Al dejar a tu hijo en Freedom Kids, recibe una calcomanía de identificación con un número único. Tú recibes una etiqueta con el mismo número. Al final del culto, el niño solo es entregado a quien presente el número correspondiente. Sin el número, no liberamos al niño — es nuestra garantía de seguridad.' },
     { q: '¿Es seguro?', a: 'Sí. Todos los voluntarios pasan por evaluación y entrenamiento. Cámaras en las salas, baños monitoreados y protocolo de emergencia.' },
     { q: '¿Y si es la primera vez?', a: 'Llega 15 minutos antes. Nuestro equipo te recibe, muestra el espacio y aclara todas las dudas.' },
   ],
