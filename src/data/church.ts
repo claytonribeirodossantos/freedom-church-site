@@ -56,6 +56,11 @@ export const church = {
     },
   ],
 
+  pastorsCouple: {
+    photo: '/pastors/pastores.jpg',
+    altText: 'Pastores Adaelton e Jheini de Souza',
+  },
+
   social: {
     instagram: 'https://www.instagram.com/ourfreedomchurch_md/',
     instagramHandle: '@ourfreedomchurch_md',
