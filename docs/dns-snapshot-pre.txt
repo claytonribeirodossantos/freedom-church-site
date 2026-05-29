@@ -1,0 +1,24 @@
+# SNAPSHOT DNS — ourfreedomchurch.com
+# Capturado em: Fri May 29 10:31:44 EDT 2026
+# ANTES de migrar nameservers pra Cloudflare. NAO PERDER os MX/TXT (email).
+
+## Nameservers atuais (Turbify):
+ourfreedomchurch.com	nameserver = ns1.turbify.com
+ourfreedomchurch.com	nameserver = ns2.turbify.com
+
+## MX (email — CRITICO):
+ourfreedomchurch.com	MX preference = 20, mail exchanger = mx-biz.mail.am0.yahoodns.net
+ourfreedomchurch.com	MX preference = 30, mail exchanger = mx-biz.mail.am0.yahoodns.net
+
+## A (apex):
+Address:  69.49.241.24
+
+## www:
+Address:  192.168.1.1
+Address:  69.49.241.24
+
+## TXT (SPF / verificacoes — CRITICO pro email):
+ourfreedomchurch.com	text =
+
+## TXT _dmarc:
+_dmarc.ourfreedomchurch.com	text =
