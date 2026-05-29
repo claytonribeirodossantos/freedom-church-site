@@ -5,10 +5,11 @@ import { getPageContent } from '../i18n/pages';
 interface Props {
   pageKey: string;
   image?: string;
+  video?: string;
   height?: 'normal' | 'tall';
 }
 
-const { pageKey, image, height = 'normal' } = Astro.props;
+const { pageKey, image, video, height = 'normal' } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const c = getPageContent(pageKey, lang);
 const titleLines = c.title.split('\n');
@@ -45,13 +46,27 @@ const bgImage = image ?? pageImages[pageKey] ?? defaultImg;
   <!-- Background image with motion -->
   <div class="absolute inset-0 overflow-hidden">
     <div class="absolute inset-0" data-parallax-layer="0.4">
-      <img
-        src={bgImage}
-        alt=""
-        class="page-hero-image absolute inset-0 w-full h-full object-cover"
-        loading="eager"
-        fetchpriority="high"
-      />
+      {video ? (
+        <video
+          class="page-hero-image absolute inset-0 w-full h-full object-cover"
+          autoplay
+          loop
+          muted
+          playsinline
+          preload="auto"
+          poster={bgImage}
+        >
+          <source src={video} type="video/mp4" />
+        </video>
+      ) : (
+        <img
+          src={bgImage}
+          alt=""
+          class="page-hero-image absolute inset-0 w-full h-full object-cover"
+          loading="eager"
+          fetchpriority="high"
+        />
+      )}
     </div>
 
     <!-- Animated light leak -->
