@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import { church } from '../data/church';
+import { SITE } from '../config';
 
 interface Props {
   title?: string;
@@ -73,6 +74,23 @@ const churchSchema = {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Maintenance gate: public visitors on the live domain see /em-breve/.
+         The .workers.dev test URL is never blocked. ?preview unlocks a browser. -->
+    <script is:inline define:vars={{ maint: SITE.maintenance, hosts: SITE.liveHosts }}>
+      (function () {
+        if (!maint) return;
+        if (location.pathname.indexOf('/em-breve') === 0) return;
+        var params = new URLSearchParams(location.search);
+        try { if (params.has('preview')) localStorage.setItem('fc_preview', '1'); } catch (e) {}
+        var bypass = params.has('preview');
+        try { if (localStorage.getItem('fc_preview') === '1') bypass = true; } catch (e) {}
+        if (hosts.indexOf(location.hostname) > -1 && !bypass) {
+          location.replace('/em-breve/');
+        }
+      })();
+    </script>
+
     <link rel="icon" type="image/png" href="/logo.png" />
     <link rel="canonical" href={canonical} />
 
