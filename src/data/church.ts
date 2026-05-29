@@ -62,8 +62,8 @@ export const church = {
   },
 
   social: {
-    instagram: 'https://www.instagram.com/our_freedom_church/',
-    instagramHandle: '@our_freedom_church',
+    instagram: 'https://www.instagram.com/ourfreedomchurch_md/',
+    instagramHandle: '@ourfreedomchurch_md',
     // Channel ID URL — sempre funciona, não depende de handle do canal
     youtube: 'https://www.youtube.com/channel/UCmItF2T27GJFT6gFJti_9SA',
     youtubeHandle: '@ourfreedomchurch',
