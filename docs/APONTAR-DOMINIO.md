@@ -17,7 +17,12 @@
    - ✅ Os 2 **MX** `mx-biz.mail.am0.yahoodns.net` (pref 20 e 30) aparecem?
    - ✅ Algum **TXT** (SPF) que existia aparece?
    - ❌ Se faltar qualquer MX/TXT → **adicionar manualmente ANTES de seguir** (comparar com `dns-snapshot-pre.txt`).
-4. A Cloudflare mostra **2 nameservers** novos (ex: `xxx.ns.cloudflare.com`). Anotar os dois.
+4. A Cloudflare mostra **2 nameservers** novos. **Os nossos são:**
+   - `rosemary.ns.cloudflare.com`
+   - `yadiel.ns.cloudflare.com`
+
+> ⚠️ **DNSSEC:** antes de trocar os nameservers na Turbify, verificar se "DNSSEC" está
+> LIGADO. Se estiver, **desligar** (senão o domínio pode parar de resolver após a troca).
 
 ## PARTE 2 — Trocar os nameservers na Turbify
 5. Entrar na Turbify (conta do Clayton) → painel do domínio `ourfreedomchurch.com` → **Nameservers / DNS**.
