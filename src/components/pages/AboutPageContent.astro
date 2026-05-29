@@ -2,6 +2,7 @@
 import PageHero from '../PageHero.astro';
 import Section from '../Section.astro';
 import SectionHeader from '../SectionHeader.astro';
+import PastorsCouple from '../PastorsCouple.astro';
 import { getLangFromUrl } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
@@ -98,3 +99,5 @@ const missionText = {
     ))}
   </div>
 </Section>
+
+<PastorsCouple />

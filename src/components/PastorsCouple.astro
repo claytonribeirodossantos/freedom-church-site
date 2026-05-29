@@ -1,0 +1,87 @@
+---
+// Seção dos pastores (casal). Usada na página Sobre (#lideranca) e na de Liderança.
+import Section from './Section.astro';
+import { getLangFromUrl } from '../i18n/utils';
+import { church } from '../data/church';
+
+const lang = getLangFromUrl(Astro.url);
+
+const labels = {
+  pt: {
+    eyebrow: 'Liderança',
+    coupleTitle: 'Pr Adaelton & Pra Jheini de Souza',
+    coupleRole: 'Pastores principais',
+    coupleBio: 'Adaelton e Jheini lideram a Freedom Church desde sua fundação. Casal há mais de uma década, dedicam suas vidas a ver brasileiros longe de casa encontrarem família, propósito e a presença de Deus em Maryland.',
+  },
+  en: {
+    eyebrow: 'Leadership',
+    coupleTitle: 'Ps. Adaelton & Ps. Jheini de Souza',
+    coupleRole: 'Lead Pastors',
+    coupleBio: 'Adaelton and Jheini have led Freedom Church since its founding. A couple for over a decade, they dedicate their lives to seeing Brazilians far from home find family, purpose, and the presence of God in Maryland.',
+  },
+  es: {
+    eyebrow: 'Liderazgo',
+    coupleTitle: 'Pr Adaelton & Pra Jheini de Souza',
+    coupleRole: 'Pastores principales',
+    coupleBio: 'Adaelton y Jheini lideran Freedom Church desde su fundación. Pareja por más de una década, dedican sus vidas a ver brasileños lejos de casa encontrando familia, propósito y la presencia de Dios en Maryland.',
+  },
+}[lang];
+
+const adaelton = church.pastors[0];
+const jheini = church.pastors[1];
+const couple = church.pastorsCouple;
+const igPath = 'M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.72 3.72 0 0 1-1.38-.9 3.72 3.72 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16Z';
+---
+
+<Section bg="light" id="lideranca">
+  <div class="max-w-2xl mb-16 lg:mb-20" data-reveal>
+    <span class="eyebrow">{labels.eyebrow}</span>
+    <h2 class="mt-4 mega text-ink-950" style="font-size: clamp(2.5rem, 6vw, 5rem)">
+      {labels.coupleTitle.split(' & ').map((part, i) => (
+        <span class="block">
+          {i === 0 ? part : <><span class="italic font-light text-gold-500">& </span>{part.replace('& ', '')}</>}
+        </span>
+      ))}
+    </h2>
+    <p class="mt-3 text-sm uppercase tracking-[0.22em] text-gold-600 font-medium">{labels.coupleRole}</p>
+  </div>
+
+  <div class="grid lg:grid-cols-12 gap-8 lg:gap-16 items-center" data-reveal data-reveal-delay="1">
+    <!-- Single couple photo -->
+    <div class="lg:col-span-6 relative">
+      <div class="relative aspect-[4/5] rounded-3xl overflow-hidden bg-ink-900 shadow-2xl">
+        <img
+          src={couple.photo}
+          alt={couple.altText}
+          class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+          loading="lazy"
+          onerror="this.style.display='none'; this.nextElementSibling?.classList.remove('hidden');"
+        />
+        <div class="absolute inset-0 hidden" style="background: linear-gradient(135deg, #0F0F0E, #4F3F1F);">
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span class="font-display text-7xl text-gold-500/40 italic">A &amp; J</span>
+          </div>
+        </div>
+        <div class="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-ink-950 via-ink-950/60 to-transparent pointer-events-none">
+          <div class="text-xs uppercase tracking-wider text-gold-400 mb-1">{labels.coupleRole}</div>
+          <div class="font-display text-2xl text-ink-50">Adaelton &amp; Jheini</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shared bio + Instagram links -->
+    <div class="lg:col-span-6">
+      <p class="text-lg lg:text-xl text-ink-700 leading-relaxed">{labels.coupleBio}</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href={adaelton.instagram} target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-ink-300/70 hover:border-ink-950 hover:bg-ink-950 hover:text-cream-50 transition-all text-sm font-medium text-ink-900">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d={igPath}/></svg>
+          {adaelton.handle}
+        </a>
+        <a href={jheini.instagram} target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-ink-300/70 hover:border-ink-950 hover:bg-ink-950 hover:text-cream-50 transition-all text-sm font-medium text-ink-900">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d={igPath}/></svg>
+          {jheini.handle}
+        </a>
+      </div>
+    </div>
+  </div>
+</Section>

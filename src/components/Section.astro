@@ -3,9 +3,10 @@ interface Props {
   bg?: 'light' | 'dark' | 'tint';
   spacing?: 'sm' | 'md' | 'lg';
   class?: string;
+  id?: string;
 }
 
-const { bg = 'light', spacing = 'lg', class: extraClass = '' } = Astro.props;
+const { bg = 'light', spacing = 'lg', class: extraClass = '', id } = Astro.props;
 
 const bgClass = {
   light: 'bg-ink-50',
@@ -20,7 +21,7 @@ const spaceClass = {
 }[spacing];
 ---
 
-<section class:list={[bgClass, spaceClass, extraClass]}>
+<section id={id} class:list={[bgClass, spaceClass, extraClass, id ? 'scroll-mt-24' : '']}>
   <div class="container-page">
     <slot />
   </div>
