@@ -113,6 +113,12 @@ const churchSchema = {
     >
       Skip to content
     </a>
+    <!-- Scroll progress bar -->
+    <div
+      class="fixed top-0 left-0 z-50 h-[3px] origin-left"
+      style="width:100%; transform:scaleX(0); background:linear-gradient(90deg,#C9A961,#E46347);"
+      data-scroll-progress
+    ></div>
     <Header />
     <main id="main">
       <slot />
@@ -134,14 +140,20 @@ const churchSchema = {
       );
       document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
 
-      // Parallax
+      // Parallax + scroll progress bar
       const parallaxEls = document.querySelectorAll<HTMLElement>('[data-parallax]');
+      const progressBar = document.querySelector<HTMLElement>('[data-scroll-progress]');
       window.addEventListener('scroll', () => {
         const y = window.scrollY;
         parallaxEls.forEach((el) => {
           const speed = parseFloat(el.dataset.parallax ?? '0.2');
           el.style.transform = `translate3d(0, ${y * speed}px, 0)`;
         });
+        if (progressBar) {
+          const docH = document.documentElement.scrollHeight - window.innerHeight;
+          const pct = docH > 0 ? y / docH : 0;
+          progressBar.style.transform = `scaleX(${pct})`;
+        }
       }, { passive: true });
 
       // Scroll-triggered scale reveal (more dramatic than fade-up)
