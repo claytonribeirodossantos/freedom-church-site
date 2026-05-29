@@ -30,10 +30,16 @@ const expect = {
 }[lang];
 
 const heading = {
-  pt: { schedule: 'Horário', expect: 'O que esperar', location: 'Onde estamos', directions: 'Como chegar' },
-  en: { schedule: 'Schedule', expect: 'What to expect', location: 'Where we are', directions: 'Get directions' },
-  es: { schedule: 'Horario', expect: 'Qué esperar', location: 'Dónde estamos', directions: 'Cómo llegar' },
+  pt: { schedule: 'Horário', expect: 'O que esperar', location: 'Onde estamos', directions: 'Como chegar', videosEyebrow: 'Vídeos', videos: 'Um pouco dos nossos cultos' },
+  en: { schedule: 'Schedule', expect: 'What to expect', location: 'Where we are', directions: 'Get directions', videosEyebrow: 'Videos', videos: 'A glimpse of our services' },
+  es: { schedule: 'Horario', expect: 'Qué esperar', location: 'Dónde estamos', directions: 'Cómo llegar', videosEyebrow: 'Videos', videos: 'Un poco de nuestros cultos' },
 }[lang];
+
+// Vídeos dos cultos. Para adicionar mais: copie o arquivo em public/cultos/
+// (ex: culto-2.mp4) e acrescente uma linha abaixo seguindo o mesmo formato.
+const videos: { src: string; title?: { pt: string; en: string; es: string } }[] = [
+  { src: '/cultos/culto-1.mp4' },
+];
 
 const mapEmbed = `https://www.google.com/maps?q=${encodeURIComponent(church.address.full)}&output=embed`;
 ---
@@ -63,6 +69,26 @@ const mapEmbed = `https://www.google.com/maps?q=${encodeURIComponent(church.addr
         <h3 class="text-lg text-ink-950">{e.t}</h3>
         <p class="mt-2 text-sm text-ink-600 leading-relaxed">{e.d}</p>
       </div>
+    ))}
+  </div>
+</Section>
+
+<Section bg="light">
+  <SectionHeader eyebrow={heading.videosEyebrow} title={heading.videos} />
+  <div class:list={['gap-6', videos.length === 1 ? 'max-w-3xl mx-auto' : 'grid md:grid-cols-2']}>
+    {videos.map((v, i) => (
+      <figure class="group" data-reveal data-reveal-delay={(i % 3) + 1}>
+        <div class="relative aspect-video rounded-2xl overflow-hidden bg-ink-900 shadow-lg">
+          <video
+            src={v.src}
+            controls
+            playsinline
+            preload="metadata"
+            class="absolute inset-0 w-full h-full object-cover"
+          ></video>
+        </div>
+        {v.title && <figcaption class="mt-3 text-sm text-ink-600 text-center">{v.title[lang]}</figcaption>}
+      </figure>
     ))}
   </div>
 </Section>
