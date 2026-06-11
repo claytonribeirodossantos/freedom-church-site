@@ -1,24 +1,33 @@
-# SNAPSHOT DNS — ourfreedomchurch.com
-# Capturado em: Fri May 29 10:31:44 EDT 2026
-# ANTES de migrar nameservers pra Cloudflare. NAO PERDER os MX/TXT (email).
+# SNAPSHOT DNS COMPLETO — ourfreedomchurch.com (Turbify)
+# Verificado direto no painel da Turbify. NAO PERDER nada de email ao migrar.
 
-## Nameservers atuais (Turbify):
-ourfreedomchurch.com	nameserver = ns1.turbify.com
-ourfreedomchurch.com	nameserver = ns2.turbify.com
+## Name Servers atuais (Turbify):
+ns1.turbify.com
+ns2.turbify.com
+# -> trocar para: rosemary.ns.cloudflare.com / yadiel.ns.cloudflare.com
 
-## MX (email — CRITICO):
-ourfreedomchurch.com	MX preference = 20, mail exchanger = mx-biz.mail.am0.yahoodns.net
-ourfreedomchurch.com	MX preference = 30, mail exchanger = mx-biz.mail.am0.yahoodns.net
+## A / CNAME:
+A      @                 69.49.241.24            (site antigo Turbify/HostGator)
+CNAME  www               ourfreedomchurch.com
+CNAME  *                 ourfreedomchurch.com    (curinga)
+CNAME  mail              mail-redirect.turbify.com   (EMAIL/webmail)
+CNAME  k2._domainkey     dkim2.mcsv.net              (EMAIL DKIM - Mailchimp)
+CNAME  k3._domainkey     dkim3.mcsv.net              (EMAIL DKIM - Mailchimp)
 
-## A (apex):
-Address:  69.49.241.24
+## TXT:
+TXT    @                 google-site-verification=4qZ7avDiMCXJOI4NTUzHA-lntdCLEt6I2AyO0yFdQ3g
+TXT    _dmarc            v=DMARC1; p=none;
 
-## www:
-Address:  192.168.1.1
-Address:  69.49.241.24
+## MX (EMAIL - CRITICO):
+MX     @   mx-biz.mail.am0.yahoodns.net   pref 20
+MX     @   mx-biz.mail.am0.yahoodns.net   pref 30
 
-## TXT (SPF / verificacoes — CRITICO pro email):
-ourfreedomchurch.com	text =
+## SRV: nenhum
+## SPF (v=spf1): nao existe (sem registro SPF)
 
-## TXT _dmarc:
-_dmarc.ourfreedomchurch.com	text =
+## ===== O QUE A CLOUDFLARE IMPORTOU AUTOMATICAMENTE =====
+# OK: A @, CNAME www, CNAME *, MX x2, TXT @ (google), TXT _dmarc
+# FALTOU (adicionar manualmente na Cloudflare, "DNS only"/nuvem cinza):
+#   - CNAME mail            -> mail-redirect.turbify.com
+#   - CNAME k2._domainkey   -> dkim2.mcsv.net
+#   - CNAME k3._domainkey   -> dkim3.mcsv.net
