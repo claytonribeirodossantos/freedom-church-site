@@ -1,109 +1,237 @@
 ---
-import PageHero from '../PageHero.astro';
-import Section from '../Section.astro';
-import SectionHeader from '../SectionHeader.astro';
 import { getLangFromUrl } from '../../i18n/utils';
+import { church } from '../../data/church';
 
 const lang = getLangFromUrl(Astro.url);
 
+const hero = {
+  pt: { kicker: 'Freedom YTH · 12 a 24 anos', l1: 'A PRÓXIMA', l2: 'GERAÇÃO', l3: 'É AGORA.', sub: 'Sexta-feira é dia de encontro. Louvor alto, palavra real e um lugar onde você não precisa fingir nada.', cta: 'Cola com a gente', cta2: 'Seguir no Instagram' },
+  en: { kicker: 'Freedom YTH · Ages 12–24', l1: 'THE NEXT', l2: 'GENERATION', l3: 'IS NOW.', sub: 'Friday is our night. Loud worship, real talk, and a place where you don\'t have to pretend.', cta: 'Pull up', cta2: 'Follow on Instagram' },
+  es: { kicker: 'Freedom YTH · 12 a 24 años', l1: 'LA PRÓXIMA', l2: 'GENERACIÓN', l3: 'ES AHORA.', sub: 'El viernes es nuestra noche. Alabanza fuerte, palabra real y un lugar donde no tienes que fingir.', cta: 'Únete', cta2: 'Seguir en Instagram' },
+}[lang];
+
+const marqueeText = {
+  pt: 'ATÉ QUE ELE VENHA',
+  en: 'UNTIL HE COMES',
+  es: 'HASTA QUE ÉL VENGA',
+}[lang];
+
 const meta = {
-  pt: { age: '12 a 24 anos', when: 'Sexta-feira • 19h30', where: 'No nosso espaço em Kensington' },
-  en: { age: 'Ages 12–24', when: 'Friday • 7:30 PM', where: 'At our space in Kensington' },
-  es: { age: '12 a 24 años', when: 'Viernes • 7:30 PM', where: 'En nuestro espacio en Kensington' },
+  pt: [
+    { k: 'Quem', v: '12 – 24 anos' },
+    { k: 'Quando', v: 'Sexta · 19h30' },
+    { k: 'Onde', v: 'Kensington, MD' },
+  ],
+  en: [
+    { k: 'Who', v: 'Ages 12 – 24' },
+    { k: 'When', v: 'Friday · 7:30 PM' },
+    { k: 'Where', v: 'Kensington, MD' },
+  ],
+  es: [
+    { k: 'Quién', v: '12 – 24 años' },
+    { k: 'Cuándo', v: 'Viernes · 7:30 PM' },
+    { k: 'Dónde', v: 'Kensington, MD' },
+  ],
 }[lang];
 
 const drops = {
   pt: [
-    { t: 'Adoração ao vivo', d: 'Banda de jovens, atmosfera de oração, sem encenação.' },
-    { t: 'Mensagem direta', d: 'Conversa franca sobre fé, identidade, sexualidade, propósito e dúvidas reais.' },
-    { t: 'Conexão verdadeira', d: 'Pequenos grupos por idade onde você é escutado pelo nome.' },
-    { t: 'Lanche pós-encontro', d: 'Pizza e papo. A melhor parte da noite acontece depois.' },
+    { t: 'Louvor ao vivo', d: 'Banda de jovens, atmosfera de presença. Sem performance, sem encenação.' },
+    { t: 'Palavra sem filtro', d: 'Conversa real sobre fé, identidade, ansiedade, propósito e as dúvidas que ninguém posta.' },
+    { t: 'Conexão de verdade', d: 'Grupos por idade onde você é chamado pelo nome — não é só mais um na multidão.' },
+    { t: 'Depois do encontro', d: 'Pizza, papo e risada. A melhor parte da noite acontece quando "termina".' },
   ],
   en: [
-    { t: 'Live worship', d: 'Youth band, prayer atmosphere, no performance.' },
-    { t: 'Straight talk', d: 'Honest conversation about faith, identity, sexuality, purpose, and real questions.' },
-    { t: 'Real connection', d: 'Small groups by age where you are heard by name.' },
-    { t: 'After hangout', d: 'Pizza and talk. The best part of the night happens after.' },
+    { t: 'Live worship', d: 'Youth band, an atmosphere of presence. No performance, no acting.' },
+    { t: 'Unfiltered word', d: 'Real talk about faith, identity, anxiety, purpose and the doubts nobody posts.' },
+    { t: 'Real connection', d: 'Age groups where you\'re called by name — not just another face in the crowd.' },
+    { t: 'The after', d: 'Pizza, talk and laughs. The best part of the night happens when it\'s "over".' },
   ],
   es: [
-    { t: 'Alabanza en vivo', d: 'Banda juvenil, atmósfera de oración, sin actuación.' },
-    { t: 'Mensaje directo', d: 'Conversación franca sobre fe, identidad, sexualidad, propósito y dudas reales.' },
-    { t: 'Conexión verdadera', d: 'Grupos pequeños por edad donde te escuchan por tu nombre.' },
-    { t: 'Lonche después', d: 'Pizza y charla. La mejor parte de la noche pasa después.' },
+    { t: 'Alabanza en vivo', d: 'Banda juvenil, atmósfera de presencia. Sin actuación, sin apariencias.' },
+    { t: 'Palabra sin filtro', d: 'Conversación real sobre fe, identidad, ansiedad, propósito y las dudas que nadie publica.' },
+    { t: 'Conexión de verdad', d: 'Grupos por edad donde te llaman por tu nombre — no eres uno más en la multitud.' },
+    { t: 'El after', d: 'Pizza, charla y risas. La mejor parte de la noche pasa cuando "termina".' },
   ],
 }[lang];
 
-const heading = {
-  pt: { quote: 'Não chamamos vocês de jovens da igreja. Vocês são a igreja agora.', drops: 'O que rola nas sextas', cta: 'Primeira vez? Avise que vou', btn: 'Marcar minha primeira vez' },
-  en: { quote: "We don't call you 'church youth.' You are the church now.", drops: 'What goes down on Fridays', cta: 'First time? Let us know', btn: 'Mark my first time' },
-  es: { quote: 'No los llamamos «jóvenes de la iglesia». Ustedes son la iglesia ahora.', drops: 'Lo que pasa los viernes', cta: '¿Primera vez? Avísanos', btn: 'Marcar mi primera vez' },
+const quote = {
+  pt: { q: 'Não chamamos vocês de "jovens da igreja".', em: 'Vocês são a igreja. Agora.' },
+  en: { q: 'We don\'t call you "church youth".', em: 'You are the church. Now.' },
+  es: { q: 'No los llamamos "jóvenes de la iglesia".', em: 'Ustedes son la iglesia. Ahora.' },
 }[lang];
+
+const cta = {
+  pt: { t: 'PRIMEIRA VEZ?', sub: 'Manda um salve e a gente te espera na porta sexta-feira.', btn: 'Avisar no WhatsApp', wa: 'Olá! Quero visitar o Freedom Youth nesta sexta. 🤘' },
+  en: { t: 'FIRST TIME?', sub: 'Hit us up and we\'ll be waiting for you at the door on Friday.', btn: 'Message on WhatsApp', wa: 'Hi! I want to visit Freedom Youth this Friday. 🤘' },
+  es: { t: '¿PRIMERA VEZ?', sub: 'Mándanos un mensaje y te esperamos en la puerta el viernes.', btn: 'Avisar por WhatsApp', wa: '¡Hola! Quiero visitar Freedom Youth este viernes. 🤘' },
+}[lang];
+
+const marqueeRun = Array.from({ length: 10 });
 ---
 
-<PageHero pageKey="youth" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" />
 
-<Section bg="light">
-  <div class="grid md:grid-cols-3 gap-4">
-    {[
-      { label: lang === 'pt' ? 'Idade' : lang === 'en' ? 'Age' : 'Edad', value: meta.age },
-      { label: lang === 'pt' ? 'Quando' : lang === 'en' ? 'When' : 'Cuándo', value: meta.when },
-      { label: lang === 'pt' ? 'Onde' : lang === 'en' ? 'Where' : 'Dónde', value: meta.where },
-    ].map((m) => (
-      <div class="bg-ink-100 rounded-2xl p-6">
-        <div class="text-xs uppercase tracking-widest text-gold-600 mb-2">{m.label}</div>
-        <div class="text-lg text-ink-950 font-medium">{m.value}</div>
-      </div>
-    ))}
-  </div>
-</Section>
+<div class="yth bg-[#070708] text-white overflow-hidden">
 
-<Section bg="tint">
-  <div class="grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-    <!-- Quote -->
-    <div class="lg:col-span-7 order-2 lg:order-1" data-reveal>
-      <blockquote class="font-display text-3xl lg:text-4xl text-ink-950 leading-tight italic">
-        "{heading.quote}"
-      </blockquote>
-      <div class="mt-8 inline-flex items-center gap-3 px-4 py-2 rounded-full bg-ink-950 text-cream-50">
-        <span class="text-xs uppercase tracking-widest text-gold-400">FREEDOM YTH</span>
-        <span class="font-display italic text-sm">Até que Ele venha</span>
-      </div>
+  <!-- ===== HERO ===== -->
+  <section class="relative min-h-screen flex flex-col justify-center pt-28 pb-0">
+    <!-- glows -->
+    <div class="pointer-events-none absolute inset-0">
+      <div class="absolute -top-32 -left-24 w-[34rem] h-[34rem] rounded-full blur-3xl opacity-30 yth-pulse" style="background: radial-gradient(circle, #7C3AED, transparent 70%);"></div>
+      <div class="absolute bottom-0 -right-24 w-[30rem] h-[30rem] rounded-full blur-3xl opacity-25 yth-pulse" style="background: radial-gradient(circle, #BEF264, transparent 70%); animation-delay:-4s"></div>
+      <div class="absolute inset-0 grain"></div>
     </div>
-    <!-- Photo -->
-    <div class="lg:col-span-5 order-1 lg:order-2" data-reveal data-reveal-delay="1">
-      <div class="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl bg-ink-900">
-        <img
-          src="/youth/freedom-yth-camiseta.jpg"
-          alt="Freedom YTH — Até que Ele venha"
-          class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-          loading="lazy"
-        />
-      </div>
-    </div>
-  </div>
-</Section>
 
-<Section bg="light">
-  <SectionHeader eyebrow={heading.drops} title={heading.drops} />
-  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-    {drops.map((d, i) => (
-      <div class="bg-ink-50 border border-ink-200 rounded-2xl p-6 group hover:border-ink-950 transition-colors">
-        <div class="text-gold-500 font-display text-3xl font-light mb-3">
-          {String(i + 1).padStart(2, '0')}
+    <div class="container-page relative z-10 grid lg:grid-cols-12 gap-12 items-center">
+      <!-- type -->
+      <div class="lg:col-span-7">
+        <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-violet-500/40 bg-violet-500/10 text-violet-300 text-xs font-semibold uppercase tracking-[0.2em]" data-reveal>
+          <span class="w-2 h-2 rounded-full bg-lime-300 animate-pulse"></span>
+          {hero.kicker}
+        </span>
+
+        <h1 class="yth-display mt-8 leading-[0.92]" style="font-size: clamp(3rem, 9.5vw, 8rem)" data-reveal data-reveal-delay="1">
+          <span class="block">{hero.l1}</span>
+          <span class="block yth-outline">{hero.l2}</span>
+          <span class="block text-transparent bg-clip-text" style="background-image: linear-gradient(90deg, #A78BFA, #BEF264);">{hero.l3}</span>
+        </h1>
+
+        <p class="mt-8 text-lg text-white/65 max-w-md leading-relaxed" data-reveal data-reveal-delay="2">{hero.sub}</p>
+
+        <div class="mt-10 flex flex-wrap gap-3" data-reveal data-reveal-delay="3">
+          <a href={`https://wa.me/?text=${encodeURIComponent(cta.wa)}`} target="_blank" rel="noopener"
+            class="yth-display inline-flex items-center gap-2 px-7 py-4 rounded-full bg-lime-300 text-[#070708] text-sm uppercase tracking-wide hover:bg-lime-200 hover:-translate-y-1 transition-all shadow-[0_16px_40px_-12px_rgba(190,242,100,0.5)]">
+            {hero.cta}
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="3"><path d="m6 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href={church.social.instagram} target="_blank" rel="noopener"
+            class="yth-display inline-flex items-center gap-2 px-7 py-4 rounded-full border border-white/20 text-white text-sm uppercase tracking-wide hover:border-violet-400 hover:text-violet-300 hover:-translate-y-1 transition-all">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.72 3.72 0 0 1-1.38-.9 3.72 3.72 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16Z"/></svg>
+            {hero.cta2}
+          </a>
         </div>
-        <h3 class="text-lg text-ink-950">{d.t}</h3>
-        <p class="mt-2 text-sm text-ink-600 leading-relaxed">{d.d}</p>
       </div>
-    ))}
-  </div>
-</Section>
 
-<Section bg="dark">
-  <div class="text-center max-w-2xl mx-auto">
-    <h2 class="text-3xl lg:text-4xl text-ink-50 leading-tight">{heading.cta}</h2>
-    <a href="#" class="mt-8 inline-flex btn btn-primary !bg-gold-500 !text-ink-950 hover:!bg-gold-400">
-      {heading.btn}
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </a>
-  </div>
-</Section>
+      <!-- photo -->
+      <div class="lg:col-span-5 relative" data-reveal data-reveal-delay="2">
+        <div class="relative max-w-sm mx-auto">
+          <div class="absolute -top-4 -left-5 z-20 yth-display text-[#070708] bg-lime-300 px-4 py-2 rounded-lg -rotate-6 text-sm uppercase yth-float">Sexta · 19h30</div>
+          <div class="absolute -bottom-5 -right-3 z-20 yth-display text-white bg-violet-600 px-4 py-2 rounded-lg rotate-3 text-sm uppercase yth-float" style="animation-delay:-3s">12–24</div>
+          <div class="relative rounded-3xl overflow-hidden rotate-2 hover:rotate-0 transition-transform duration-500 border border-white/10 shadow-2xl">
+            <img src="/youth/freedom-yth-camiseta.jpg" alt="Freedom YTH — Até que Ele venha" class="w-full object-cover" loading="eager" />
+            <div class="absolute inset-0" style="background: linear-gradient(180deg, transparent 60%, rgba(7,7,8,0.7));"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- marquee -->
+    <div class="relative z-10 mt-16 border-y border-white/10 py-4 bg-white/[0.02]" aria-hidden="true">
+      <div class="marquee">
+        <div class="marquee-track">
+          {marqueeRun.map(() => (
+            <span class="yth-display text-2xl lg:text-4xl uppercase whitespace-nowrap">
+              <span class="text-white/90">{marqueeText}</span>
+              <span class="text-lime-300 mx-6">✦</span>
+              <span class="yth-outline-thin">FREEDOM YTH</span>
+              <span class="text-violet-400 mx-6">✦</span>
+            </span>
+          ))}
+        </div>
+        <div class="marquee-track" aria-hidden="true">
+          {marqueeRun.map(() => (
+            <span class="yth-display text-2xl lg:text-4xl uppercase whitespace-nowrap">
+              <span class="text-white/90">{marqueeText}</span>
+              <span class="text-lime-300 mx-6">✦</span>
+              <span class="yth-outline-thin">FREEDOM YTH</span>
+              <span class="text-violet-400 mx-6">✦</span>
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== META CHIPS ===== -->
+  <section class="relative py-16">
+    <div class="container-page grid sm:grid-cols-3 gap-4">
+      {meta.map((m, i) => (
+        <div class="group rounded-2xl border border-white/10 bg-white/[0.03] p-6 hover:border-lime-300/50 hover:bg-white/[0.06] hover:-translate-y-1 transition-all duration-300" data-reveal data-reveal-delay={i + 1}>
+          <div class="text-xs uppercase tracking-[0.25em] text-violet-300 mb-2">{m.k}</div>
+          <div class="yth-display text-2xl text-white group-hover:text-lime-300 transition-colors">{m.v}</div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ===== QUOTE ===== -->
+  <section class="relative py-20 lg:py-28">
+    <div class="pointer-events-none absolute inset-0">
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[42rem] h-[26rem] blur-3xl opacity-20" style="background: radial-gradient(ellipse, #7C3AED, transparent 70%);"></div>
+    </div>
+    <div class="container-page relative z-10 max-w-4xl mx-auto text-center" data-reveal>
+      <p class="font-display italic text-3xl lg:text-5xl leading-tight text-white/85">"{quote.q}"</p>
+      <p class="yth-display mt-6 text-3xl lg:text-5xl uppercase text-transparent bg-clip-text" style="background-image: linear-gradient(90deg, #BEF264, #A78BFA);">{quote.em}</p>
+    </div>
+  </section>
+
+  <!-- ===== O QUE ROLA ===== -->
+  <section class="relative py-16 lg:py-24">
+    <div class="container-page">
+      <h2 class="yth-display uppercase text-white mb-12" style="font-size: clamp(1.75rem, 4.5vw, 3rem)" data-reveal>
+        {lang === 'pt' ? 'O que rola nas ' : lang === 'en' ? 'What goes down on ' : 'Lo que pasa los '}<span class="text-lime-300">{lang === 'pt' ? 'sextas' : lang === 'en' ? 'Fridays' : 'viernes'}</span>
+      </h2>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {drops.map((d, i) => (
+          <div class="group relative rounded-2xl border border-white/10 bg-white/[0.03] p-7 overflow-hidden hover:border-violet-400/60 hover:-translate-y-2 transition-all duration-300" data-reveal data-reveal-delay={i + 1}>
+            <div class="yth-display yth-outline-thin text-6xl absolute -top-2 -right-1 opacity-40 group-hover:opacity-90 group-hover:text-lime-300 transition-all">{String(i + 1).padStart(2, '0')}</div>
+            <h3 class="yth-display relative z-10 mt-10 text-lg uppercase text-white">{d.t}</h3>
+            <p class="relative z-10 mt-3 text-sm text-white/55 leading-relaxed">{d.d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="relative py-24 lg:py-32 text-center overflow-hidden">
+    <div class="pointer-events-none absolute inset-0">
+      <div class="absolute -bottom-40 left-1/2 -translate-x-1/2 w-[50rem] h-[30rem] blur-3xl opacity-30" style="background: radial-gradient(ellipse, #7C3AED 0%, #BEF264 60%, transparent 75%);"></div>
+      <div class="absolute inset-0 grain"></div>
+    </div>
+    <div class="container-page relative z-10 max-w-2xl mx-auto" data-reveal>
+      <h2 class="yth-display uppercase leading-none" style="font-size: clamp(3rem, 9vw, 7rem)">
+        <span class="yth-outline">{cta.t}</span>
+      </h2>
+      <p class="mt-6 text-lg text-white/65">{cta.sub}</p>
+      <a href={`https://wa.me/?text=${encodeURIComponent(cta.wa)}`} target="_blank" rel="noopener"
+        class="yth-display mt-10 inline-flex items-center gap-3 px-9 py-5 rounded-full bg-lime-300 text-[#070708] text-base uppercase tracking-wide hover:bg-lime-200 hover:-translate-y-1 hover:scale-105 transition-all shadow-[0_20px_50px_-12px_rgba(190,242,100,0.55)]">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.4-.1-.6.1l-.9 1c-.2.2-.3.3-.6.1-.3-.1-1.2-.4-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.7-.8c.1-.1.2-.3.1-.4-.1-.1-.6-1.5-.9-2-.2-.5-.5-.4-.6-.4h-.5c-.2 0-.4 0-.7.3-.2.3-.9.9-.9 2.2 0 1.3.9 2.5 1.1 2.7.1.2 1.9 2.9 4.6 4.1 1.8.8 2.5.9 3.5.8.6-.1 1.7-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.1-.3-.2-.6-.3ZM12 .5C5.7.5.5 5.7.5 12c0 2 .5 4 1.5 5.7L.5 23.5l5.9-1.5c1.7.9 3.6 1.4 5.6 1.4 6.3 0 11.5-5.2 11.5-11.5S18.3.5 12 .5Zm0 21c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7.9.9-3.6-.2-.4c-.9-1.5-1.4-3.3-1.4-5.1C2.2 6.7 6.6 2.3 12 2.3S21.8 6.7 21.8 12 17.4 21.5 12 21.5Z"/></svg>
+        {cta.btn}
+      </a>
+    </div>
+  </section>
+</div>
+
+<style>
+  .yth-display { font-family: 'Archivo Black', 'Geist', system-ui, sans-serif; font-weight: 400; letter-spacing: -0.01em; }
+  .yth-outline {
+    color: transparent;
+    -webkit-text-stroke: 2px rgba(255, 255, 255, 0.85);
+  }
+  .yth-outline-thin {
+    color: transparent;
+    -webkit-text-stroke: 1.2px rgba(255, 255, 255, 0.5);
+  }
+  .yth-pulse { animation: yth-pulse 9s ease-in-out infinite alternate; }
+  @keyframes yth-pulse {
+    0%   { transform: scale(1) translate(0, 0); opacity: 0.22; }
+    100% { transform: scale(1.15) translate(3%, -3%); opacity: 0.38; }
+  }
+  .yth-float { animation: yth-float 6s ease-in-out infinite; }
+  @keyframes yth-float {
+    0%, 100% { transform: translateY(0) rotate(var(--tw-rotate, 0)); }
+    50%      { transform: translateY(-10px) rotate(var(--tw-rotate, 0)); }
+  }
+</style>
