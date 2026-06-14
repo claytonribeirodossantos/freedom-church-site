@@ -23,9 +23,9 @@ const buildTimeSermons = buildTimeVideos.map((v) => ({
 const initialJSON = JSON.stringify(buildTimeSermons);
 
 const labels = {
-  pt: { all: 'Todas', filter: 'Filtrar por série', loading: 'Carregando pregações...', empty: 'Em breve novas pregações.', subscribe: 'Inscrever no canal', watch: 'Assistir' },
-  en: { all: 'All', filter: 'Filter by series', loading: 'Loading sermons...', empty: 'New sermons coming soon.', subscribe: 'Subscribe to channel', watch: 'Watch' },
-  es: { all: 'Todas', filter: 'Filtrar por serie', loading: 'Cargando prédicas...', empty: 'Pronto nuevas prédicas.', subscribe: 'Suscribirse al canal', watch: 'Ver' },
+  pt: { all: 'Todas', filter: 'Filtrar por série', loading: 'Carregando pregações...', empty: 'Em breve novas pregações.', subscribe: 'Inscrever no canal', watch: 'Assistir', latest: 'Mais recente' },
+  en: { all: 'All', filter: 'Filter by series', loading: 'Loading sermons...', empty: 'New sermons coming soon.', subscribe: 'Subscribe to channel', watch: 'Watch', latest: 'Latest' },
+  es: { all: 'Todas', filter: 'Filtrar por serie', loading: 'Cargando prédicas...', empty: 'Pronto nuevas prédicas.', subscribe: 'Suscribirse al canal', watch: 'Ver', latest: 'Más reciente' },
 }[lang];
 
 const dateLocale = lang === 'pt' ? 'pt-BR' : lang === 'en' ? 'en-US' : 'es-ES';
@@ -42,6 +42,7 @@ const hasBuildData = buildTimeSermons.length > 0;
     data-date-locale={dateLocale}
     data-label-all={labels.all}
     data-label-filter={labels.filter}
+    data-label-latest={labels.latest}
     data-has-initial={hasBuildData ? '1' : '0'}
   >
     <!-- Initial sermons (from build) embedded as JSON -->
@@ -67,7 +68,26 @@ const hasBuildData = buildTimeSermons.length > 0;
         </a>
       </div>
 
-      <div id="sermon-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12"></div>
+      <!-- Carrossel -->
+      <div class="relative group/carousel">
+        <button
+          type="button"
+          data-carousel-prev
+          aria-label="Anterior"
+          class="hidden md:flex absolute -left-4 lg:-left-5 top-[28%] -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-ink-950 text-ink-50 items-center justify-center shadow-xl hover:bg-gold-500 hover:text-ink-950 transition-all disabled:opacity-0"
+        >
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m14 5-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button
+          type="button"
+          data-carousel-next
+          aria-label="Próximo"
+          class="hidden md:flex absolute -right-4 lg:-right-5 top-[28%] -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-ink-950 text-ink-50 items-center justify-center shadow-xl hover:bg-gold-500 hover:text-ink-950 transition-all disabled:opacity-0"
+        >
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m8 5 6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div id="sermon-grid" class="sermon-track flex gap-5 lg:gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 -mx-1 px-1"></div>
+      </div>
     </div>
 
     <!-- Empty fallback -->
@@ -80,6 +100,11 @@ const hasBuildData = buildTimeSermons.length > 0;
     </div>
   </div>
 </Section>
+
+<style>
+  .sermon-track { scrollbar-width: none; -ms-overflow-style: none; }
+  .sermon-track::-webkit-scrollbar { display: none; }
+</style>
 
 <script>
   type Video = {
@@ -104,10 +129,15 @@ const hasBuildData = buildTimeSermons.length > 0;
   const channelId = state?.dataset.channelId ?? '';
   const dateLocale = state?.dataset.dateLocale ?? 'pt-BR';
   const labelAll = state?.dataset.labelAll ?? 'All';
+  const labelLatest = state?.dataset.labelLatest ?? 'Latest';
+
+  function sortByDate(list: Video[]): Video[] {
+    return [...list].sort((a, b) => new Date(b.publishedAt).valueOf() - new Date(a.publishedAt).valueOf());
+  }
 
   let videos: Video[] = [];
   try {
-    videos = JSON.parse(initialScript?.textContent || '[]');
+    videos = sortByDate(JSON.parse(initialScript?.textContent || '[]'));
   } catch { videos = []; }
 
   function decodeEntities(s: string): string {
@@ -250,15 +280,20 @@ const hasBuildData = buildTimeSermons.length > 0;
     gridEl.innerHTML = '';
     const visible = currentFilter === 'all' ? videos : videos.filter(v => v.series === currentFilter);
 
-    visible.forEach((v) => {
+    visible.forEach((v, idx) => {
       const date = formatDate(v.publishedAt);
+      const isLatest = idx === 0 && currentFilter === 'all';
       const card = document.createElement('a');
       card.href = v.watchUrl;
       card.target = '_blank';
       card.rel = 'noopener';
-      card.className = 'group block';
+      card.className = 'group block shrink-0 snap-start w-[290px] sm:w-[360px] lg:w-[400px]';
+      const latestBadge = isLatest
+        ? `<div class="absolute top-3 right-3 z-10 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-ink-950 bg-gold-500 px-2.5 py-1 rounded-full shadow-lg"><span class="w-1.5 h-1.5 rounded-full bg-ink-950 animate-pulse"></span>${labelLatest}</div>`
+        : '';
       card.innerHTML = `
-        <div class="relative aspect-video rounded-xl overflow-hidden bg-ink-950 card-editorial">
+        <div class="relative aspect-video rounded-2xl overflow-hidden bg-ink-950 card-editorial ${isLatest ? 'ring-2 ring-gold-500 ring-offset-2 ring-offset-ink-50' : ''}">
+          ${latestBadge}
           <img src="${v.thumbnail}" alt="${v.cleanTitle.replace(/"/g, '&quot;')}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" onerror="this.src='https://i.ytimg.com/vi/${v.id}/hqdefault.jpg'" />
           <div class="absolute inset-0 bg-gradient-to-t from-ink-950/80 via-transparent to-transparent"></div>
           <div class="absolute inset-0 flex items-center justify-center">
@@ -277,7 +312,26 @@ const hasBuildData = buildTimeSermons.length > 0;
       `;
       gridEl.appendChild(card);
     });
+    gridEl.scrollLeft = 0;
+    updateArrows();
   }
+
+  // Carousel arrows
+  const prevBtn = document.querySelector<HTMLButtonElement>('[data-carousel-prev]');
+  const nextBtn = document.querySelector<HTMLButtonElement>('[data-carousel-next]');
+  function scrollAmount(): number {
+    const first = gridEl?.querySelector('a');
+    return first ? (first as HTMLElement).offsetWidth + 24 : 380;
+  }
+  function updateArrows() {
+    if (!gridEl || !prevBtn || !nextBtn) return;
+    const max = gridEl.scrollWidth - gridEl.clientWidth - 4;
+    prevBtn.disabled = gridEl.scrollLeft <= 4;
+    nextBtn.disabled = gridEl.scrollLeft >= max;
+  }
+  prevBtn?.addEventListener('click', () => gridEl?.scrollBy({ left: -scrollAmount(), behavior: 'smooth' }));
+  nextBtn?.addEventListener('click', () => gridEl?.scrollBy({ left: scrollAmount(), behavior: 'smooth' }));
+  gridEl?.addEventListener('scroll', updateArrows, { passive: true });
 
   // Initial render (from build-time snapshot if available)
   if (videos.length > 0) {
@@ -290,7 +344,7 @@ const hasBuildData = buildTimeSermons.length > 0;
   // Refresh from network in background
   fetchLatest().then((latest) => {
     if (latest && latest.length > 0) {
-      videos = latest;
+      videos = sortByDate(latest);
       loading?.classList.add('hidden');
       content?.classList.remove('hidden');
       empty?.classList.add('hidden');

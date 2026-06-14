@@ -34,7 +34,9 @@ export async function getChannelVideos(force = false): Promise<YouTubeVideo[]> {
       return [];
     }
     const xml = await res.text();
-    cachedVideos = parseFeed(xml);
+    cachedVideos = parseFeed(xml).sort(
+      (a, b) => b.publishedAt.valueOf() - a.publishedAt.valueOf(),
+    );
     return cachedVideos;
   } catch (err) {
     console.warn('[youtube] feed fetch error:', err);

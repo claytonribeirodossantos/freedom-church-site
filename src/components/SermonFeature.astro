@@ -45,14 +45,15 @@ const copy = {
       </div>
     </div>
 
-    <div class="grid lg:grid-cols-12 gap-8 items-center" data-reveal data-reveal-delay="2">
-      <a href={featWatch} target="_blank" rel="noopener" class="lg:col-span-8 block relative aspect-video rounded-3xl overflow-hidden bg-ink-900 group cursor-pointer tilt-card card-image-zoom" data-reveal-scale>
+    <div class="grid lg:grid-cols-12 gap-8 items-center" data-reveal data-reveal-delay="2" data-sermon-feature data-channel-id={church.social.youtubeChannelId} data-locale={lang === 'pt' ? 'pt-BR' : lang === 'en' ? 'en-US' : 'es-ES'}>
+      <a href={featWatch} target="_blank" rel="noopener" class="lg:col-span-8 block relative aspect-video rounded-3xl overflow-hidden bg-ink-900 group cursor-pointer tilt-card card-image-zoom" data-reveal-scale data-feat-link>
         <img
           src={featThumb}
           alt={featTitle}
           class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
           loading="lazy"
           onerror={`this.src='https://i.ytimg.com/vi/${featId}/hqdefault.jpg'`}
+          data-feat-img
         />
         <div class="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/30 to-transparent"></div>
         <div class="absolute inset-0 flex items-center justify-center">
@@ -61,12 +62,12 @@ const copy = {
           </div>
         </div>
         <div class="absolute bottom-0 left-0 right-0 p-8 lg:p-10">
-          <div class="text-xs uppercase tracking-[0.22em] text-gold-400 mb-3">{featSeries}</div>
-          <div class="font-display text-3xl lg:text-4xl text-ink-50 leading-tight">{featTitle}</div>
+          <div class="text-xs uppercase tracking-[0.22em] text-gold-400 mb-3" data-feat-series>{featSeries}</div>
+          <div class="font-display text-3xl lg:text-4xl text-ink-50 leading-tight" data-feat-title>{featTitle}</div>
           <div class="mt-3 flex items-center gap-3 text-sm text-ink-300">
-            <span>{featPastor}</span>
+            <span data-feat-pastor>{featPastor}</span>
             <span class="w-1 h-1 rounded-full bg-ink-400"></span>
-            <span>{featDate}</span>
+            <span data-feat-date>{featDate}</span>
           </div>
         </div>
       </a>
@@ -92,3 +93,70 @@ const copy = {
     </div>
   </div>
 </section>
+
+<script>
+  // Atualiza o vídeo em destaque ao vivo (caso o site não tenha sido reconstruído hoje)
+  const root = document.querySelector<HTMLElement>('[data-sermon-feature]');
+  if (root) {
+    const channelId = root.dataset.channelId ?? '';
+    const locale = root.dataset.locale ?? 'pt-BR';
+    const feedUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
+
+    const decode = (s: string) => s.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&apos;/g,"'");
+    const clean = (t: string) => t
+      .replace(/^(Pastor[a]?\.?|Pr\.?[a]?\.?)\s+[A-Za-zÀ-ÿ]+(?:\s+[A-Za-zÀ-ÿ]+)?\s*\|\s*/i,'')
+      .replace(/\s*\|\s*Freedom Church.*$/i,'').replace(/\s*-\s*Freedom Church.*$/i,'')
+      .replace(/\s*\|\s*Part\s*(\d+)/i,' · Parte $1').trim();
+    const series = (t: string) => {
+      const pm = t.match(/\|\s*([^|]+?)\s*\|\s*Part\s*\d+/i); if (pm) return pm[1].trim();
+      const p = t.split('|').map(s=>s.trim()).filter(Boolean); if (p.length>=3) return p[1];
+      if (/sunday\s+service/i.test(t)) return 'Sunday Service';
+      if (/culto/i.test(t)) return 'Culto'; return 'Mensagem';
+    };
+    const pastor = (t: string) => { const m = t.match(/^(Pastor[a]?\.?\s+[A-Za-zÀ-ÿ]+(?:\s+[A-Za-zÀ-ÿ]+)?|Pr\.?[a]?\.?\s+[A-Za-zÀ-ÿ]+(?:\s+[A-Za-zÀ-ÿ]+)?)/i); return m ? m[1].trim() : 'Freedom Church'; };
+
+    async function latest(): Promise<{id:string,title:string,pub:string}|null> {
+      // rss2json
+      try {
+        const r = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=10`);
+        if (r.ok) { const d = await r.json();
+          if (d.status==='ok' && d.items?.length) {
+            const items = d.items.map((it:any)=>({ id: ((it.guid||'').match(/yt:video:([\w-]+)/)||(it.link||'').match(/v=([\w-]+)/)||[])[1]||'', title: decode(it.title||''), pub: it.pubDate||it.published||'' })).filter((v:any)=>v.id);
+            items.sort((a:any,b:any)=>new Date(b.pub).valueOf()-new Date(a.pub).valueOf());
+            if (items[0]) return items[0];
+          }
+        }
+      } catch {}
+      // allorigins
+      try {
+        const r = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(feedUrl)}`);
+        if (r.ok) { const xml = await r.text();
+          const entries = xml.split('<entry>').slice(1).map((e:string)=>{
+            const id=(e.match(/<yt:videoId>([^<]+)<\/yt:videoId>/)||[])[1]||'';
+            const title=(e.match(/<title>([^<]+)<\/title>/)||[])[1]||'';
+            const pub=(e.match(/<published>([^<]+)<\/published>/)||[])[1]||'';
+            return { id, title: decode(title), pub };
+          }).filter((v:any)=>v.id);
+          entries.sort((a:any,b:any)=>new Date(b.pub).valueOf()-new Date(a.pub).valueOf());
+          if (entries[0]) return entries[0];
+        }
+      } catch {}
+      return null;
+    }
+
+    latest().then((v) => {
+      if (!v) return;
+      const link = root.querySelector<HTMLAnchorElement>('[data-feat-link]');
+      const img = root.querySelector<HTMLImageElement>('[data-feat-img]');
+      // Só atualiza se for um vídeo diferente do que veio do build
+      if (link && link.href.includes(v.id)) return;
+      if (link) link.href = `https://www.youtube.com/watch?v=${v.id}`;
+      if (img) { img.src = `https://i.ytimg.com/vi/${v.id}/maxresdefault.jpg`; img.onerror = () => { img.src = `https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`; }; }
+      const setTxt = (sel:string, val:string) => { const el = root.querySelector(sel); if (el) el.textContent = val; };
+      setTxt('[data-feat-series]', series(v.title));
+      setTxt('[data-feat-title]', clean(v.title));
+      setTxt('[data-feat-pastor]', pastor(v.title));
+      try { setTxt('[data-feat-date]', new Intl.DateTimeFormat(locale,{year:'numeric',month:'long',day:'numeric'}).format(new Date(v.pub))); } catch {}
+    });
+  }
+</script>
