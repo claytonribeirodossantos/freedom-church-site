@@ -50,7 +50,7 @@ const labels = {
 
 <Section bg="light">
   <div class="grid lg:grid-cols-12 gap-12 lg:gap-16">
-    <div class="lg:col-span-7">
+    <div class="lg:col-span-7" data-reveal>
       <form id="contact-form" class="space-y-6 w-full">
         <input type="hidden" name="access_key" value={church.web3FormsAccessKey} />
         <input type="hidden" name="subject" value="Contato — Freedom Church" />
@@ -93,7 +93,7 @@ const labels = {
       </form>
     </div>
 
-    <div class="lg:col-span-5">
+    <div class="lg:col-span-5" data-reveal data-reveal-delay="1">
       <div class="bg-ink-100 rounded-2xl p-8 lg:sticky lg:top-28">
         <div class="text-xs uppercase tracking-widest text-gold-600 mb-4">{labels.info}</div>
         <dl class="space-y-5 text-sm">

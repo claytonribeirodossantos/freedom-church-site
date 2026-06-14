@@ -49,8 +49,8 @@ const labels = {
 
 <Section bg="light">
   <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-    {ministries.map((m) => (
-      <a href={localizedPath(lang, m.href)} class="tilt-card bg-ink-50 border border-ink-200 rounded-2xl p-6 group hover:border-ink-950 hover:shadow-lg transition-all block">
+    {ministries.map((m, i) => (
+      <a href={localizedPath(lang, m.href)} class="tilt-card bg-ink-50 border border-ink-200 rounded-2xl p-6 group hover:border-ink-950 hover:shadow-lg hover:-translate-y-1 transition-all block" data-reveal data-reveal-delay={(i % 4) + 1}>
         <div class="text-3xl text-gold-500 mb-4 group-hover:scale-110 transition-transform inline-block">
           {m.icon}
         </div>
@@ -66,7 +66,7 @@ const labels = {
 </Section>
 
 <Section bg="dark">
-  <div class="text-center max-w-2xl mx-auto">
+  <div class="text-center max-w-2xl mx-auto" data-reveal>
     <h2 class="text-3xl lg:text-4xl text-ink-50 leading-tight">{labels.cta}</h2>
     <p class="mt-4 text-ink-300">{labels.ctaSub}</p>
     <a href={localizedPath(lang, '/contato')} class="mt-8 inline-flex btn btn-primary !bg-gold-500 !text-ink-950 hover:!bg-gold-400">
