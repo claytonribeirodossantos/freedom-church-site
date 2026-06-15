@@ -2,51 +2,92 @@
 import PageHero from '../PageHero.astro';
 import Section from '../Section.astro';
 import { getLangFromUrl } from '../../i18n/utils';
+import { getChannelVideos, cleanTitle } from '../../lib/youtube';
 import { church } from '../../data/church';
 
 const lang = getLangFromUrl(Astro.url);
+const channelId = church.social.youtubeChannelId;
+
+// Último vídeo (build-time, ordenado newest-first). Fallback: sample sermon.
+const vids = await getChannelVideos();
+const latestId = vids[0]?.id ?? church.sampleSermon.youtubeId;
+const latestTitle = vids[0] ? cleanTitle(vids[0].title) : '';
+
+const latestEmbed = `https://www.youtube.com/embed/${latestId}?rel=0`;
+const liveEmbed = `https://www.youtube.com/embed/live_stream?channel=${channelId}&autoplay=1&rel=0`;
+const liveUrl = `https://www.youtube.com/channel/${channelId}/live`;
 
 const labels = {
-  pt: { now: 'Estamos no ar', off: 'No momento estamos offline', nextLabel: 'Próximo culto', nextWhen: 'Domingo às 10h30', join: 'Toque o sino no YouTube e seja avisado quando entrarmos ao vivo.', subscribe: 'Inscrever no canal', recent: 'Último culto disponível', share: 'Compartilhe', invite: 'Convide alguém', message: 'Olá! Estamos ao vivo na Freedom Church. Venha adorar com a gente:', watchYt: 'Assistir no YouTube', watchYtHint: 'O player não carregou? Assista direto no YouTube:' },
-  en: { now: 'We are live', off: "We're currently offline", nextLabel: 'Next service', nextWhen: 'Sunday at 10:30 AM', join: 'Ring the bell on YouTube and get notified when we go live.', subscribe: 'Subscribe to channel', recent: 'Latest service', share: 'Share', invite: 'Invite someone', message: 'Hi! We are live at Freedom Church. Come worship with us:', watchYt: 'Watch on YouTube', watchYtHint: "Player didn't load? Watch directly on YouTube:" },
-  es: { now: 'Estamos en vivo', off: 'En este momento estamos fuera de línea', nextLabel: 'Próximo culto', nextWhen: 'Domingo a las 10:30 AM', join: 'Toca la campana en YouTube y recibe aviso cuando estemos en vivo.', subscribe: 'Suscribirse al canal', recent: 'Último culto disponible', share: 'Compartir', invite: 'Invita a alguien', message: '¡Hola! Estamos en vivo en Freedom Church. Ven a adorar con nosotros:', watchYt: 'Ver en YouTube', watchYtHint: '¿El reproductor no cargó? Mira directo en YouTube:' },
+  pt: {
+    liveNow: 'Ao vivo agora', offline: 'Offline no momento', watching: 'Último culto', watchingLive: 'Transmissão ao vivo',
+    nextLabel: 'Próximo culto', nextWhen: 'Domingo · 10h30',
+    join: 'Toque o sino no YouTube e seja avisado quando entrarmos ao vivo.', subscribe: 'Inscrever no canal',
+    watchYt: 'Assistir ao vivo no YouTube',
+    invite: 'Convide alguém', message: 'Olá! Venha adorar com a gente na Freedom Church:', share: 'Compartilhar no WhatsApp',
+  },
+  en: {
+    liveNow: 'Live now', offline: 'Currently offline', watching: 'Latest service', watchingLive: 'Live broadcast',
+    nextLabel: 'Next service', nextWhen: 'Sunday · 10:30 AM',
+    join: 'Ring the bell on YouTube and get notified when we go live.', subscribe: 'Subscribe to channel',
+    watchYt: 'Watch live on YouTube',
+    invite: 'Invite someone', message: 'Hi! Come worship with us at Freedom Church:', share: 'Share on WhatsApp',
+  },
+  es: {
+    liveNow: 'En vivo ahora', offline: 'Fuera de línea', watching: 'Último culto', watchingLive: 'Transmisión en vivo',
+    nextLabel: 'Próximo culto', nextWhen: 'Domingo · 10:30 AM',
+    join: 'Toca la campana en YouTube y recibe aviso cuando estemos en vivo.', subscribe: 'Suscribirse al canal',
+    watchYt: 'Ver en vivo en YouTube',
+    invite: 'Invita a alguien', message: '¡Hola! Ven a adorar con nosotros en Freedom Church:', share: 'Compartir en WhatsApp',
+  },
 }[lang];
-
-// Link que SEMPRE funciona: redireciona pra live quando o canal está ao vivo
-const liveUrl = `https://www.youtube.com/channel/${church.social.youtubeChannelId}/live`;
 ---
 
 <PageHero pageKey="live" />
 
 <Section bg="light">
-  <div class="max-w-5xl mx-auto">
-    <div class="aspect-video rounded-2xl overflow-hidden bg-ink-950 shadow-2xl">
+  <div class="max-w-5xl mx-auto" data-live-root data-channel-id={channelId} data-live-embed={liveEmbed} data-latest-embed={latestEmbed}>
+
+    <!-- Status -->
+    <div class="flex items-center justify-between gap-4 mb-5">
+      <div class="inline-flex items-center gap-2.5" data-live-status>
+        <span class="relative flex w-3 h-3" data-live-dot>
+          <span class="absolute inline-flex w-full h-full rounded-full bg-ink-400 opacity-75"></span>
+          <span class="relative inline-flex w-3 h-3 rounded-full bg-ink-400"></span>
+        </span>
+        <span class="text-sm font-semibold uppercase tracking-wider text-ink-700" data-live-text>{labels.offline}</span>
+      </div>
+      <span class="text-xs uppercase tracking-widest text-ink-500" data-watching-label>{latestTitle ? labels.watching : ''}</span>
+    </div>
+
+    <!-- Player -->
+    <div class="aspect-video rounded-2xl overflow-hidden bg-ink-950 shadow-2xl ring-1 ring-ink-200">
       <iframe
+        id="live-player"
         class="w-full h-full"
-        src={`https://www.youtube.com/embed/live_stream?channel=${church.social.youtubeChannelId}&autoplay=0&rel=0`}
-        title="Freedom Church Live"
+        src={latestEmbed}
+        title="Freedom Church"
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen
       ></iframe>
     </div>
 
-    <!-- Fallback à prova de falhas: link direto pra live do canal -->
-    <div class="mt-5 flex flex-col sm:flex-row items-center justify-center gap-3 text-center">
-      <span class="text-sm text-ink-600">{labels.watchYtHint}</span>
+    <!-- Botão à prova de falhas -->
+    <div class="mt-5 text-center">
       <a
         href={liveUrl}
         target="_blank"
         rel="noopener"
-        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-red-600 text-white text-sm font-semibold hover:bg-red-500 hover:-translate-y-0.5 transition-all shadow-lg shadow-red-600/25"
+        class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-red-600 text-white text-sm font-semibold hover:bg-red-500 hover:-translate-y-0.5 transition-all shadow-lg shadow-red-600/25"
       >
         <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8ZM9.6 15.6V8.4l6.2 3.6-6.2 3.6Z"/></svg>
         {labels.watchYt}
       </a>
     </div>
 
-    <div class="mt-6 grid sm:grid-cols-2 gap-4">
-      <div class="bg-ink-100 rounded-xl p-5">
+    <!-- Cards -->
+    <div class="mt-10 grid sm:grid-cols-2 gap-4">
+      <div class="bg-ink-100 rounded-2xl p-6">
         <div class="text-xs uppercase tracking-widest text-gold-600 mb-2">{labels.nextLabel}</div>
         <div class="font-display text-2xl text-ink-950">{labels.nextWhen}</div>
         <p class="mt-2 text-sm text-ink-600 leading-relaxed">{labels.join}</p>
@@ -55,19 +96,73 @@ const liveUrl = `https://www.youtube.com/channel/${church.social.youtubeChannelI
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
       </div>
-      <div class="bg-ink-950 text-ink-50 rounded-xl p-5">
+      <div class="bg-ink-950 text-ink-50 rounded-2xl p-6">
         <div class="text-xs uppercase tracking-widest text-gold-400 mb-2">{labels.invite}</div>
         <p class="text-sm text-ink-300 leading-relaxed">{labels.message}</p>
         <a
-          href={`https://wa.me/?text=${encodeURIComponent(labels.message + ' https://ourfreedomchurch.com/live')}`}
+          href={`https://wa.me/?text=${encodeURIComponent(labels.message + ' ' + liveUrl)}`}
           target="_blank"
           rel="noopener"
           class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-gold-400 hover:text-gold-300"
         >
           <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.4-.1-.6.1l-.9 1c-.2.2-.3.3-.6.1-.3-.1-1.2-.4-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.7-.8c.1-.1.2-.3.1-.4-.1-.1-.6-1.5-.9-2-.2-.5-.5-.4-.6-.4h-.5c-.2 0-.4 0-.7.3-.2.3-.9.9-.9 2.2 0 1.3.9 2.5 1.1 2.7.1.2 1.9 2.9 4.6 4.1 1.8.8 2.5.9 3.5.8.6-.1 1.7-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.1-.3-.2-.6-.3ZM12 .5C5.7.5.5 5.7.5 12c0 2 .5 4 1.5 5.7L.5 23.5l5.9-1.5c1.7.9 3.6 1.4 5.6 1.4 6.3 0 11.5-5.2 11.5-11.5S18.3.5 12 .5Zm0 21c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7.9.9-3.6-.2-.4c-.9-1.5-1.4-3.3-1.4-5.1C2.2 6.7 6.6 2.3 12 2.3S21.8 6.7 21.8 12 17.4 21.5 12 21.5Z"/></svg>
-          {labels.share} WhatsApp
+          {labels.share}
         </a>
       </div>
     </div>
   </div>
 </Section>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-live-root]');
+  if (root) {
+    const channelId = root.dataset.channelId ?? '';
+    const liveEmbed = root.dataset.liveEmbed ?? '';
+    const player = document.getElementById('live-player') as HTMLIFrameElement | null;
+    const dot = root.querySelector<HTMLElement>('[data-live-dot]');
+    const text = root.querySelector<HTMLElement>('[data-live-text]');
+    const watching = root.querySelector<HTMLElement>('[data-watching-label]');
+
+    const L = {
+      liveNow: text?.dataset.liveNow, // not used; labels injected below
+    };
+    // Labels passados via dataset do server? Simplificamos com textos fixos por idioma do <html>
+    const lang = document.documentElement.lang || 'pt';
+    const T = {
+      pt: { liveNow: 'Ao vivo agora', live: 'Transmissão ao vivo' },
+      en: { liveNow: 'Live now', live: 'Live broadcast' },
+      es: { liveNow: 'En vivo ahora', live: 'Transmisión en vivo' },
+    }[lang === 'en' ? 'en' : lang === 'es' ? 'es' : 'pt'];
+
+    function goLive() {
+      if (player && liveEmbed && !player.src.includes('live_stream')) player.src = liveEmbed;
+      if (dot) dot.querySelectorAll('span').forEach((s) => { s.classList.remove('bg-ink-400'); s.classList.add('bg-red-500'); });
+      dot?.querySelector('span')?.classList.add('animate-ping');
+      if (text) { text.textContent = T.liveNow; text.classList.remove('text-ink-700'); text.classList.add('text-red-600'); }
+      if (watching) watching.textContent = T.live;
+    }
+
+    async function isLive(): Promise<boolean> {
+      const target = `https://www.youtube.com/channel/${channelId}/live`;
+      for (const proxy of [
+        `https://api.allorigins.win/raw?url=${encodeURIComponent(target)}`,
+        `https://corsproxy.io/?${encodeURIComponent(target)}`,
+      ]) {
+        try {
+          const r = await fetch(proxy, { cache: 'no-store' });
+          if (!r.ok) continue;
+          const html = await r.text();
+          if (/"isLive":true/.test(html) || /"isLiveNow":true/.test(html) || /<meta itemprop="isLiveBroadcast" content="True">/i.test(html)) return true;
+          if (/"videoTab"|"playlistTab"/.test(html)) return false;
+        } catch {}
+      }
+      // heurística: domingo 10:00-12:30 ET
+      const nowET = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
+      const min = nowET.getHours() * 60 + nowET.getMinutes();
+      return nowET.getDay() === 0 && min >= 600 && min <= 750;
+    }
+
+    isLive().then((live) => { if (live) goLive(); });
+    setInterval(() => { isLive().then((live) => { if (live) goLive(); }); }, 90_000);
+  }
+</script>
