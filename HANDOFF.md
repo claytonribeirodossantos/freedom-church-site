@@ -1,46 +1,41 @@
-# 📋 HANDOFF — Site Freedom Church
+# 📋 HANDOFF — Site Freedom Church (atualizado 2026-06-16)
 
-> **Documento de transferência completo.** Cole isto no início de uma nova conversa com Claude (Code ou app) pra continuar exatamente de onde paramos.
+> **Documento de transferência completo.** Cole isto no início de uma nova conversa com Claude (Code, no computador) pra continuar exatamente de onde paramos. Tudo que o assistente anterior sabia está aqui.
 
 ---
 
 ## 🎯 PROJETO
 
-Estou construindo o site da **Freedom Church**, uma igreja brasileira em **Kensington, Maryland (EUA)**. Sou voluntário tecnicamente curioso mas **não-programador profissional** — você precisa me guiar passo a passo, sem jargão, com exemplos visuais.
+Site da **Freedom Church**, igreja brasileira em **Kensington, Maryland (EUA)**. Clayton é voluntário **não-programador** — precisa de orientação passo a passo, sem jargão, com decisões visuais (screenshots antes de mudanças grandes).
 
-### Contexto da igreja
-- **Nome**: Freedom Church (variação: OurFreedomChurch)
-- **Endereço**: 5020 Nicholson Court, Kensington, MD 20895, USA
-- **Cultos**: Domingos às 10:30 AM
-- **Pastores principais**: Adaelton de Souza + Jheini de Souza (casal há mais de 10 anos)
-- **Instagram igreja**: [@ourfreedomchurch_md](https://www.instagram.com/ourfreedomchurch_md/)
-- **YouTube canal**: [@ourfreedomchurch](https://www.youtube.com/@ourfreedomchurch) (channel ID: `UCmItF2T27GJFT6gFJti_9SA`)
-- **Pr Adaelton**: [@adaelton_desouza](https://www.instagram.com/adaelton_desouza/)
-- **Pra Jheini**: [@jheinidesouza](https://www.instagram.com/jheinidesouza/)
-- **Idiomas**: Português (principal) + Inglês + Espanhol
-- **Público**: brasileiros, americanos, latinos — "para todas as nações"
-- **Ministérios ativos**: Kids, Jovens, Casais, Mulheres, Homens, Louvor, Células
+- **Endereço:** 5020 Nicholson Court, Kensington, MD 20895, USA
+- **Culto:** Domingos 10h30
+- **Pastores:** Adaelton de Souza + Jheini de Souza (casal, pastores principais)
+- **Instagram igreja:** [@ourfreedomchurch_md](https://www.instagram.com/ourfreedomchurch_md/) ← handle CORRETO
+- **YouTube:** canal ID `UCmItF2T27GJFT6gFJti_9SA` ([@ourfreedomchurch](https://www.youtube.com/@ourfreedomchurch))
+- **Pr Adaelton:** [@adaelton_desouza](https://www.instagram.com/adaelton_desouza/) · **Pra Jheini:** [@jheinidesouza](https://www.instagram.com/jheinidesouza/)
+- **Idiomas:** PT (principal, `/`) + EN (`/en/`) + ES (`/es/`)
+- **Ministérios:** Kids, Jovens (Youth), Casais, Mulheres, Homens, Louvor, Células
+
+---
+
+## 🔗 URLS ESSENCIAIS
+
+| O quê | URL |
+|---|---|
+| **Site de TESTES (dev)** — use este pra ver mudanças | https://freedom-church-site.claytonribeirodossantos.workers.dev |
+| **Domínio oficial (público vê "Em breve")** | https://ourfreedomchurch.com |
+| **Ver site real no domínio (bypass manutenção)** | https://ourfreedomchurch.com/?preview |
+| **Repositório GitHub** | https://github.com/claytonribeirodossantos/freedom-church-site |
+| **Cloudflare dashboard** | https://dash.cloudflare.com (account: `a883a62138a3227585f3722468d05f07`) |
 
 ---
 
 ## 🚨 RESTRIÇÕES CRÍTICAS (NÃO QUEBRAR)
 
-### Domínio e email
-- Domínio `ourfreedomchurch.com` está registrado na **Turbify** (antiga Yahoo Small Business)
-- **Eu (Clayton) tenho acesso ao Turbify** e autorização do pastor pra mexer em DNS
-- **PROIBIDO MEXER nos registros MX** (email) — eles estão vinculados a recebimento de ofertas (Zelle, Venmo, etc) do pastor
-- MX records atuais: `mx-biz.mail.am0.yahoodns.net` (preferences 20 e 30)
-- Snapshot DNS salvo em `site/docs/dns-snapshot-pre.txt`
-
-### Hierarquia
-- Pastor (Adaelton de Souza) é o dono do domínio e das contas financeiras
-- Decisões grandes (mudar nameservers, alterar email, conectar contas de pagamento) precisam ser confirmadas comigo
-- **EU implemento, mas o pastor é o dono**
-
-### Credenciais
-- **Nunca peça senhas no chat** — só username/identificadores públicos
-- Eu (Clayton) já vazei senha do Gmail uma vez por engano — fui ensinado a trocar e ativar 2FA
-- Se eu mandar credencial sem pedir, alerte imediatamente
+1. **EMAIL / MX — sagrado.** O email da igreja recebe comprovantes de oferta (Zelle/Venmo/etc). MX aponta pro **Yahoo**: `mx-biz.mail.am0.yahoodns.net` (preferências 20 e 30). **NUNCA apagar/alterar** os registros de email no DNS. Snapshot completo em `docs/dns-snapshot-pre.txt`.
+2. **Hierarquia:** o Pastor Adaelton é dono do domínio e das contas financeiras. Clayton **implementa**, mas decisões de domínio/email/pagamento precisam do **OK do pastor**.
+3. **CREDENCIAIS:** **NUNCA pedir senha** de nada. Só identificadores públicos (handle do Instagram, @ do Venmo, etc). Sempre avisar: "só o usuário, NUNCA a senha". Clayton já vazou senha do Gmail uma vez por engano.
 
 ---
 
@@ -48,280 +43,155 @@ Estou construindo o site da **Freedom Church**, uma igreja brasileira em **Kensi
 
 | Camada | Ferramenta |
 |---|---|
-| Framework | **Astro 6** (output: static) |
-| Estilização | **Tailwind CSS v4** (com `@theme` block, sem `tailwind.config.js`) |
-| Hospedagem | **Cloudflare Workers** (NÃO Pages — versão nova Workers Builds) |
-| Repositório | **GitHub**: [github.com/claytonribeirodossantos/freedom-church-site](https://github.com/claytonribeirodossantos/freedom-church-site) (público) |
-| CMS | **Sveltia CMS** preparado em `/admin` (precisa do GitHub App pra autenticar) |
-| Conteúdo dinâmico | **Astro Content Collections** (`src/content/sermons`, `events`, `blog`) |
-| Pregações | **YouTube RSS feed** lido em build time + client-side (rss2json + allorigins fallback) |
-| Forms | **Web3Forms** (preparado, precisa access key) |
-| Doações | **Zelle + Venmo + Cash App** (placeholders, precisam handles reais) |
-| i18n | Nativo Astro: PT (default, `/`) + EN (`/en/`) + ES (`/es/`) — slugs PT em todas |
-| Fontes | **Fraunces** (display serif) + **Geist** (sans) |
-| Cores | Preto `#0A0908` + cream `#FAFAF7` + champagne gold `#C9A961` |
+| Framework | **Astro 6** (output **static** — 100% estático) |
+| Estilo | **Tailwind CSS v4** (`@theme` em `src/styles/global.css`, sem tailwind.config.js) |
+| Hospedagem | **Cloudflare Workers** (Workers Builds, auto-deploy do GitHub) |
+| Config deploy | **`wrangler.jsonc`** força assets estáticos (ver gotcha #2 abaixo) |
+| Vídeos pregação | **YouTube RSS** (build-time em `src/lib/youtube.ts` + refresh client-side via proxies rss2json/allorigins) |
+| Formulários | **Web3Forms** (preparado, FALTA access key) |
+| Doações | Zelle + Venmo + Cash App (placeholders, FALTAM handles reais) |
+| Fontes | Fraunces (serif) + Geist (sans) via Google Fonts; Youth usa **Archivo Black**, Kids usa **Fredoka** |
+| Cores | Preto `#0A0908` (ink) + cream `#FAFAF7` + **dourado `#C9A961`** (gold). Kids e Youth têm paletas próprias. |
 
-### URL live
-**https://freedom-church-site.claytonribeirodossantos.workers.dev**
-
-### Domínio próprio
-Ainda não apontado. Plano: subdomínio `preview.ourfreedomchurch.com` quando pastor aprovar. Cloudflare Workers Custom Domains exige migrar DNS pro Cloudflare (Cloudflare detecta e preserva MX). **Não foi feito ainda.**
+**Deploy:** cada `git push` na branch `main` dispara build automático na Cloudflare (~1 min). Verificar status via GitHub check-runs ou dashboard.
 
 ---
 
-## 📂 ESTRUTURA DO PROJETO
+## 🌐 DOMÍNIO — JÁ MIGRADO E NO AR (feito nas últimas sessões)
 
-```
-C:/Users/ClaytonRibeirodosSan/freedom-church/
-├── HANDOFF.md ← este arquivo
-├── docs/ (legado, conteúdo movido pra site/docs/)
-└── site/                           ← projeto Astro (= git repo root)
-    ├── astro.config.mjs            ← i18n PT/EN/ES + sitemap + Tailwind
-    ├── wrangler.jsonc              ← NÃO existe (foi tentado e removido)
-    ├── package.json                ← deps: astro, tailwindcss, @astrojs/sitemap
-    ├── public/
-    │   ├── logo.png                ← logo cruz preta em círculo
-    │   ├── favicon.svg / favicon.ico
-    │   ├── hero/intro.mp4          ← vídeo Pexels worship 4.5MB
-    │   ├── pastors/
-    │   │   ├── adaelton.jpg        ← AINDA NÃO EXISTE — placeholder ativo
-    │   │   └── jheini.jpg          ← AINDA NÃO EXISTE — placeholder ativo
-    │   ├── uploads/                ← pra fotos novas (events, gallery, blog, ministries)
-    │   └── admin/
-    │       └── config.yml          ← Sveltia CMS (compatível Decap)
-    ├── src/
-    │   ├── pages/
-    │   │   ├── index.astro         ← Home PT
-    │   │   ├── en/index.astro      ← Home EN
-    │   │   ├── es/index.astro      ← Home ES
-    │   │   ├── [page].astro        ← PT dynamic (slugs: sobre, cultos, pregacoes...)
-    │   │   ├── en/[page].astro     ← EN dynamic
-    │   │   ├── es/[page].astro     ← ES dynamic
-    │   │   ├── 404.astro           ← Erro custom com versículo
-    │   │   └── admin/index.astro   ← Sveltia CMS loader
-    │   ├── layouts/
-    │   │   └── BaseLayout.astro    ← head, header, footer, scripts globais (live detection, parallax, reveal, tilt)
-    │   ├── components/
-    │   │   ├── Header.astro        ← Mega menu 4 itens, mobile drawer
-    │   │   ├── Footer.astro        ← Cinematic dark, 3 colunas nav
-    │   │   ├── LanguageSwitcher.astro ← Click toggle (mobile-friendly)
-    │   │   ├── Hero.astro          ← Vídeo MP4 + mouse parallax + Ken Burns + light leaks + particles + marquee
-    │   │   ├── Manifesto.astro     ← Mega text editorial + keywords marquee
-    │   │   ├── NextService.astro   ← Stats (6 anos, 300+ famílias...)
-    │   │   ├── SermonFeature.astro ← Vídeo destacado + 3 últimos (YouTube)
-    │   │   ├── AboutPreview.astro  ← 4 pilares numerados
-    │   │   ├── PageHero.astro      ← Hero pras páginas internas (mesma vibe Hero)
-    │   │   ├── Section.astro       ← Wrapper (bg light/dark/tint)
-    │   │   ├── SectionHeader.astro ← eyebrow + title + intro
-    │   │   └── pages/              ← um component por página interna
-    │   │       ├── AboutPageContent.astro
-    │   │       ├── ServicesPageContent.astro
-    │   │       ├── SermonsPageContent.astro     ← client-side fetch YouTube
-    │   │       ├── EventsPageContent.astro      ← lê Content Collection
-    │   │       ├── MinistriesPageContent.astro
-    │   │       ├── GivePageContent.astro        ← Zelle+Venmo+CashApp cards
-    │   │       ├── NewHerePageContent.astro     ← Manifesto + steps + FAQ
-    │   │       ├── PrayerPageContent.astro      ← Web3Forms
-    │   │       ├── ContactPageContent.astro     ← Web3Forms
-    │   │       ├── LeadershipPageContent.astro  ← Adaelton + Jheini JUNTOS (casal)
-    │   │       ├── LivePageContent.astro        ← YouTube embed live_stream
-    │   │       ├── KidsPageContent.astro
-    │   │       ├── YouthPageContent.astro
-    │   │       ├── GalleryPageContent.astro
-    │   │       ├── ResourcesPageContent.astro
-    │   │       ├── PastoralServicesPageContent.astro
-    │   │       ├── NewsletterPageContent.astro
-    │   │       ├── PrivacyPageContent.astro
-    │   │       └── TermsPageContent.astro
-    │   ├── content.config.ts       ← Collections schemas (sermons, events, blog)
-    │   ├── content/
-    │   │   ├── sermons/*.md        ← 3 exemplos (placeholders — vídeos reais vêm do YouTube)
-    │   │   ├── events/*.md         ← 4 exemplos (placeholders, editáveis via /admin)
-    │   │   └── blog/               ← vazio
-    │   ├── data/
-    │   │   └── church.ts           ← FONTE ÚNICA: nome, endereço, pastores, social, giving, web3FormsAccessKey
-    │   ├── i18n/
-    │   │   ├── ui.ts               ← strings da interface (PT/EN/ES)
-    │   │   ├── pages.ts            ← títulos/subtítulos das páginas (PT/EN/ES)
-    │   │   ├── utils.ts            ← getLangFromUrl, useTranslations, localizedPath, switchLangPath
-    │   │   └── format.ts           ← formatDate, formatMonthDay, pickLocalized
-    │   ├── lib/
-    │   │   └── youtube.ts          ← Fetch RSS feed do canal (build time)
-    │   └── styles/
-    │       └── global.css          ← @theme tokens + components + animations
-    └── docs/                       ← guias práticos (vão pro GitHub)
-        ├── MANUTENCAO-DO-SITE.md   ← 10 seções: postar pregação, ir ao vivo, fotos, eventos, /admin, doações, formulários, domínio, troubleshooting
-        ├── COMO-BAIXAR-DO-INSTAGRAM.md ← 4 opções (saveinsta.io recomendado)
-        ├── MAPA-DO-SITE.md         ← tabela onde editar cada coisa
-        ├── PREVIEW-NO-DOMINIO.md   ← passo-a-passo Cloudflare + Turbify
-        ├── resumo-para-o-pastor.md ← documento pra Clayton apresentar
-        └── dns-snapshot-pre.txt    ← baseline DNS antes de qualquer mudança
-```
+Estado **completo e funcional**:
+
+- ✅ Domínio `ourfreedomchurch.com` registrado na **Turbify** (Clayton tem acesso).
+- ✅ **Nameservers migrados** Turbify → **Cloudflare**: `rosemary.ns.cloudflare.com` + `yadiel.ns.cloudflare.com`.
+- ✅ **Email preservado na migração** — todos os registros copiados pra Cloudflare (MX x2, `mail`→mail-redirect.turbify.com, `k2/k3._domainkey`→dkim2/3.mcsv.net, TXT _dmarc + google-site-verification). **Testado, email funciona.**
+- ✅ **Apex + www** conectados ao Worker como Custom Domains (registro A antigo `69.49.241.24` da Turbify/HostGator foi deletado; o `www` CNAME também foi deletado e reconectado como custom domain). SSL ativo nos dois.
+- ✅ **Site antigo do HostGator** (abandonado, tinha sido hackeado) foi substituído. O Google tinha marcado o domínio como **"Dangerous" (páginas enganosas)** por causa disso → solicitamos revisão no **Google Search Console** → **JÁ FOI REMOVIDO**.
+
+### ⚙️ MODO MANUTENÇÃO — IMPORTANTE
+- Arquivo **`src/config.ts`** tem `SITE.maintenance = true`.
+- Com isso, **o público que acessa `ourfreedomchurch.com` é redirecionado pra página `/em-breve/`** (um "Em breve" elegante). A equipe testa o site real no link `.workers.dev` (nunca bloqueado) ou em `ourfreedomchurch.com/?preview`.
+- **PARA LANÇAR PRO PÚBLICO:** trocar `maintenance: true` → `false` em `src/config.ts`, commit e push. Pronto, sai do "Em breve".
+- O gate está no `<head>` do `src/layouts/BaseLayout.astro` (script inline por hostname).
 
 ---
 
-## ✅ O QUE ESTÁ PRONTO
+## ✅ O QUE JÁ ESTÁ PRONTO (todas as páginas em PT/EN/ES)
 
-### Páginas (todas em PT/EN/ES, total ~62 páginas geradas)
-- ✅ **Home**: Hero com vídeo + Manifesto + Stats + Sermon Feature + Pilares
-- ✅ **Sobre** (/sobre)
-- ✅ **Cultos** (/cultos) com mapa Google embed
-- ✅ **Pregações** (/pregacoes) lendo YouTube RSS (build + client fallback)
-- ✅ **Eventos** (/eventos) lendo Content Collection
-- ✅ **Ministérios** (/ministerios) com cards linkando pra Kids/Youth/etc
-- ✅ **Contribua** (/contribua) com Zelle/Venmo/CashApp (placeholders)
-- ✅ **Sou Novo Aqui** (/sou-novo-aqui) Manifesto + 6 steps + 6 FAQs + CTA WhatsApp
-- ✅ **Pedidos de Oração** (/pedidos-de-oracao) form Web3Forms
-- ✅ **Contato** (/contato) form Web3Forms
-- ✅ **Liderança** (/lideranca) Pastores Adaelton + Jheini JUNTOS (casal)
-- ✅ **Live** (/live) YouTube embed live_stream
-- ✅ **Freedom Kids** (/kids)
-- ✅ **Freedom Youth** (/jovens)
-- ✅ **Galeria** (/galeria)
-- ✅ **Recursos** (/recursos)
-- ✅ **Serviços Pastorais** (/servicos-pastorais)
-- ✅ **Newsletter** (/newsletter)
-- ✅ **Privacidade** (/privacidade) + **Termos** (/termos)
-- ✅ **404 customizada** com versículo
+### Páginas
+- **Home** (`/`): Hero com vídeo + Manifesto + Stats + **SermonFeature (vídeo em destaque, atualiza AO VIVO)** + AboutPreview + **InstagramBand** (faixa de seguir).
+- **Sobre** (`/sobre`): página ÚNICA com história + missão + valores + **Liderança (pastores casal, âncora `#lideranca`)**. "Sobre" no menu é link direto (sem dropdown).
+- **Cultos** (`/cultos`): horário, "o que esperar", **vídeo de fundo no hero**, mapa.
+- **Pregações** (`/pregacoes`): **CARROSSEL moderno** de vídeos (scroll-snap + setas), ordenado por data, selo "Mais recente" no primeiro, filtros por série, fetch ao vivo.
+- **Ao Vivo** (`/live`): **nunca fica vazia** — mostra o último culto por padrão; detecta live e troca pra transmissão + selo "AO VIVO AGORA"; botão vermelho "Assistir no YouTube".
+- **Eventos** (`/eventos`): lê Content Collection.
+- **Ministérios** (`/ministerios`): grid de 8 ministérios. (Item "Todos os ministérios" foi REMOVIDO do menu.)
+- **Freedom Kids** (`/kids`): **design colorido/infantil próprio** (Fredoka, paleta vibrante, hero com vídeo de fundo, 5 valores, faixas etárias, processo de check-in adesivo+número). **NÃO MEXER — Clayton aprovou.**
+- **Freedom Youth** (`/jovens`): **design jovem próprio** (preto + violeta/lima, Archivo Black gigante com outline, marquee "Até que Ele venha", foto com adesivos, glows). Distinta do resto.
+- **Galeria** (`/galeria`): 3 fotos reais (oração, parede de memórias, jantar).
+- **Contribua** (`/contribua`): **modernizada** — cards com faixa colorida da marca (Zelle roxo/Venmo azul/Cash App verde), botão copiar em pílula, botão "Abrir app". Handles ainda PLACEHOLDER.
+- **Contato** (`/contato`): formulário Web3Forms (FALTA key).
+- **Sou Novo Aqui** (`/sou-novo-aqui`), **Serviços Pastorais**, **Newsletter**, **Recursos**, **Privacidade**, **Termos**, **404 custom**.
 
-### Features funcionais
-- ✅ **Mega menu** 4 itens: Sobre ▾ | Conecte-se ▾ | Ministérios ▾ | Contribua
-- ✅ **Mobile**: full-screen drawer + dropdowns nativos (<details>)
-- ✅ **Language switcher** com click toggle (funciona em touch)
-- ✅ **Live detection** real-time: client-side fetch via CORS proxy (allorigins → corsproxy.io → heurística domingo 10:00-12:30 ET)
-- ✅ **YouTube auto-feed**: pregações atualizam sozinhas quando posta no canal
-- ✅ **Animações ricas**: mouse parallax multi-camadas, Ken Burns, light leaks animados, partículas douradas, 3D tilt em cards, scroll reveal com blur
-- ✅ **SEO**: JSON-LD Church schema, hreflang PT/EN/ES, OG tags, sitemap.xml
-- ✅ **Trilingual**: PT default em `/`, EN em `/en/`, ES em `/es/`
+### Identidade visual
+- **Logo NOVO** (sem a curva antiga): arte oficial `brand/logo-color.png` recolorida pra preto via `scripts/make-logo.mjs` → `public/logo.png` (+ `logo.svg`). Cruz limpa no círculo.
+- **Animações/movimento:** scroll-reveal (`data-reveal`) em quase todas as páginas, barra de progresso de scroll no topo, sublinhado animado no menu, hover-lift em cards, parallax no Hero, respeito a `prefers-reduced-motion`.
 
-### Deploy
-- ✅ **Cloudflare Workers** com GitHub auto-deploy (cada push rebuilda em ~2min)
-- ✅ **SSL** automático
-- ✅ **CDN global** (300+ data centers)
-- ✅ **Custo**: $0/mês
-
-### Documentação
-- ✅ 5 guias em `site/docs/` cobrindo todos os fluxos de manutenção
+### Menu (Header) — estado atual
+- **Sobre** (link direto → /sobre)
+- **Conecte-se** ▾ : Cultos · Pregações · Eventos · Galeria
+- **Ministérios** ▾ : Freedom Kids · Freedom Youth
+- **Contribua** (link direto)
+- + botão "Sou novo aqui", ícone Instagram, "Ao vivo", seletor de idioma
 
 ---
 
-## ⏳ O QUE ESTÁ PENDENTE
+## ⏳ O QUE FALTA (pendências)
 
-### Setup pelo Clayton (não-código)
-- ⏳ **Trocar handles reais** Zelle/Venmo/CashApp em `src/data/church.ts` (placeholders genéricos: `contato@ourfreedomchurch.com`, `@ourfreedomchurch`, `$ourfreedomchurch`)
-- ⏳ **Criar Web3Forms account** + colocar access key em `src/data/church.ts` (placeholder: `'REPLACE_WITH_WEB3FORMS_ACCESS_KEY'`)
-- ⏳ **Criar GitHub App** pro `/admin` funcionar (Sveltia CMS) — instruções no `docs/MANUTENCAO-DO-SITE.md` seção 6
-- ⏳ **Baixar fotos pastores** do Instagram → salvar em `public/pastors/adaelton.jpg` e `jheini.jpg`
-- ⏳ **Apontar domínio** (Caminho A: ficar com `.workers.dev` até pastor aprovar / Caminho B: migrar DNS pro Cloudflare quando der)
-
-### Desenvolvimento técnico
-- ⏳ **Tasks #9, #10, #16, #27, #28** da minha lista interna (verificar com `TaskList`)
-- ⏳ Detecção de live ainda usa CORS proxies de terceiros (funciona mas frágil); idealmente usar Cloudflare Function quando migrar pro adapter @astrojs/cloudflare
-- ⏳ Substituir mais fotos Unsplash por fotos reais quando Clayton baixar do Instagram
-
----
-
-## 🔑 DECISÕES TÉCNICAS IMPORTANTES
-
-### Por que essas escolhas (e o que NÃO foi escolhido)
-
-| Decisão | Por quê | Alternativas descartadas |
+| Item | Depende de | Detalhe |
 |---|---|---|
-| **Astro + Cloudflare Workers (estático)** | Performance, zero custo, SSL automático | WordPress no HostGator (tentamos avaliar — pesado, antiquado) |
-| **Slugs em PT pra todas linguagens** | Pragmático, fácil de manter | Slugs traduzidos (mais SEO mas mais complexo) |
-| **Sveltia CMS (não Decap)** | GitHub auth client-side sem Worker function | Decap CMS (requer servidor OAuth) |
-| **YouTube RSS** | Free, sem API key, atualiza sozinho | YouTube Data API (precisa key, cota) |
-| **Live via CORS proxy** | Sem precisar Cloudflare Function | API server-side (tentei @astrojs/cloudflare adapter mas quebrou deploy — abandonei) |
-| **Vídeo MP4 hospedado em public/** | Confiável, sem dependência externa | Pexels URLs (mostraram bandeira India, criança VR — não confiáveis) |
-| **Pastores juntos no Liderança** | São casal | Cards separados (era assim antes) |
-| **Menu 4 itens com dropdowns** | Inspirado transformchurch.us, mais clean | 6 itens horizontais (era assim antes) |
-
-### Tentativas que NÃO funcionaram
-- **@astrojs/cloudflare adapter**: instalei, quebrou o deploy do Workers Builds. Desinstalei. Hoje site é 100% estático.
-- **wrangler.jsonc**: tentei criar, quebrou build. Não existe.
-- **Pexels random URLs**: pegaram bandeira da Índia e criança com VR. Hoje uso só URLs confirmadas via `curl -I`.
-- **API routes server-side**: não funcionam sem adapter. Tudo é estático + client-side JS.
+| 💳 Handles reais Zelle/Venmo/Cash App | Pastor confirmar | Editar `src/data/church.ts` → `giving`. Hoje: `@ourfreedomchurch`, `$ourfreedomchurch`, email zelle genérico. |
+| 📧 Web3Forms access key | Clayton criar conta grátis (web3forms.com) | Editar `src/data/church.ts` → `web3FormsAccessKey` (hoje `'REPLACE_WITH_WEB3FORMS_ACCESS_KEY'`). Sem isso, formulários de contato/oração não enviam. |
+| 🖼️ Fotos reais | Clayton baixar do Instagram | Várias páginas ainda usam imagens Unsplash (placeholder) no `PageHero`. |
+| 🚀 **LANÇAR pro público** | Clayton decidir | Trocar `SITE.maintenance` pra `false` em `src/config.ts`. Clayton quer ajustar mais coisas antes. |
 
 ---
 
-## 👤 SOBRE MIM (Clayton)
+## 🧨 GOTCHAS / ARMADILHAS (lições aprendidas — NÃO repetir erros)
 
-- Email: `claytonribeirodossantos@gmail.com`
-- GitHub: `claytonribeirodossantos`
-- Localização: Brasil (computador) / acessa site nos EUA (igreja)
-- Sou **não-programador profissional** — entendo conceitos mas precisa de orientação clara
-- **Prefiro decisões visuais** — me mostre screenshots antes de implementar mudanças grandes
-- **Quero o site MODERNO** (referência: [transformchurch.us](https://transformchurch.us/), [hillsong.com](https://hillsong.com/), [churchome.org](https://churchome.org/))
-- Tenho conta GitHub, Cloudflare, Turbify
-- Posso editar arquivos no GitHub pelo navegador do celular
-- **Aceito** que algumas coisas precisam config minha (criar GitHub App, Web3Forms account, baixar fotos)
-- **NÃO aceito** complicação técnica sem necessidade
+1. **Site é 100% ESTÁTICO.** NÃO instalar `@astrojs/cloudflare` adapter — ele cria um KV Namespace que dá conflito (erro 10014) e quebra o deploy. Já aconteceu. O `wrangler.jsonc` existe pra forçar deploy de assets estáticos e impedir o auto-setup.
+2. **NÃO adicionar React/Three.js/shadcn.** Uma sessão interrompida instalou isso + deixou `@import "tw-animate-css"` e `@import "shadcn/..."` órfãos no `global.css`, que quebraram o build na Cloudflare (mas passava local porque node_modules ainda tinha). Mantenha o projeto **lean: só Astro + Tailwind + sitemap**.
+3. **Windows Defender** dava falso-positivo (`Trojan:HTML/FakeLogin`) em `ContactPageContent.astro` (é só um form) e apagava o arquivo do disco. Resolvido: pasta `freedom-church` está nas **exclusões do Defender**. Se um arquivo "sumir" sozinho, é isso.
+4. **Cloudflare reporta build "0.0s"** mesmo nos que dão certo — não é sinal de erro. Olhar `conclusion: success/failure`.
+5. **Screenshots no preview travam** por causa do (a) script de live-detection que fica buscando proxies e (b) vídeos autoplay — a página nunca fica "idle". Solução: rodar `window.stop()` via preview_eval antes do screenshot, ou verificar via inspeção do DOM (preview_eval).
+6. **Vídeo de pregação "desatualizado":** o site é estático (build-time). Já corrigido com (a) ordenação por data no `youtube.ts` e (b) refresh client-side na home e na Pregações. Mas lembre: pra o snapshot do build ficar fresco, precisa de um novo deploy.
+7. **DNS/domínio:** os nameservers JÁ estão na Cloudflare. Pra qualquer mudança de DNS, é no painel Cloudflare (não mais na Turbify). Nunca mexer nos registros de email.
 
 ---
 
-## 🚀 COMO CONTINUAR EM CHAT NOVO
+## 📂 ARQUIVOS-CHAVE
 
-### Se for Claude Code (no computador):
-1. Cole o conteúdo deste arquivo no início da conversa
-2. Diga: _"Estou continuando o desenvolvimento do site Freedom Church. Leia o HANDOFF.md em `C:\Users\ClaytonRibeirodosSan\freedom-church\HANDOFF.md` e me confirme que está alinhado. Próxima coisa que quero fazer é: [X]"_
-
-### Se for Claude no celular/app (claude.ai):
-1. Cole o conteúdo deste documento no início da conversa
-2. Diga: _"Sou voluntário construindo o site da Freedom Church. Tô no celular, sem acesso ao código direto. Preciso de ajuda com [X] — pode me orientar passo a passo? O site está em https://freedom-church-site.claytonribeirodossantos.workers.dev e o código em https://github.com/claytonribeirodossantos/freedom-church-site"_
-
-### URLs essenciais pro novo chat
-- **Site live**: https://freedom-church-site.claytonribeirodossantos.workers.dev
-- **Repo GitHub**: https://github.com/claytonribeirodossantos/freedom-church-site
-- **Cloudflare dashboard**: https://dash.cloudflare.com
-- **Histórico de mudanças**: https://github.com/claytonribeirodossantos/freedom-church-site/commits/main
-- **Guias salvos**: https://github.com/claytonribeirodossantos/freedom-church-site/tree/main/docs
-- **Mapa do site (onde editar)**: https://github.com/claytonribeirodossantos/freedom-church-site/blob/main/docs/MAPA-DO-SITE.md
-- **Como manter**: https://github.com/claytonribeirodossantos/freedom-church-site/blob/main/docs/MANUTENCAO-DO-SITE.md
-
----
-
-## 📊 HISTÓRICO RESUMIDO
-
-Construído em ~50 rounds de iteração. Marcos principais:
-
-1. ✅ Decisão de stack (Astro vs WordPress) — escolhi modern
-2. ✅ Setup Astro + Tailwind + i18n
-3. ✅ Design system inicial (preto + dourado)
-4. ✅ 19 páginas em 3 idiomas (62 páginas total)
-5. ✅ Astro Content Collections (sermons, events, blog)
-6. ✅ Sveltia CMS preparado
-7. ✅ Push pro GitHub + deploy Cloudflare Workers
-8. ✅ Redesign cinematográfico (Hero, Manifesto, layouts editoriais)
-9. ✅ YouTube RSS automático
-10. ✅ Live detection real-time
-11. ✅ Mobile responsivo (mega menu, language switcher click)
-12. ✅ 4 guias de manutenção
-13. ✅ Animações ricas (mouse parallax, 3D tilt, scroll reveal)
-14. ✅ Vídeo real no Hero (Pexels worship)
-15. ✅ Pastores como casal na Liderança
-16. ✅ Menu simplificado (4 itens, estilo transformchurch)
-
-### Bugs corrigidos importantes
-- Bandeira da Índia aparecia em /contribua (URL Unsplash errada) → trocada
-- Hero mostrava criança com VR (URL Unsplash errada) → trocada por foto worship confirmada → trocada por vídeo
-- Mobile menu height: 0 → fix com `style="height: calc(100dvh - 5rem)"`
-- Live link "Assistir ao vivo" da Home não funcionava → corrigido
-- Header texto invisível em hero escuro → simplificado pra sempre claro
-- LanguageSwitcher hover não funcionava em mobile → click toggle
-- @astrojs/cloudflare adapter quebrou deploy → revertido pra static
+```
+site/  <- raiz do repositorio git (rode git/npm AQUI)
+├── wrangler.jsonc            <- forca deploy estatico (NAO remover)
+├── src/
+│   ├── config.ts             <- SITE.maintenance (chave do "Em breve")
+│   ├── data/church.ts        <- FONTE UNICA: nome, endereco, pastores, social, giving, web3FormsAccessKey
+│   ├── layouts/BaseLayout.astro  <- head, gate de manutencao, scripts globais (reveal, parallax, live-detect, scroll-progress)
+│   ├── lib/youtube.ts        <- fetch RSS YouTube (build-time, ordenado por data)
+│   ├── styles/global.css     <- @theme tokens + animacoes (SO @import "tailwindcss")
+│   ├── components/
+│   │   ├── Header.astro / Footer.astro / Hero.astro / Manifesto.astro
+│   │   ├── SermonFeature.astro   <- video destaque home (refresh ao vivo)
+│   │   ├── InstagramBand.astro / PastorsCouple.astro / SectionHeader.astro / Section.astro (aceita id)
+│   │   └── pages/*.astro     <- conteudo de cada pagina
+│   └── pages/ [page].astro, en/[page].astro, es/[page].astro, index (x3), em-breve.astro, admin/
+├── public/
+│   ├── logo.png / logo.svg / logo-color.png / favicon.svg
+│   ├── pastors/pastores.jpg
+│   ├── kids/freedom-kids.mp4, youth/freedom-yth-camiseta.jpg, cultos/culto-1.mp4
+│   └── uploads/galeria/*.jpg
+├── brand/logo-color.png      <- arte oficial colorida (fonte do logo)
+├── scripts/make-logo.mjs     <- regenera logo.png preto a partir da arte
+├── scripts/audit-links.py    <- audita todos os links do build (python3)
+└── docs/
+    ├── APONTAR-DOMINIO.md    <- guia DNS Turbify->Cloudflare
+    ├── dns-snapshot-pre.txt  <- snapshot DNS completo (seguranca)
+    ├── MANUTENCAO-DO-SITE.md, MAPA-DO-SITE.md, COMO-BAIXAR-DO-INSTAGRAM.md, etc.
+```
 
 ---
 
-## 🔚 ESTADO ATUAL (último commit: `f020cc7`)
+## 🚀 COMO CONTINUAR EM UM CHAT NOVO (Claude Code, no computador)
 
-- Site **NO AR** em https://freedom-church-site.claytonribeirodossantos.workers.dev
-- Build time: ~2.5s
-- 62 páginas geradas
-- Total deploys: ~30+
-- Última feature: Vídeo de adoração Pexels no Hero (4.5MB, 540p)
-
-**Tudo funcionando.** Próxima rodada pode focar em: trocar handles reais, fotos dos pastores, ativar /admin, ou apontar domínio.
+1. Diretório do projeto: `C:\Users\ClaytonRibeirodosSan\freedom-church\site`
+2. Cole este HANDOFF no início e diga: *"Estou continuando o site da Freedom Church. Leia este handoff e confirme que está alinhado. Próxima coisa que quero: [X]."*
+3. Fluxo de trabalho: editar arquivos → `npm run build` (verificar) → `git add/commit/push` → Cloudflare deploya em ~1 min → verificar no link `.workers.dev`.
+4. Sempre que tocar em layout, **mostrar screenshot/preview** antes (Clayton decide visualmente). Usar `window.stop()` antes de screenshot.
 
 ---
 
-_Documento gerado em 2026-05-27. Mantenha atualizado conforme o projeto evolui._
+## 📊 HISTÓRICO RESUMIDO (o que foi feito além do site base)
+
+1. ✅ Foto real dos pastores (casal) na Liderança
+2. ✅ Removida FAQ de ofertas e "Pedidos de Oração" do menu
+3. ✅ Check-in do Kids: adesivo numerado (não pulseira)
+4. ✅ Logo novo (cruz limpa, sem curva, preto)
+5. ✅ Instagram corrigido pra @ourfreedomchurch_md em todo o site
+6. ✅ Galeria no menu + faixa Instagram + animações/movimento
+7. ✅ Fotos na Galeria + foto camiseta no Youth + vídeos (Kids hero, Cultos hero)
+8. ✅ Página Kids redesenhada (colorida/infantil) — APROVADA
+9. ✅ Página Youth redesenhada (jovem)
+10. ✅ Sobre virou página única com Liderança
+11. ✅ **Domínio migrado** Turbify→Cloudflare (email preservado), apex + www, SSL
+12. ✅ Modo manutenção ("Em breve") + página /em-breve
+13. ✅ Google removeu aviso "Dangerous"
+14. ✅ Bug do link "ao vivo" (channel ID cortado) corrigido
+15. ✅ Pregações em carrossel + correção do "vídeo mais recente"
+16. ✅ Página Ao Vivo modernizada (nunca vazia)
+17. ✅ Contribua modernizada
+18. ✅ Removido "Todos os ministérios" do menu
+19. ✅ Limpeza de dependências pesadas não usadas (React/Three/shadcn)
+
+---
+
+_Última atualização: 2026-06-16. O site está NO AR no domínio em modo manutenção. Próximo grande marco: ajustes finais de conteúdo/visual e depois LANÇAR (trocar maintenance pra false)._
