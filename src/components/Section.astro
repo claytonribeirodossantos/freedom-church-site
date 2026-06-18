@@ -4,9 +4,13 @@ interface Props {
   spacing?: 'sm' | 'md' | 'lg';
   class?: string;
   id?: string;
+  /** Background brand watermark. 'dark' = black logo (light pages),
+   *  'color' = gradient logo, 'light' = white logo (dark pages). */
+  watermark?: 'dark' | 'color' | 'light';
+  watermarkPos?: 'tr' | 'tl' | 'br' | 'bl';
 }
 
-const { bg = 'light', spacing = 'lg', class: extraClass = '', id } = Astro.props;
+const { bg = 'light', spacing = 'lg', class: extraClass = '', id, watermark, watermarkPos = 'tr' } = Astro.props;
 
 const bgClass = {
   light: 'bg-ink-50',
@@ -19,10 +23,30 @@ const spaceClass = {
   md: 'py-20 lg:py-24',
   lg: 'py-24 lg:py-32',
 }[spacing];
+
+const wmSrc = watermark === 'color' ? '/logo-color.png' : '/logo.png';
+const wmInvert = watermark === 'light';
+// opacity bumped one level up from the original 0.03 watermark
+const wmOpacity = watermark === 'color' ? 0.1 : watermark === 'light' ? 0.07 : 0.05;
+const wmPos = {
+  tr: '-top-24 -right-28',
+  tl: '-top-24 -left-28',
+  br: '-bottom-28 -right-28',
+  bl: '-bottom-28 -left-28',
+}[watermarkPos];
 ---
 
-<section id={id} class:list={[bgClass, spaceClass, extraClass, id ? 'scroll-mt-24' : '']}>
-  <div class="container-page">
+<section id={id} class:list={[bgClass, spaceClass, extraClass, id ? 'scroll-mt-24' : '', watermark && 'relative overflow-hidden']}>
+  {watermark && (
+    <div
+      class:list={['pointer-events-none absolute z-0 w-[30rem] h-[30rem] animate-(--animate-float)', wmPos]}
+      style={`opacity:${wmOpacity}`}
+      aria-hidden="true"
+    >
+      <img src={wmSrc} alt="" class:list={['w-full h-full object-contain', wmInvert && 'invert']} loading="lazy" />
+    </div>
+  )}
+  <div class:list={['container-page', watermark && 'relative z-10']}>
     <slot />
   </div>
 </section>

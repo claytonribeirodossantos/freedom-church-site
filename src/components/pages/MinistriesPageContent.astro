@@ -47,7 +47,7 @@ const labels = {
 
 <PageHero pageKey="ministries" />
 
-<Section bg="light">
+<Section bg="light" watermark="dark">
   <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
     {ministries.map((m, i) => (
       <a href={localizedPath(lang, m.href)} class="tilt-card bg-ink-50 border border-ink-200 rounded-2xl p-6 group hover:border-ink-950 hover:shadow-lg hover:-translate-y-1 transition-all block" data-reveal data-reveal-delay={(i % 4) + 1}>
