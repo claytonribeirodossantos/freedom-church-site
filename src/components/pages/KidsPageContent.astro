@@ -113,10 +113,15 @@ const faq = {
 }[lang];
 
 const heading = {
-  pt: { values: 'Um lugar feito pra eles', ages: 'Cada idade no seu espaço', how: 'Como funciona', faq: 'Perguntas dos pais', cta: 'Traga seu filho neste domingo', sub: 'Chega 15 minutinhos antes e a gente cuida de todo o resto. Vai ser uma festa receber a sua família!', btn: 'Planeje sua visita' },
-  en: { values: 'A place made for them', ages: 'Every age in its space', how: 'How it works', faq: 'Parents’ questions', cta: 'Bring your child this Sunday', sub: 'Arrive 15 minutes early and we take care of the rest. It will be a party to welcome your family!', btn: 'Plan your visit' },
-  es: { values: 'Un lugar hecho para ellos', ages: 'Cada edad en su espacio', how: 'Cómo funciona', faq: 'Preguntas de los padres', cta: 'Trae a tu hijo este domingo', sub: '¡Llega 15 minutos antes y cuidamos del resto. Será una fiesta recibir a tu familia!', btn: 'Planea tu visita' },
+  pt: { values: 'Um lugar feito pra eles', ages: 'Cada idade no seu espaço', how: 'Como funciona', faq: 'Perguntas dos pais', cta: 'Traga seu filho neste domingo', sub: 'Chega 15 minutinhos antes e a gente cuida de todo o resto. Vai ser uma festa receber a sua família!', btn: 'Planeje sua visita', galleryTitle: 'Momentos Freedom Kids', gallerySub: 'Sorrisos, brincadeiras e muita alegria — assim é o nosso domingo!' },
+  en: { values: 'A place made for them', ages: 'Every age in its space', how: 'How it works', faq: 'Parents’ questions', cta: 'Bring your child this Sunday', sub: 'Arrive 15 minutes early and we take care of the rest. It will be a party to welcome your family!', btn: 'Plan your visit', galleryTitle: 'Freedom Kids moments', gallerySub: 'Smiles, play and lots of joy — that’s our Sunday!' },
+  es: { values: 'Un lugar hecho para ellos', ages: 'Cada edad en su espacio', how: 'Cómo funciona', faq: 'Preguntas de los padres', cta: 'Trae a tu hijo este domingo', sub: '¡Llega 15 minutos antes y cuidamos del resto. Será una fiesta recibir a tu familia!', btn: 'Planea tu visita', galleryTitle: 'Momentos Freedom Kids', gallerySub: 'Sonrisas, juegos y mucha alegría — ¡así es nuestro domingo!' },
 }[lang];
+
+// Galeria divertida — fotos reais (public/kids/gallery). Rotações e cores alternadas dão o clima infantil.
+const galleryPhotos = Array.from({ length: 10 }, (_, i) => `/kids/gallery/kids-${String(i + 1).padStart(2, '0')}.jpg`);
+const galleryRotations = ['-rotate-2', 'rotate-1', 'rotate-2', '-rotate-1', 'rotate-1', '-rotate-2', 'rotate-2', '-rotate-1', 'rotate-1', '-rotate-2'];
+const galleryRings = ['ring-amber-300', 'ring-sky-300', 'ring-rose-300', 'ring-violet-300', 'ring-emerald-300'];
 ---
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" />
@@ -134,6 +139,7 @@ const heading = {
 
     <div class="container-page relative z-10 grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
       <div>
+        <img src="/kids/logo-color.jpg" alt="Freedom Church" width="76" height="76" class="w-[68px] h-[68px] lg:w-[76px] lg:h-[76px] rounded-full shadow-md ring-4 ring-white mb-5" />
         <span class="kids-display inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white text-rose-500 font-semibold shadow-sm text-sm">
           <span class="w-2.5 h-2.5 rounded-full bg-rose-400"></span>{hero.kicker}
         </span>
@@ -201,6 +207,23 @@ const heading = {
             <div class:list={['kids-display mx-auto w-20 h-20 rounded-full inline-flex items-center justify-center text-white text-3xl font-bold shadow-lg', stepStyles[i]]}>{i + 1}</div>
             <h3 class="kids-display mt-5 text-xl font-semibold text-ink-950">{s.t}</h3>
             <p class="mt-2 text-ink-600 leading-relaxed text-sm">{s.d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- GALERIA DIVERTIDA -->
+  <section class="py-20 lg:py-28 bg-white overflow-hidden">
+    <div class="container-page">
+      <h2 class="kids-display text-center font-bold text-ink-950" style="font-size: clamp(2rem,5vw,3.25rem)">{heading.galleryTitle}</h2>
+      <p class="text-center text-lg text-ink-600 mt-3 mb-12 lg:mb-16 max-w-xl mx-auto">{heading.gallerySub}</p>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-5">
+        {galleryPhotos.map((src, i) => (
+          <div class="group" data-reveal data-reveal-delay={(i % 5) + 1}>
+            <div class:list={['aspect-square rounded-3xl overflow-hidden bg-white p-1.5 shadow-lg ring-4 transition-all duration-300 group-hover:rotate-0 group-hover:scale-105 group-hover:shadow-2xl', galleryRotations[i % galleryRotations.length], galleryRings[i % galleryRings.length]]}>
+              <img src={src} alt="Freedom Kids" loading="lazy" class="w-full h-full object-cover rounded-[1.25rem]" />
+            </div>
           </div>
         ))}
       </div>

@@ -12,7 +12,7 @@ const buildTimeVideos = await getChannelVideos();
 const buildTimeSermons = buildTimeVideos.map((v) => ({
   id: v.id,
   title: v.title,
-  publishedAt: v.publishedAt.toISOString(),
+  publishedAt: v.publishedAt.getFullYear() > 2000 ? v.publishedAt.toISOString() : '',
   series: extractSeries(v.title),
   pastor: extractPastor(v.title),
   cleanTitle: cleanTitle(v.title),
@@ -23,9 +23,9 @@ const buildTimeSermons = buildTimeVideos.map((v) => ({
 const initialJSON = JSON.stringify(buildTimeSermons);
 
 const labels = {
-  pt: { all: 'Todas', filter: 'Filtrar por série', loading: 'Carregando pregações...', empty: 'Em breve novas pregações.', subscribe: 'Inscrever no canal', watch: 'Assistir', latest: 'Mais recente' },
-  en: { all: 'All', filter: 'Filter by series', loading: 'Loading sermons...', empty: 'New sermons coming soon.', subscribe: 'Subscribe to channel', watch: 'Watch', latest: 'Latest' },
-  es: { all: 'Todas', filter: 'Filtrar por serie', loading: 'Cargando prédicas...', empty: 'Pronto nuevas prédicas.', subscribe: 'Suscribirse al canal', watch: 'Ver', latest: 'Más reciente' },
+  pt: { all: 'Todas', filter: 'Filtrar por série', loading: 'Carregando pregações...', empty: 'Em breve novas pregações.', subscribe: 'Inscrever no canal', watch: 'Assistir', latest: 'Mais recente', more: 'Ver todas no YouTube' },
+  en: { all: 'All', filter: 'Filter by series', loading: 'Loading sermons...', empty: 'New sermons coming soon.', subscribe: 'Subscribe to channel', watch: 'Watch', latest: 'Latest', more: 'See all on YouTube' },
+  es: { all: 'Todas', filter: 'Filtrar por serie', loading: 'Cargando prédicas...', empty: 'Pronto nuevas prédicas.', subscribe: 'Suscribirse al canal', watch: 'Ver', latest: 'Más reciente', more: 'Ver todas en YouTube' },
 }[lang];
 
 const dateLocale = lang === 'pt' ? 'pt-BR' : lang === 'en' ? 'en-US' : 'es-ES';
@@ -68,25 +68,23 @@ const hasBuildData = buildTimeSermons.length > 0;
         </a>
       </div>
 
-      <!-- Carrossel -->
-      <div class="relative group/carousel">
-        <button
-          type="button"
-          data-carousel-prev
-          aria-label="Anterior"
-          class="hidden md:flex absolute -left-4 lg:-left-5 top-[28%] -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-ink-950 text-ink-50 items-center justify-center shadow-xl hover:bg-gold-500 hover:text-ink-950 transition-all disabled:opacity-0"
+      <!-- Pregação em destaque (mais recente) -->
+      <div id="sermon-featured" class="mb-10 lg:mb-12"></div>
+
+      <!-- Grade de pregações -->
+      <div id="sermon-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-7 lg:gap-8"></div>
+
+      <!-- Ver todas no YouTube -->
+      <div id="sermon-more" class="hidden text-center mt-12 lg:mt-14">
+        <a
+          href={church.social.youtube}
+          target="_blank"
+          rel="noopener"
+          class="inline-flex items-center gap-2 text-sm font-medium text-ink-900 border border-ink-300 hover:border-ink-950 hover:bg-ink-950 hover:text-cream-50 rounded-full py-3 px-7 transition-all"
         >
-          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m14 5-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <button
-          type="button"
-          data-carousel-next
-          aria-label="Próximo"
-          class="hidden md:flex absolute -right-4 lg:-right-5 top-[28%] -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-ink-950 text-ink-50 items-center justify-center shadow-xl hover:bg-gold-500 hover:text-ink-950 transition-all disabled:opacity-0"
-        >
-          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m8 5 6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <div id="sermon-grid" class="sermon-track flex gap-5 lg:gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 -mx-1 px-1"></div>
+          {labels.more}
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
       </div>
     </div>
 
@@ -100,11 +98,6 @@ const hasBuildData = buildTimeSermons.length > 0;
     </div>
   </div>
 </Section>
-
-<style>
-  .sermon-track { scrollbar-width: none; -ms-overflow-style: none; }
-  .sermon-track::-webkit-scrollbar { display: none; }
-</style>
 
 <script>
   type Video = {
@@ -124,6 +117,8 @@ const hasBuildData = buildTimeSermons.length > 0;
   const empty = document.getElementById('sermon-empty');
   const filtersEl = document.getElementById('sermon-filters');
   const gridEl = document.getElementById('sermon-grid');
+  const featuredEl = document.getElementById('sermon-featured');
+  const moreEl = document.getElementById('sermon-more');
   const initialScript = document.getElementById('sermons-initial');
 
   const channelId = state?.dataset.channelId ?? '';
@@ -275,63 +270,78 @@ const hasBuildData = buildTimeSermons.length > 0;
     });
   }
 
+  function playButton(size: number, ring: number): string {
+    return `<div class="absolute inset-0 flex items-center justify-center">
+        <div class="rounded-full bg-gold-500 flex items-center justify-center group-hover:scale-110 transition-transform shadow-xl" style="width:${ring}px;height:${ring}px;">
+          <svg width="${size}" height="${size}" fill="currentColor" class="text-ink-950 ml-0.5"><path d="M5 3v22l18-11z"/></svg>
+        </div>
+      </div>`;
+  }
+
+  function seriesTag(series: string): string {
+    return `<div class="absolute top-3 left-3 text-xs uppercase tracking-widest text-gold-400 bg-ink-950/80 backdrop-blur px-2.5 py-1 rounded">${series}</div>`;
+  }
+
   function renderGrid() {
     if (!gridEl) return;
     gridEl.innerHTML = '';
-    const visible = currentFilter === 'all' ? videos : videos.filter(v => v.series === currentFilter);
+    if (featuredEl) featuredEl.innerHTML = '';
 
-    visible.forEach((v, idx) => {
+    const visible = currentFilter === 'all'
+      ? videos
+      : videos.filter(v => v.series === currentFilter);
+
+    let gridItems = visible;
+
+    // Featured = most recent (only when no filter is applied)
+    if (currentFilter === 'all' && visible.length > 0 && featuredEl) {
+      const f = visible[0];
+      gridItems = visible.slice(1);
+      const fDate = formatDate(f.publishedAt);
+      featuredEl.innerHTML = `
+        <a href="${f.watchUrl}" target="_blank" rel="noopener" class="group block rounded-3xl overflow-hidden border-2 border-gold-500 bg-cream-50">
+          <div class="relative aspect-[16/8] bg-ink-950">
+            <img src="${f.thumbnail}" alt="${f.cleanTitle.replace(/"/g, '&quot;')}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" onerror="this.src='https://i.ytimg.com/vi/${f.id}/hqdefault.jpg'" />
+            <div class="absolute inset-0 bg-gradient-to-t from-ink-950/45 to-transparent"></div>
+            ${seriesTag(f.series)}
+            <div class="absolute top-4 right-4 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-ink-950 bg-gold-500 px-3 py-1.5 rounded-full shadow-lg"><span class="w-1.5 h-1.5 rounded-full bg-ink-950 animate-pulse"></span>${labelLatest}</div>
+            ${playButton(30, 68)}
+          </div>
+          <div class="px-6 py-5 lg:px-8 lg:py-6">
+            <h3 class="text-2xl lg:text-3xl text-ink-950 group-hover:text-gold-600 transition-colors leading-tight font-display">${f.cleanTitle}</h3>
+            <div class="mt-2 flex items-center gap-2 text-sm text-ink-500">
+              <span>${f.pastor}</span>
+              ${fDate ? `<span class="w-1 h-1 rounded-full bg-ink-400"></span><span>${fDate}</span>` : ''}
+            </div>
+          </div>
+        </a>`;
+    }
+
+    gridItems.forEach((v) => {
       const date = formatDate(v.publishedAt);
-      const isLatest = idx === 0 && currentFilter === 'all';
       const card = document.createElement('a');
       card.href = v.watchUrl;
       card.target = '_blank';
       card.rel = 'noopener';
-      card.className = 'group block shrink-0 snap-start w-[290px] sm:w-[360px] lg:w-[400px]';
-      const latestBadge = isLatest
-        ? `<div class="absolute top-3 right-3 z-10 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-ink-950 bg-gold-500 px-2.5 py-1 rounded-full shadow-lg"><span class="w-1.5 h-1.5 rounded-full bg-ink-950 animate-pulse"></span>${labelLatest}</div>`
-        : '';
+      card.className = 'group block';
       card.innerHTML = `
-        <div class="relative aspect-video rounded-2xl overflow-hidden bg-ink-950 card-editorial ${isLatest ? 'ring-2 ring-gold-500 ring-offset-2 ring-offset-ink-50' : ''}">
-          ${latestBadge}
+        <div class="relative aspect-video rounded-2xl overflow-hidden bg-ink-950 card-editorial">
           <img src="${v.thumbnail}" alt="${v.cleanTitle.replace(/"/g, '&quot;')}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" onerror="this.src='https://i.ytimg.com/vi/${v.id}/hqdefault.jpg'" />
-          <div class="absolute inset-0 bg-gradient-to-t from-ink-950/80 via-transparent to-transparent"></div>
-          <div class="absolute inset-0 flex items-center justify-center">
-            <div class="w-16 h-16 rounded-full bg-gold-500 flex items-center justify-center group-hover:scale-110 transition-transform shadow-xl">
-              <svg width="22" height="22" fill="currentColor" class="text-ink-950 ml-0.5"><path d="M5 3v22l18-11z"/></svg>
-            </div>
-          </div>
-          <div class="absolute top-3 left-3 text-xs uppercase tracking-widest text-gold-400 bg-ink-950/80 backdrop-blur px-2.5 py-1 rounded">${v.series}</div>
+          <div class="absolute inset-0 bg-gradient-to-t from-ink-950/70 via-transparent to-transparent"></div>
+          ${playButton(22, 56)}
+          ${seriesTag(v.series)}
         </div>
-        <h3 class="mt-5 text-xl text-ink-950 group-hover:text-gold-600 transition-colors leading-snug font-display">${v.cleanTitle}</h3>
-        <div class="mt-2 flex items-center gap-2 text-sm text-ink-500">
+        <h3 class="mt-4 text-lg text-ink-950 group-hover:text-gold-600 transition-colors leading-snug font-display">${v.cleanTitle}</h3>
+        <div class="mt-1.5 flex items-center gap-2 text-sm text-ink-500">
           <span>${v.pastor}</span>
-          <span class="w-1 h-1 rounded-full bg-ink-400"></span>
-          <span>${date}</span>
+          ${date ? `<span class="w-1 h-1 rounded-full bg-ink-400"></span><span>${date}</span>` : ''}
         </div>
       `;
       gridEl.appendChild(card);
     });
-    gridEl.scrollLeft = 0;
-    updateArrows();
-  }
 
-  // Carousel arrows
-  const prevBtn = document.querySelector<HTMLButtonElement>('[data-carousel-prev]');
-  const nextBtn = document.querySelector<HTMLButtonElement>('[data-carousel-next]');
-  function scrollAmount(): number {
-    const first = gridEl?.querySelector('a');
-    return first ? (first as HTMLElement).offsetWidth + 24 : 380;
+    if (moreEl) moreEl.classList.toggle('hidden', visible.length === 0);
   }
-  function updateArrows() {
-    if (!gridEl || !prevBtn || !nextBtn) return;
-    const max = gridEl.scrollWidth - gridEl.clientWidth - 4;
-    prevBtn.disabled = gridEl.scrollLeft <= 4;
-    nextBtn.disabled = gridEl.scrollLeft >= max;
-  }
-  prevBtn?.addEventListener('click', () => gridEl?.scrollBy({ left: -scrollAmount(), behavior: 'smooth' }));
-  nextBtn?.addEventListener('click', () => gridEl?.scrollBy({ left: scrollAmount(), behavior: 'smooth' }));
-  gridEl?.addEventListener('scroll', updateArrows, { passive: true });
 
   // Initial render (from build-time snapshot if available)
   if (videos.length > 0) {

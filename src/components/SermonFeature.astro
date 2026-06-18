@@ -15,7 +15,8 @@ const others = sorted.slice(1, 4);
 const featTitle = featured ? cleanTitle(featured.title) : 'Última mensagem';
 const featSeries = featured ? extractSeries(featured.title) : 'Sunday Service';
 const featPastor = featured ? extractPastor(featured.title) : 'Pr Adaelton';
-const featDate = featured ? formatDate(featured.publishedAt, lang) : '';
+// publishedAt may be epoch (unknown date, from the fallback list) — omit it then.
+const featDate = featured && featured.publishedAt.getFullYear() > 2000 ? formatDate(featured.publishedAt, lang) : '';
 const featWatch = featured?.watchUrl ?? `https://www.youtube.com/watch?v=${church.sampleSermon.youtubeId}`;
 const featThumb = featured?.thumbnailUrl ?? `https://i.ytimg.com/vi/${church.sampleSermon.youtubeId}/maxresdefault.jpg`;
 const featId = featured?.id ?? church.sampleSermon.youtubeId;
@@ -66,7 +67,7 @@ const copy = {
           <div class="font-display text-3xl lg:text-4xl text-ink-50 leading-tight" data-feat-title>{featTitle}</div>
           <div class="mt-3 flex items-center gap-3 text-sm text-ink-300">
             <span data-feat-pastor>{featPastor}</span>
-            <span class="w-1 h-1 rounded-full bg-ink-400"></span>
+            <span class="w-1 h-1 rounded-full bg-ink-400" data-feat-sep class:list={[!featDate && 'hidden']}></span>
             <span data-feat-date>{featDate}</span>
           </div>
         </div>
@@ -156,7 +157,12 @@ const copy = {
       setTxt('[data-feat-series]', series(v.title));
       setTxt('[data-feat-title]', clean(v.title));
       setTxt('[data-feat-pastor]', pastor(v.title));
-      try { setTxt('[data-feat-date]', new Intl.DateTimeFormat(locale,{year:'numeric',month:'long',day:'numeric'}).format(new Date(v.pub))); } catch {}
+      try {
+        if (v.pub) {
+          setTxt('[data-feat-date]', new Intl.DateTimeFormat(locale,{year:'numeric',month:'long',day:'numeric'}).format(new Date(v.pub)));
+          root.querySelector('[data-feat-sep]')?.classList.remove('hidden');
+        }
+      } catch {}
     });
   }
 </script>

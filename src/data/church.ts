@@ -69,7 +69,7 @@ export const church = {
     youtubeHandle: '@ourfreedomchurch',
     youtubeName: 'Freedom Church',
     youtubeChannelId: 'UCmItF2T27GJFT6gFJti_9SA',
-    facebook: '',
+    facebook: 'https://www.facebook.com/ourfreedomchurchMD',
     spotify: '',
     whatsapp: '',
   },
