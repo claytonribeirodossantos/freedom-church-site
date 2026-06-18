@@ -20,30 +20,36 @@ export interface YouTubeVideo {
 let cachedVideos: YouTubeVideo[] | null = null;
 
 /**
- * Curated list of the channel's real, recent videos (newest first).
+ * Curated list of the channel's real, recent videos (NEWEST FIRST, with date).
  * Acts as a guaranteed fallback so the Sermons page is NEVER empty: the
  * YouTube RSS feed (/feeds/videos.xml) frequently returns 404 to servers
  * (build hosts, CORS proxies), which used to leave the page blank.
  * When the live feed DOES work (build-time or client-side), it replaces this.
- * To refresh: open the channel's /videos page and update the ids + titles.
+ *
+ * IMPORTANT: the weekly Sunday services are LIVESTREAMS — they live under the
+ * channel's /streams tab, NOT /videos. To refresh, check BOTH the /streams tab
+ * (recent "Sunday service" videos) and the /videos tab, then list them here
+ * newest-first with their upload date (YYYY-MM-DD).
  */
-const FALLBACK_VIDEOS: { id: string; title: string }[] = [
-  { id: 'DtOQxqTXkbU', title: 'A Fé que Envia - Pr. Adaelton de Souza' },
-  { id: 'Ry5TlNTN07M', title: 'Pastora Marina Reus | Vinho novo | Freedom Church Maryland' },
-  { id: 'GHN-DmKxrR0', title: 'Pastor Adaelton de Souza | Freedom Church Maryland' },
-  { id: '8fZbDk0GVw0', title: 'Pastor Adaelton de Souza | Cartas de Jesus | Part 5 | Freedom Church Maryland' },
-  { id: 'OyjCzjXnC2A', title: 'Pastora Marina Reus | Os olhos de Deus | Freedom Church Maryland' },
-  { id: 'JKBCP9ZGUDs', title: 'Pastor Adaelton de Souza | Cartas de Jesus | Part 4 | Freedom Church Maryland' },
-  { id: 'sydidLL1Ek8', title: 'Pastor Adaelton de Souza | Cartas de Jesus | Part 3 | Freedom Church Maryland' },
-  { id: 'wc5g5Odrmo4', title: 'Pastor Adaelton de Souza | Cartas de Jesus | Part 2 | Freedom Church Maryland' },
+const FALLBACK_VIDEOS: { id: string; title: string; date: string }[] = [
+  { id: '8FGO2eweSIE', title: 'Sunday service - Freedom Church Maryland', date: '2026-06-14' },
+  { id: 'QNBYXd4y7eE', title: 'Sunday service - Freedom Church Maryland', date: '2026-06-07' },
+  { id: 'vPoRJh9AWZk', title: 'Sunday service - Freedom Church Maryland', date: '2026-05-25' },
+  { id: 'DtOQxqTXkbU', title: 'A Fé que Envia - Pr. Adaelton de Souza', date: '2026-04-19' },
+  { id: 'Ry5TlNTN07M', title: 'Pastora Marina Reus | Vinho novo | Freedom Church Maryland', date: '2025-09-29' },
+  { id: '8fZbDk0GVw0', title: 'Pastor Adaelton de Souza | Cartas de Jesus | Part 5 | Freedom Church Maryland', date: '2025-09-02' },
+  { id: 'OyjCzjXnC2A', title: 'Pastora Marina Reus | Os olhos de Deus | Freedom Church Maryland', date: '2025-09-02' },
+  { id: 'JKBCP9ZGUDs', title: 'Pastor Adaelton de Souza | Cartas de Jesus | Part 4 | Freedom Church Maryland', date: '2025-08-28' },
+  { id: 'sydidLL1Ek8', title: 'Pastor Adaelton de Souza | Cartas de Jesus | Part 3 | Freedom Church Maryland', date: '2025-08-28' },
+  { id: 'wc5g5Odrmo4', title: 'Pastor Adaelton de Souza | Cartas de Jesus | Part 2 | Freedom Church Maryland', date: '2025-07-28' },
 ];
 
 function fallbackVideos(): YouTubeVideo[] {
-  return FALLBACK_VIDEOS.map(({ id, title }) => ({
+  return FALLBACK_VIDEOS.map(({ id, title, date }) => ({
     id,
     title,
     description: '',
-    publishedAt: new Date(0), // unknown date — display layer omits it
+    publishedAt: new Date(`${date}T12:00:00Z`), // noon UTC keeps the calendar day stable
     thumbnailUrl: `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`,
     watchUrl: `https://www.youtube.com/watch?v=${id}`,
     embedUrl: `https://www.youtube.com/embed/${id}`,
