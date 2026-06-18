@@ -154,8 +154,11 @@ const marqueeRun = Array.from({ length: 10 });
   </section>
 
   <!-- ===== META CHIPS ===== -->
-  <section class="relative py-16">
-    <div class="container-page grid sm:grid-cols-3 gap-4">
+  <section class="relative overflow-hidden py-16">
+    <div class="pointer-events-none absolute -top-20 -right-24 w-[24rem] h-[24rem] opacity-[0.09] yth-float" aria-hidden="true">
+      <img src="/logo-color.png" alt="" class="w-full h-full object-contain" loading="lazy" />
+    </div>
+    <div class="container-page relative z-10 grid sm:grid-cols-3 gap-4">
       {meta.map((m, i) => (
         <div class="group rounded-2xl border border-white/10 bg-white/[0.03] p-6 hover:border-lime-300/50 hover:bg-white/[0.06] hover:-translate-y-1 transition-all duration-300" data-reveal data-reveal-delay={i + 1}>
           <div class="text-xs uppercase tracking-[0.25em] text-violet-300 mb-2">{m.k}</div>
@@ -177,8 +180,11 @@ const marqueeRun = Array.from({ length: 10 });
   </section>
 
   <!-- ===== O QUE ROLA ===== -->
-  <section class="relative py-16 lg:py-24">
-    <div class="container-page">
+  <section class="relative overflow-hidden py-16 lg:py-24">
+    <div class="pointer-events-none absolute -bottom-28 -left-28 w-[30rem] h-[30rem] opacity-[0.07] yth-float" style="animation-delay:-3s" aria-hidden="true">
+      <img src="/logo-color.png" alt="" class="w-full h-full object-contain" loading="lazy" />
+    </div>
+    <div class="container-page relative z-10">
       <h2 class="yth-display uppercase text-white mb-12" style="font-size: clamp(1.75rem, 4.5vw, 3rem)" data-reveal>
         {lang === 'pt' ? 'O que rola nas ' : lang === 'en' ? 'What goes down on ' : 'Lo que pasa los '}<span class="text-lime-300">{lang === 'pt' ? 'sextas' : lang === 'en' ? 'Fridays' : 'viernes'}</span>
       </h2>
