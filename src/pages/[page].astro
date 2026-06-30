@@ -8,7 +8,6 @@ import MinistriesPageContent from '../components/pages/MinistriesPageContent.ast
 import GivePageContent from '../components/pages/GivePageContent.astro';
 import NewHerePageContent from '../components/pages/NewHerePageContent.astro';
 import ContactPageContent from '../components/pages/ContactPageContent.astro';
-import LeadershipPageContent from '../components/pages/LeadershipPageContent.astro';
 import LivePageContent from '../components/pages/LivePageContent.astro';
 import KidsPageContent from '../components/pages/KidsPageContent.astro';
 import YouthPageContent from '../components/pages/YouthPageContent.astro';
@@ -29,7 +28,6 @@ export function getStaticPaths() {
     { params: { page: 'contribua' }, props: { component: 'give' } },
     { params: { page: 'sou-novo-aqui' }, props: { component: 'newHere' } },
     { params: { page: 'contato' }, props: { component: 'contact' } },
-    { params: { page: 'lideranca' }, props: { component: 'leadership' } },
     { params: { page: 'live' }, props: { component: 'live' } },
     { params: { page: 'kids' }, props: { component: 'kids' } },
     { params: { page: 'jovens' }, props: { component: 'youth' } },
@@ -53,7 +51,6 @@ const titlesPt: Record<string, string> = {
   give: 'Contribua',
   newHere: 'Sou novo aqui',
   contact: 'Contato',
-  leadership: 'Liderança',
   live: 'Ao vivo',
   kids: 'Freedom Kids',
   youth: 'Freedom Youth',
@@ -75,7 +72,6 @@ const titlesPt: Record<string, string> = {
   {component === 'give' && <GivePageContent />}
   {component === 'newHere' && <NewHerePageContent />}
   {component === 'contact' && <ContactPageContent />}
-  {component === 'leadership' && <LeadershipPageContent />}
   {component === 'live' && <LivePageContent />}
   {component === 'kids' && <KidsPageContent />}
   {component === 'youth' && <YouthPageContent />}

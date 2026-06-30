@@ -35,9 +35,9 @@ const values = {
 }[lang];
 
 const heading = {
-  pt: { story: 'Nossa história', mission: 'Nossa missão', values: 'Nossos valores' },
-  en: { story: 'Our story', mission: 'Our mission', values: 'Our values' },
-  es: { story: 'Nuestra historia', mission: 'Nuestra misión', values: 'Nuestros valores' },
+  pt: { story: 'Nossa história', visionPurpose: 'Visão e Propósito', vision: 'Visão', purpose: 'Propósito', values: 'Nossos valores' },
+  en: { story: 'Our story', visionPurpose: 'Vision & Purpose', vision: 'Vision', purpose: 'Purpose', values: 'Our values' },
+  es: { story: 'Nuestra historia', visionPurpose: 'Visión y Propósito', vision: 'Visión', purpose: 'Propósito', values: 'Nuestros valores' },
 }[lang];
 
 const storyText = {
@@ -46,10 +46,62 @@ const storyText = {
   es: 'Freedom Church comenzó como un sueño: ver brasileños lejos de casa encontrando familia, propósito y la presencia de Dios. Lo que empezó pequeño hoy es una comunidad vibrante que recibe a personas de toda historia, edad y nacionalidad.',
 }[lang];
 
-const missionText = {
-  pt: 'Tornar Jesus conhecido entre os brasileiros nos Estados Unidos, formando discípulos que vivem livres, amam profundamente e servem com alegria.',
-  en: 'To make Jesus known among Brazilians in the United States, forming disciples who live free, love deeply and serve with joy.',
-  es: 'Dar a conocer a Jesús entre los brasileños en Estados Unidos, formando discípulos que viven libres, aman profundamente y sirven con alegría.',
+const vision = {
+  pt: 'Ministrar ao Senhor em adoração, submissão e comunhão e conhecê-lo cada dia mais através da Palavra de Deus e de um relacionamento íntimo com o Espírito Santo.',
+  en: 'To minister to the Lord in worship, submission and fellowship, and to know Him more each day through the Word of God and an intimate relationship with the Holy Spirit.',
+  es: 'Ministrar al Señor en adoración, sumisión y comunión, y conocerle cada día más a través de la Palabra de Dios y de una relación íntima con el Espíritu Santo.',
+}[lang];
+
+const purpose = {
+  pt: 'Declarar quem Deus é, revelar a pessoa e o caráter de Cristo e manifestar o Reino. Servir uns aos outros em amor e entendimento na igreja local e na comunidade; e declararmos nossa fé através de uma vida rendida a Cristo pela qual expressamos amor e serviço.',
+  en: 'To declare who God is, reveal the person and character of Christ, and manifest the Kingdom. To serve one another in love and understanding in the local church and in the community; and to declare our faith through a life surrendered to Christ, through which we express love and service.',
+  es: 'Declarar quién es Dios, revelar la persona y el carácter de Cristo y manifestar el Reino. Servir unos a otros en amor y entendimiento en la iglesia local y en la comunidad; y declarar nuestra fe a través de una vida rendida a Cristo, por la cual expresamos amor y servicio.',
+}[lang];
+
+// Bio do Pastor Adaelton (conteúdo oficial do Church Center, traduzido).
+const pastor = {
+  pt: {
+    eyebrow: 'Nosso pastor',
+    role: 'Pastor Principal',
+    bio: [
+      'O Pastor Adaelton nasceu em um lar cristão e, desde muito cedo, reconheceu o chamado de Deus para pastorear, liderar e servir pessoas com amor e propósito.',
+      'Aos 12 anos, sua família imigrou para os Estados Unidos em busca de novas oportunidades. Aqui, continuou seus estudos, graduando-se no ensino médio em 2006.',
+      'Em 2009, o Pastor Adaelton se casou com sua amada esposa, Jheinifer, que hoje serve ao seu lado como Pastora da Freedom Church. Juntos, eles têm três filhos: Nathan, Noah e Ana Luiza, e formam uma família comprometida em viver e compartilhar os valores do Reino de Deus.',
+      'Em 2012, o Pastor Adaelton concluiu seu seminário teológico, e em 2018 foi ordenado ao ministério pastoral.',
+      'Movido por uma profunda paixão por ganhar almas e ver vidas transformadas pela presença de Jesus, ele tem dedicado sua vida a proclamar o Evangelho e a estabelecer o Reino de Deus aqui na Terra.',
+      'Em 2021, o Pastor Adaelton, a Pastora Jheinifer e um grupo de líderes deram início à Freedom Church, uma igreja nascida no coração de Deus, com o propósito de alcançar pessoas, restaurar famílias e impactar gerações.',
+      'Em 2025, o casal pastoral foi reconhecido e ordenado pelo CFNI (Christ for the Nations International), uma instituição mundialmente conhecida por sua influência missionária e comprometimento com a propagação do Evangelho.',
+      'Hoje, o Pastor Adaelton e a Pastora Jheinifer lideram a Freedom Church com fé, visão e dedicação, servindo com corações apaixonados por Jesus e por pessoas. Seu ministério é marcado por um desejo ardente de ver cada indivíduo salvo, liberto e vivendo plenamente o propósito de Deus, para que, através da sua vida, o Reino de Deus seja estabelecido nesta geração.',
+    ],
+  },
+  en: {
+    eyebrow: 'Our pastor',
+    role: 'Lead Pastor',
+    bio: [
+      'Pastor Adaelton was born into a Christian home and, from a very young age, recognized God\'s call to pastor, lead, and serve people with love and purpose.',
+      'At the age of 12, his family immigrated to the United States in search of new opportunities. Here he continued his studies, graduating from high school in 2006.',
+      'In 2009, Pastor Adaelton married his beloved wife, Jheinifer, who today serves alongside him as Pastor of Freedom Church. Together they have three children — Nathan, Noah, and Ana Luiza — and form a family committed to living and sharing the values of the Kingdom of God.',
+      'In 2012, Pastor Adaelton completed his theological seminary, and in 2018 he was ordained into pastoral ministry.',
+      'Driven by a deep passion for winning souls and seeing lives transformed by the presence of Jesus, he has dedicated his life to proclaiming the Gospel and establishing the Kingdom of God here on Earth.',
+      'In 2021, Pastor Adaelton, Pastor Jheinifer, and a group of leaders started Freedom Church — a church born in the heart of God, with the purpose of reaching people, restoring families, and impacting generations.',
+      'In 2025, the pastoral couple was recognized and ordained by CFNI (Christ for the Nations International), an institution known worldwide for its missionary influence and commitment to spreading the Gospel.',
+      'Today, Pastor Adaelton and Pastor Jheinifer lead Freedom Church with faith, vision, and dedication, serving with hearts passionate for Jesus and for people. Their ministry is marked by a burning desire to see every person saved, set free, and fully living God\'s purpose — so that, through their lives, the Kingdom of God may be established in this generation.',
+    ],
+  },
+  es: {
+    eyebrow: 'Nuestro pastor',
+    role: 'Pastor Principal',
+    bio: [
+      'El Pastor Adaelton nació en un hogar cristiano y, desde muy temprano, reconoció el llamado de Dios para pastorear, liderar y servir a las personas con amor y propósito.',
+      'A los 12 años, su familia emigró a los Estados Unidos en busca de nuevas oportunidades. Aquí continuó sus estudios, graduándose de la escuela secundaria en 2006.',
+      'En 2009, el Pastor Adaelton se casó con su amada esposa, Jheinifer, quien hoy sirve a su lado como Pastora de Freedom Church. Juntos tienen tres hijos: Nathan, Noah y Ana Luiza, y forman una familia comprometida a vivir y compartir los valores del Reino de Dios.',
+      'En 2012, el Pastor Adaelton concluyó su seminario teológico, y en 2018 fue ordenado al ministerio pastoral.',
+      'Movido por una profunda pasión por ganar almas y ver vidas transformadas por la presencia de Jesús, ha dedicado su vida a proclamar el Evangelio y a establecer el Reino de Dios aquí en la Tierra.',
+      'En 2021, el Pastor Adaelton, la Pastora Jheinifer y un grupo de líderes dieron inicio a Freedom Church, una iglesia nacida en el corazón de Dios, con el propósito de alcanzar personas, restaurar familias e impactar generaciones.',
+      'En 2025, la pareja pastoral fue reconocida y ordenada por CFNI (Christ for the Nations International), una institución mundialmente conocida por su influencia misionera y su compromiso con la propagación del Evangelio.',
+      'Hoy, el Pastor Adaelton y la Pastora Jheinifer lideran Freedom Church con fe, visión y dedicación, sirviendo con corazones apasionados por Jesús y por las personas. Su ministerio está marcado por un ardiente deseo de ver a cada persona salva, libre y viviendo plenamente el propósito de Dios, para que, a través de su vida, el Reino de Dios sea establecido en esta generación.',
+    ],
+  },
 }[lang];
 ---
 
@@ -70,16 +122,18 @@ const missionText = {
 </Section>
 
 <Section bg="tint" watermark="dark">
-  <div class="grid lg:grid-cols-12 gap-12 lg:gap-16">
-    <div class="lg:col-span-5" data-reveal>
-      <span class="eyebrow">{heading.mission}</span>
-      <h2 class="mt-4 text-3xl lg:text-4xl text-ink-950 leading-tight">
-        {heading.mission}
-      </h2>
+  <SectionHeader eyebrow={heading.visionPurpose} title={heading.visionPurpose} />
+  <div class="grid lg:grid-cols-2 gap-10 lg:gap-14">
+    <div data-reveal>
+      <span class="eyebrow">{heading.vision}</span>
+      <blockquote class="mt-5 font-display text-xl lg:text-2xl text-ink-900 leading-relaxed italic border-l-4 border-gold-500 pl-6">
+        {vision}
+      </blockquote>
     </div>
-    <div class="lg:col-span-7" data-reveal data-reveal-delay="1">
-      <blockquote class="font-display text-2xl lg:text-3xl text-ink-900 leading-relaxed italic border-l-4 border-gold-500 pl-6">
-        "{missionText}"
+    <div data-reveal data-reveal-delay="1">
+      <span class="eyebrow">{heading.purpose}</span>
+      <blockquote class="mt-5 font-display text-xl lg:text-2xl text-ink-900 leading-relaxed italic border-l-4 border-gold-500 pl-6">
+        {purpose}
       </blockquote>
     </div>
   </div>
@@ -101,3 +155,28 @@ const missionText = {
 </Section>
 
 <PastorsCouple />
+
+<Section bg="tint" watermark="dark">
+  <div class="grid lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+    <div class="lg:col-span-5" data-reveal>
+      <div class="aspect-[3/4] rounded-3xl overflow-hidden bg-ink-900 shadow-2xl lg:sticky lg:top-28">
+        <img
+          src="/pastors/adaelton.jpg"
+          alt="Pastor Adaelton de Souza"
+          class="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+          loading="lazy"
+        />
+      </div>
+    </div>
+    <div class="lg:col-span-7" data-reveal data-reveal-delay="1">
+      <span class="eyebrow">{pastor.eyebrow}</span>
+      <h2 class="mt-4 mega text-ink-950" style="font-size: clamp(2.5rem, 6vw, 4.5rem)">
+        Adaelton <span class="italic font-light text-gold-500">de Souza</span>
+      </h2>
+      <p class="mt-3 text-sm uppercase tracking-[0.22em] text-gold-600 font-medium">{pastor.role}</p>
+      <div class="mt-8 space-y-5 text-lg text-ink-700 leading-relaxed">
+        {pastor.bio.map((p) => <p>{p}</p>)}
+      </div>
+    </div>
+  </div>
+</Section>
