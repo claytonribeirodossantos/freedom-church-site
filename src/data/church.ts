@@ -87,7 +87,7 @@ export const church = {
 
   giving: {
     zelle: {
-      identifier: 'contato@ourfreedomchurch.com',
+      identifier: 'Give@ourfreedomchurch.com',
       identifierType: 'email',
       label: 'Zelle',
     },

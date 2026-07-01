@@ -65,6 +65,8 @@
   --font-display: "Fraunces", ui-serif, Georgia, serif;
   --font-sans: "Geist", "Inter Tight", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, monospace;
+  /* Marca/wordmark "Freedom Church" — igual ao logo */
+  --font-brand: "Montserrat", ui-sans-serif, system-ui, sans-serif;
 
   /* Easing */
   --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
@@ -156,6 +158,16 @@
   @media (min-width: 1024px) {
     .container-page { padding-inline: 3rem; }
   }
+
+  /* Wordmark "Freedom Church" — mesma fonte do logo (Montserrat) */
+  .wordmark {
+    font-family: var(--font-brand);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    line-height: 1;
+  }
+  .wordmark .word-freedom { font-weight: 800; }
+  .wordmark .word-church { font-weight: 500; letter-spacing: 0.14em; }
 
   .btn {
     display: inline-flex;
