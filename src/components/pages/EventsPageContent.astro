@@ -1,129 +1,50 @@
 ---
-import { getCollection } from 'astro:content';
 import PageHero from '../PageHero.astro';
 import Section from '../Section.astro';
 import { getLangFromUrl } from '../../i18n/utils';
-import { formatDate, pickLocalized } from '../../i18n/format';
 
 const lang = getLangFromUrl(Astro.url);
-const now = new Date();
 
-// Agenda oficial da igreja (Church Center) — para onde os eventos apontam.
-const churchCenterUrl = 'https://ourfreedomchurch.churchcenter.com/calendar?view=gallery';
-
-const events = (await getCollection('events'))
-  .filter((e) => e.data.date.valueOf() >= now.valueOf() - 24 * 60 * 60 * 1000)
-  .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
+// Agenda oficial da igreja (Church Center), incorporada ao vivo.
+const churchCenterEmbed = 'https://ourfreedomchurch.churchcenter.com/calendar?view=gallery&embed=true';
 
 const labels = {
-  pt: { eyebrow: 'Nossa agenda', heading: 'O que vem por aí', sub: 'Reserve a data e venha com a gente — tem sempre algo acontecendo na Freedom Church.', next: 'Próximo evento', seeAll: 'Ver a agenda completa', viewEvent: 'Ver no Church Center', empty: 'Confira todos os nossos eventos na agenda oficial da igreja.' },
-  en: { eyebrow: 'Our calendar', heading: 'What’s coming up', sub: 'Save the date and join us — there’s always something happening at Freedom Church.', next: 'Next event', seeAll: 'See the full calendar', viewEvent: 'View on Church Center', empty: 'See all our events on the church’s official calendar.' },
-  es: { eyebrow: 'Nuestra agenda', heading: 'Lo que viene', sub: 'Reserva la fecha y ven con nosotros — siempre hay algo en Freedom Church.', next: 'Próximo evento', seeAll: 'Ver la agenda completa', viewEvent: 'Ver en Church Center', empty: 'Consulta todos nuestros eventos en el calendario oficial de la iglesia.' },
+  pt: { eyebrow: 'Nossa agenda', heading: 'O que vem por aí', sub: 'Reserve a data e venha com a gente — tudo direto da nossa agenda oficial, sempre atualizado.' },
+  en: { eyebrow: 'Our calendar', heading: 'What’s coming up', sub: 'Save the date and join us — straight from our official calendar, always up to date.' },
+  es: { eyebrow: 'Nuestra agenda', heading: 'Lo que viene', sub: 'Reserva la fecha y ven con nosotros — directo de nuestra agenda oficial, siempre actualizada.' },
 }[lang];
-
-// Cores de categoria — usadas só no fallback (eventos sem flyer).
-const tagStyles = {
-  'Conferência': 'from-violet-500 to-fuchsia-600',
-  'Comunhão':    'from-amber-500 to-orange-600',
-  'Jovens':      'from-pink-500 to-rose-600',
-  'Missão':      'from-emerald-500 to-teal-600',
-  'Família':     'from-sky-500 to-indigo-600',
-  'Homens':      'from-stone-600 to-stone-800',
-  'Mulheres':    'from-rose-400 to-pink-600',
-  'Kids':        'from-orange-400 to-rose-500',
-};
-
-const items = events.map((e) => {
-  const day = formatDate(e.data.date, lang, { day: '2-digit', timeZone: 'UTC' });
-  const month = formatDate(e.data.date, lang, { month: 'short', timeZone: 'UTC' }).replace('.', '').toUpperCase();
-  const year = e.data.date.getUTCFullYear();
-  const title = pickLocalized(e.data, 'title', lang);
-  const meta = `${day} ${month} ${year} · ${e.data.time} · ${e.data.place}`;
-  return { id: e.id, day, month, title, meta, tag: e.data.tag, cover: e.data.cover, grad: tagStyles[e.data.tag] ?? 'from-amber-500 to-orange-600' };
-});
-
-const featured = items[0];
-const rest = items.slice(1);
-
-const extIcon = '<svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 16 16"><path d="M6 3H3.5A1.5 1.5 0 0 0 2 4.5v8A1.5 1.5 0 0 0 3.5 14h8a1.5 1.5 0 0 0 1.5-1.5V10M9.5 2.5H13.5V6.5M13 3l-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 ---
 
 <PageHero pageKey="events" image="/cultos/gallery/cultos-02.jpg" />
 
 <Section bg="light" watermark="dark">
-  <div>
-    {/* intro + botão da agenda completa */}
-    <div class="text-center max-w-2xl mx-auto mb-14 lg:mb-16" data-reveal>
-      <span class="eyebrow justify-center">{labels.eyebrow}</span>
-      <h2 class="mt-3 font-display text-4xl lg:text-5xl text-ink-950 leading-tight">{labels.heading}</h2>
-      <p class="mt-4 text-lg text-ink-600 leading-relaxed">{labels.sub}</p>
-      <a href={churchCenterUrl} target="_blank" rel="noopener" class="mt-8 inline-flex items-center gap-2 bg-ink-950 text-cream-50 font-semibold rounded-full py-3 px-7 hover:bg-gold-500 hover:text-ink-950 transition-all">
-        {labels.seeAll}
-        <Fragment set:html={extIcon} />
-      </a>
-    </div>
+  <div class="text-center max-w-2xl mx-auto mb-10 lg:mb-14" data-reveal>
+    <span class="eyebrow justify-center">{labels.eyebrow}</span>
+    <h2 class="mt-3 font-display text-4xl lg:text-5xl text-ink-950 leading-tight">{labels.heading}</h2>
+    <p class="mt-4 text-lg text-ink-600 leading-relaxed">{labels.sub}</p>
+  </div>
 
-    {events.length > 0 && (
-      <>
-        {/* PRÓXIMO EVENTO em destaque (flyer grande) */}
-        <article class="group max-w-4xl mx-auto" data-reveal>
-          <a href={churchCenterUrl} target="_blank" rel="noopener" class="block relative rounded-3xl overflow-hidden shadow-xl bg-ink-100">
-            {featured.cover ? (
-              <img src={featured.cover} alt={featured.title} class="w-full aspect-video object-cover transition-transform duration-700 group-hover:scale-[1.02]" />
-            ) : (
-              <div class:list={['w-full aspect-video flex items-center justify-center text-white bg-gradient-to-br', featured.grad]}>
-                <div class="text-center"><div class="font-display text-6xl">{featured.day}</div><div class="uppercase tracking-widest">{featured.month}</div></div>
-              </div>
-            )}
-            <span class="absolute top-4 left-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-ink-950 bg-gold-500 px-3 py-1.5 rounded-full shadow-lg">
-              <span class="w-1.5 h-1.5 rounded-full bg-ink-950 animate-pulse"></span>{labels.next}
-            </span>
-          </a>
-          <div class="mt-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <h3 class="font-display text-2xl lg:text-3xl text-ink-950 leading-tight">{featured.title}</h3>
-              <div class="mt-1.5 text-sm text-ink-500">{featured.meta}</div>
-            </div>
-            <a href={churchCenterUrl} target="_blank" rel="noopener" class="shrink-0 inline-flex items-center gap-2 bg-ink-950 text-cream-50 font-semibold rounded-full py-3 px-6 hover:bg-gold-500 hover:text-ink-950 transition-all">
-              {labels.viewEvent}
-              <Fragment set:html={extIcon} />
-            </a>
-          </div>
-        </article>
-
-        {/* DEMAIS EVENTOS */}
-        {rest.length > 0 && (
-          <div class="grid sm:grid-cols-2 gap-8 lg:gap-10 mt-14 lg:mt-16 max-w-4xl mx-auto">
-            {rest.map((e, i) => (
-              <article class="group" data-reveal data-reveal-delay={(i % 2) + 1}>
-                <a href={churchCenterUrl} target="_blank" rel="noopener" class="block rounded-2xl overflow-hidden shadow-lg bg-ink-100">
-                  {e.cover ? (
-                    <img src={e.cover} alt={e.title} class="w-full aspect-video object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
-                  ) : (
-                    <div class:list={['w-full aspect-video flex items-center justify-center text-white bg-gradient-to-br', e.grad]}>
-                      <div class="text-center"><div class="font-display text-5xl">{e.day}</div><div class="text-xs uppercase tracking-widest">{e.month}</div></div>
-                    </div>
-                  )}
-                </a>
-                <div class="mt-4">
-                  <h3 class="font-display text-xl text-ink-950 leading-tight">{e.title}</h3>
-                  <div class="mt-1 text-sm text-ink-500">{e.meta}</div>
-                  <a href={churchCenterUrl} target="_blank" rel="noopener" class="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-gold-600 hover:text-gold-700 transition-colors">
-                    {labels.viewEvent}
-                    <Fragment set:html={extIcon} />
-                  </a>
-                </div>
-              </article>
-            ))}
-          </div>
-        )}
-      </>
-    )}
-
-    {events.length === 0 && (
-      <div class="text-center py-8" data-reveal>
-        <p class="text-lg text-ink-600 max-w-md mx-auto">{labels.empty}</p>
-      </div>
-    )}
+  <div class="max-w-5xl mx-auto" data-reveal>
+    <iframe
+      src={churchCenterEmbed}
+      title="Agenda Freedom Church"
+      id="cc-calendar"
+      class="w-full rounded-2xl bg-transparent"
+      style="height: 900px; border: 0;"
+      loading="lazy"
+    ></iframe>
   </div>
 </Section>
+
+<script>
+  // O embed do Church Center envia a própria altura ({ pageHeight }) —
+  // ajusta o iframe pra caber todos os eventos, sem rolagem interna.
+  window.addEventListener('message', (e) => {
+    if (!e.origin.includes('churchcenter.com')) return;
+    const h = e.data && e.data.pageHeight;
+    if (typeof h === 'number' && h > 200) {
+      const f = document.getElementById('cc-calendar');
+      if (f) f.style.height = h + 'px';
+    }
+  });
+</script>
