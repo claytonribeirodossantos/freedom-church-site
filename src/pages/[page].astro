@@ -11,7 +11,7 @@ import ContactPageContent from '../components/pages/ContactPageContent.astro';
 import LivePageContent from '../components/pages/LivePageContent.astro';
 import KidsPageContent from '../components/pages/KidsPageContent.astro';
 import YouthPageContent from '../components/pages/YouthPageContent.astro';
-import GalleryPageContent from '../components/pages/GalleryPageContent.astro';
+import HubsGroupsPageContent from '../components/pages/HubsGroupsPageContent.astro';
 import ResourcesPageContent from '../components/pages/ResourcesPageContent.astro';
 import PastoralServicesPageContent from '../components/pages/PastoralServicesPageContent.astro';
 import NewsletterPageContent from '../components/pages/NewsletterPageContent.astro';
@@ -31,7 +31,7 @@ export function getStaticPaths() {
     { params: { page: 'live' }, props: { component: 'live' } },
     { params: { page: 'kids' }, props: { component: 'kids' } },
     { params: { page: 'jovens' }, props: { component: 'youth' } },
-    { params: { page: 'galeria' }, props: { component: 'gallery' } },
+    { params: { page: 'hubs-groups' }, props: { component: 'hubsGroups' } },
     { params: { page: 'recursos' }, props: { component: 'resources' } },
     { params: { page: 'servicos-pastorais' }, props: { component: 'pastoralServices' } },
     { params: { page: 'newsletter' }, props: { component: 'newsletter' } },
@@ -54,7 +54,7 @@ const titlesPt: Record<string, string> = {
   live: 'Ao vivo',
   kids: 'Freedom Kids',
   youth: 'Freedom Youth',
-  gallery: 'Galeria',
+  hubsGroups: 'Hubs & Groups',
   resources: 'Recursos',
   pastoralServices: 'Serviços pastorais',
   newsletter: 'Newsletter',
@@ -75,7 +75,7 @@ const titlesPt: Record<string, string> = {
   {component === 'live' && <LivePageContent />}
   {component === 'kids' && <KidsPageContent />}
   {component === 'youth' && <YouthPageContent />}
-  {component === 'gallery' && <GalleryPageContent />}
+  {component === 'hubsGroups' && <HubsGroupsPageContent />}
   {component === 'resources' && <ResourcesPageContent />}
   {component === 'pastoralServices' && <PastoralServicesPageContent />}
   {component === 'newsletter' && <NewsletterPageContent />}

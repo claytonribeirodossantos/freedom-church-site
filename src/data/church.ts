@@ -19,13 +19,19 @@ export const church = {
 
   services: {
     pt: [
-      { day: 'Domingo', time: '10h30', name: 'Culto principal', desc: 'Louvor, Palavra, oração e ministério para crianças.' },
+      { day: 'Domingo', time: '10:30 AM', name: 'Culto principal', desc: 'Café da manhã começa às 9h.' },
+      { day: 'Quinta', time: '8 PM', name: 'Overflow', desc: 'Quinzenal.' },
+      { day: 'Sexta', time: '8 PM', name: 'Hubs', desc: 'Quinzenal.' },
     ],
     en: [
-      { day: 'Sunday', time: '10:30 AM', name: 'Sunday Service', desc: 'Worship, the Word, prayer and kids ministry.' },
+      { day: 'Sunday', time: '10:30 AM', name: 'Main service', desc: 'Breakfast starts at 9 AM.' },
+      { day: 'Thursday', time: '8 PM', name: 'Overflow', desc: 'Every other week.' },
+      { day: 'Friday', time: '8 PM', name: 'Hubs', desc: 'Every other week.' },
     ],
     es: [
-      { day: 'Domingo', time: '10:30 AM', name: 'Culto principal', desc: 'Alabanza, Palabra, oración y ministerio infantil.' },
+      { day: 'Domingo', time: '10:30 AM', name: 'Culto principal', desc: 'El desayuno comienza a las 9 AM.' },
+      { day: 'Jueves', time: '8 PM', name: 'Overflow', desc: 'Quincenal.' },
+      { day: 'Viernes', time: '8 PM', name: 'Hubs', desc: 'Quincenal.' },
     ],
   },
 

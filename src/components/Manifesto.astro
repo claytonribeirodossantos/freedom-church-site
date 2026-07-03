@@ -5,38 +5,23 @@ const lang = getLangFromUrl(Astro.url);
 
 const copy = {
   pt: {
-    eyebrow: 'Nosso manifesto',
-    line1: 'Cremos que',
-    line2_emph: 'a fé verdadeira',
-    line3: 'liberta. Não escraviza.',
-    line4: 'Que ninguém deveria',
-    line5_emph: 'caminhar sozinho',
-    line6: 'na cidade onde Deus o plantou.',
-    body: 'Somos uma igreja para brasileiros longe de casa, americanos curiosos, latinos que chegaram ontem, famílias que perderam o rumo, jovens que ainda procuram, casais que querem recomeçar. Aqui você é esperado pelo nome.',
+    eyebrow: 'Nossa igreja',
+    statement: 'Nossa igreja é um lugar de adoração, comunhão e crescimento espiritual, onde juntos buscamos nos aproximar de Deus através da Sua Palavra e da presença do Espírito Santo.',
+    invite: 'Venha participar dos nossos cultos e descubra o que Deus está fazendo em nosso meio.',
     cta: 'Venha como você é',
     btn: 'Visitar este domingo',
   },
   en: {
-    eyebrow: 'Our manifesto',
-    line1: 'We believe',
-    line2_emph: 'true faith',
-    line3: 'sets free. Does not enslave.',
-    line4: 'That no one should',
-    line5_emph: 'walk alone',
-    line6: 'in the city where God planted them.',
-    body: 'We are a church for Brazilians far from home, curious Americans, Latinos who just arrived, families who lost their way, young people still searching, couples wanting a fresh start. Here you are expected by name.',
+    eyebrow: 'Our church',
+    statement: 'Our church is a place of worship, fellowship and spiritual growth, where together we seek to draw closer to God through His Word and the presence of the Holy Spirit.',
+    invite: 'Come join our services and discover what God is doing among us.',
     cta: 'Come as you are',
     btn: 'Visit this Sunday',
   },
   es: {
-    eyebrow: 'Nuestro manifiesto',
-    line1: 'Creemos que',
-    line2_emph: 'la fe verdadera',
-    line3: 'libera. No esclaviza.',
-    line4: 'Que nadie debería',
-    line5_emph: 'caminar solo',
-    line6: 'en la ciudad donde Dios lo plantó.',
-    body: 'Somos una iglesia para brasileños lejos de casa, americanos curiosos, latinos recién llegados, familias que perdieron el rumbo, jóvenes que aún buscan, parejas que quieren recomenzar. Aquí te esperan por tu nombre.',
+    eyebrow: 'Nuestra iglesia',
+    statement: 'Nuestra iglesia es un lugar de adoración, comunión y crecimiento espiritual, donde juntos buscamos acercarnos a Dios a través de Su Palabra y de la presencia del Espíritu Santo.',
+    invite: 'Ven a participar de nuestros cultos y descubre lo que Dios está haciendo en medio de nosotros.',
     cta: 'Ven tal como eres',
     btn: 'Visitar este domingo',
   },
@@ -59,30 +44,20 @@ const keywords = {
   </div>
 
   <div class="container-page relative z-10">
-    <div class="grid lg:grid-cols-12 gap-12 lg:gap-16 mb-20" data-reveal>
-      <div class="lg:col-span-7">
-        <span class="eyebrow">{copy.eyebrow}</span>
-      </div>
+    <div class="mb-10 lg:mb-12" data-reveal>
+      <span class="eyebrow">{copy.eyebrow}</span>
     </div>
 
-    <h2
-      class="mega text-ink-950 mb-16"
-      style="font-size: clamp(2.5rem, 8vw, 8rem)"
-      data-reveal
-    >
-      <span class="block">{copy.line1} <em class="italic font-light text-gold-500">{copy.line2_emph}</em></span>
-      <span class="block">{copy.line3}</span>
-      <span class="block mt-4 lg:mt-6">{copy.line4} <em class="italic font-light text-gold-500">{copy.line5_emph}</em></span>
-      <span class="block">{copy.line6}</span>
-    </h2>
-
-    <div class="grid lg:grid-cols-12 gap-12 lg:gap-16 items-end" data-reveal data-reveal-delay="2">
-      <div class="lg:col-span-7">
-        <p class="text-lg lg:text-xl text-ink-700 leading-relaxed max-w-2xl">
-          {copy.body}
+    <div class="grid lg:grid-cols-12 gap-12 lg:gap-16 items-end" data-reveal>
+      <div class="lg:col-span-8">
+        <p class="font-display text-ink-950 leading-[1.18]" style="font-size: clamp(1.75rem, 4vw, 3.25rem)">
+          {copy.statement}
+        </p>
+        <p class="mt-8 text-lg lg:text-xl text-ink-700 leading-relaxed max-w-2xl">
+          {copy.invite}
         </p>
       </div>
-      <div class="lg:col-span-5 lg:text-right">
+      <div class="lg:col-span-4 lg:text-right" data-reveal data-reveal-delay="1">
         <div class="text-sm text-ink-500 mb-3">{copy.cta}</div>
         <a href={localizedPath(lang, '/sou-novo-aqui')} class="btn btn-dark">
           {copy.btn}

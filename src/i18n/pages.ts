@@ -74,10 +74,10 @@ export const pages: PagesMap = {
     en: { eyebrow: 'Freedom Youth', title: 'A generation\nthat does not sell out.', subtitle: 'For young people who want to live a real faith, with real friends, in the real world. Friday nights.' },
     es: { eyebrow: 'Freedom Youth', title: 'Una generación\nque no se vende.', subtitle: 'Para jóvenes que quieren vivir una fe real, con amigos reales, en el mundo real. Viernes por la noche.' },
   },
-  gallery: {
-    pt: { eyebrow: 'Galeria', title: 'Momentos\nque nos definem.', subtitle: 'Um pedacinho do que vivemos juntos: cultos, retiros, batismos, encontros e muito mais.' },
-    en: { eyebrow: 'Gallery', title: 'Moments\nthat define us.', subtitle: 'A glimpse of what we live together: services, retreats, baptisms, gatherings and much more.' },
-    es: { eyebrow: 'Galería', title: 'Momentos\nque nos definen.', subtitle: 'Un vistazo de lo que vivimos juntos: cultos, retiros, bautismos, encuentros y mucho más.' },
+  hubsGroups: {
+    pt: { eyebrow: 'Hubs & Groups', title: 'Ninguém caminha\nsozinho.', subtitle: 'Hubs e grupos pequenos onde você é conhecido pelo nome, cresce na fé e faz parte de uma família.' },
+    en: { eyebrow: 'Hubs & Groups', title: 'No one walks\nalone.', subtitle: 'Hubs and small groups where you are known by name, grow in faith and belong to a family.' },
+    es: { eyebrow: 'Hubs & Groups', title: 'Nadie camina\nsolo.', subtitle: 'Hubs y grupos pequeños donde te conocen por tu nombre, creces en la fe y perteneces a una familia.' },
   },
   resources: {
     pt: { eyebrow: 'Recursos', title: 'Para sua\ncaminhada.', subtitle: 'Estudos, devocionais, wallpapers e ferramentas para alimentar sua fé durante a semana.' },

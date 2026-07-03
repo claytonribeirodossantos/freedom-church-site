@@ -27,31 +27,67 @@ const manifestoLines = {
   ],
 }[lang];
 
-const steps = {
-  pt: [
-    { n: '01', t: 'Chegue como quiser', d: 'Sem dress code. Sem expectativa. Use o que te faz bem.' },
-    { n: '02', t: 'Estacionamento fácil', d: 'Voluntários te recebem na entrada e indicam tudo.' },
-    { n: '03', t: 'Pegue um café', d: 'Quinze minutos antes do culto a comunhão começa.' },
-    { n: '04', t: 'Curta o culto', d: 'Cerca de 80 minutos. Música, Palavra e oração.' },
-    { n: '05', t: 'Kids cuidados', d: 'Sala segura com equipe treinada para os pequenos.' },
-    { n: '06', t: 'Conecte-se depois', d: 'Sem pressão. Quando estiver pronto, apresentamos a família.' },
-  ],
-  en: [
-    { n: '01', t: 'Come as you are', d: 'No dress code. No expectations. Wear what feels right.' },
-    { n: '02', t: 'Easy parking', d: 'Volunteers greet you at the entrance and guide you.' },
-    { n: '03', t: 'Grab a coffee', d: 'Fifteen minutes before service the fellowship begins.' },
-    { n: '04', t: 'Enjoy the service', d: 'About 80 minutes. Music, the Word, and prayer.' },
-    { n: '05', t: 'Kids well cared for', d: 'Safe room with trained team for the little ones.' },
-    { n: '06', t: 'Connect afterward', d: 'No pressure. When you are ready, we introduce the family.' },
-  ],
-  es: [
-    { n: '01', t: 'Ven como eres', d: 'Sin código de vestimenta. Sin expectativas. Usa lo que te haga bien.' },
-    { n: '02', t: 'Estacionamiento fácil', d: 'Voluntarios te reciben en la entrada y te guían.' },
-    { n: '03', t: 'Toma un café', d: 'Quince minutos antes del culto empieza la comunión.' },
-    { n: '04', t: 'Disfruta el culto', d: 'Cerca de 80 minutos. Música, Palabra y oración.' },
-    { n: '05', t: 'Niños bien cuidados', d: 'Sala segura con equipo entrenado para los pequeños.' },
-    { n: '06', t: 'Conéctate después', d: 'Sin presión. Cuando estés listo, presentamos a la familia.' },
-  ],
+const journey = {
+  pt: {
+    eyebrow: 'Primeiros passos',
+    title: 'Comece sua jornada de fé!',
+    intro: [
+      'Tudo começa com um passo de fé — crer. E nós estamos aqui para caminhar com você nessa nova etapa de crescimento espiritual.',
+      'Na nossa igreja, somos mais do que um grupo de pessoas: somos uma família espiritual que ama Jesus, ama o próximo e vive em comunidade. Queremos que você também faça parte dessa família.',
+      'Sabemos que todo começo pode gerar dúvidas e até um pouco de medo, mas lembre-se: você não está sozinho!',
+    ],
+    stepsTitle: 'Passos para sua caminhada de fé',
+    steps: [
+      { t: 'Entregue sua vida a Jesus', d: 'Tudo começa quando você reconhece Jesus Cristo como seu único e suficiente Salvador e Senhor. Esse é o primeiro e mais importante passo.' },
+      { t: 'Dê o passo do batismo', d: 'O batismo é uma confissão pública da sua fé — uma expressão exterior do que o Espírito Santo já está fazendo dentro de você. É um momento de entrega, compromisso e celebração!' },
+      { t: 'Fortaleça sua fé', d: 'Após o batismo, oferecemos as classes de Primeiros Passos chamada START; um tempo especial de aprendizado e crescimento para que você conheça mais sobre Jesus e se firme na fé.' },
+    ],
+    communityTitle: 'Cresça e viva em comunidade!',
+    community: [
+      'Nossa igreja oferece atividades semanais para crianças, adolescentes, jovens e adultos. Aqui, você e sua família encontrarão alimento espiritual através da Palavra de Deus, e serão ensinados a viver como verdadeiros discípulos de Jesus.',
+      'Venha fazer parte dessa jornada — a sua nova vida em Cristo está apenas começando!',
+    ],
+  },
+  en: {
+    eyebrow: 'First steps',
+    title: 'Start your journey of faith!',
+    intro: [
+      'It all begins with a step of faith — to believe. And we are here to walk with you in this new season of spiritual growth.',
+      'In our church, we are more than a group of people: we are a spiritual family that loves Jesus, loves our neighbor and lives in community. We want you to be part of this family too.',
+      'We know that every beginning can bring questions and even a little fear, but remember: you are not alone!',
+    ],
+    stepsTitle: 'Steps for your walk of faith',
+    steps: [
+      { t: 'Give your life to Jesus', d: 'It all starts when you recognize Jesus Christ as your only and sufficient Savior and Lord. This is the first and most important step.' },
+      { t: 'Take the step of baptism', d: 'Baptism is a public confession of your faith — an outward expression of what the Holy Spirit is already doing within you. It is a moment of surrender, commitment and celebration!' },
+      { t: 'Strengthen your faith', d: 'After baptism, we offer our First Steps classes called START; a special time of learning and growth so you get to know Jesus more and become firm in the faith.' },
+    ],
+    communityTitle: 'Grow and live in community!',
+    community: [
+      'Our church offers weekly activities for children, teens, youth and adults. Here, you and your family will find spiritual nourishment through the Word of God, and will be taught to live as true disciples of Jesus.',
+      'Come be part of this journey — your new life in Christ is only beginning!',
+    ],
+  },
+  es: {
+    eyebrow: 'Primeros pasos',
+    title: '¡Comienza tu jornada de fe!',
+    intro: [
+      'Todo comienza con un paso de fe — creer. Y estamos aquí para caminar contigo en esta nueva etapa de crecimiento espiritual.',
+      'En nuestra iglesia, somos más que un grupo de personas: somos una familia espiritual que ama a Jesús, ama al prójimo y vive en comunidad. Queremos que tú también seas parte de esta familia.',
+      'Sabemos que todo comienzo puede generar dudas e incluso un poco de miedo, pero recuerda: ¡no estás solo!',
+    ],
+    stepsTitle: 'Pasos para tu caminar de fe',
+    steps: [
+      { t: 'Entrega tu vida a Jesús', d: 'Todo comienza cuando reconoces a Jesucristo como tu único y suficiente Salvador y Señor. Este es el primer y más importante paso.' },
+      { t: 'Da el paso del bautismo', d: 'El bautismo es una confesión pública de tu fe — una expresión exterior de lo que el Espíritu Santo ya está haciendo dentro de ti. ¡Es un momento de entrega, compromiso y celebración!' },
+      { t: 'Fortalece tu fe', d: 'Después del bautismo, ofrecemos las clases de Primeros Pasos llamadas START; un tiempo especial de aprendizaje y crecimiento para que conozcas más a Jesús y te afirmes en la fe.' },
+    ],
+    communityTitle: '¡Crece y vive en comunidad!',
+    community: [
+      'Nuestra iglesia ofrece actividades semanales para niños, adolescentes, jóvenes y adultos. Aquí, tú y tu familia encontrarán alimento espiritual a través de la Palabra de Dios, y serán enseñados a vivir como verdaderos discípulos de Jesús.',
+      'Ven a ser parte de esta jornada — ¡tu nueva vida en Cristo apenas está comenzando!',
+    ],
+  },
 }[lang];
 
 const faq = {
@@ -104,24 +140,32 @@ const labels = {
   </h2>
 </Section>
 
-<!-- Steps -->
-<Section bg="tint">
-  <div class="max-w-2xl mb-16" data-reveal>
-    <span class="eyebrow">{labels.steps}</span>
-    <h2 class="mt-4 text-3xl lg:text-4xl text-ink-950 leading-tight">{labels.steps}</h2>
+<!-- Comece sua jornada de fé -->
+<Section bg="tint" watermark="dark">
+  <div class="max-w-3xl mx-auto text-center mb-10" data-reveal>
+    <span class="eyebrow justify-center">{journey.eyebrow}</span>
+    <h2 class="mt-4 font-display text-4xl lg:text-5xl text-ink-950 leading-tight">{journey.title}</h2>
   </div>
-  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    {steps.map((s, i) => (
-      <div
-        class="bg-ink-50 border border-ink-200 rounded-2xl p-7 group hover:border-ink-950 hover:shadow-lg transition-all"
-        data-reveal
-        data-reveal-delay={i + 1}
-      >
-        <div class="display-num text-5xl mb-4">{s.n}</div>
-        <h3 class="text-lg text-ink-950">{s.t}</h3>
-        <p class="mt-2 text-sm text-ink-600 leading-relaxed">{s.d}</p>
+  <div class="max-w-3xl mx-auto space-y-5 text-lg text-ink-700 leading-relaxed" data-reveal>
+    {journey.intro.map((p) => <p>{p}</p>)}
+  </div>
+
+  <h3 class="mt-16 lg:mt-20 mb-8 text-center font-display text-2xl lg:text-3xl text-ink-950">{journey.stepsTitle}</h3>
+  <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+    {journey.steps.map((s, i) => (
+      <div class="bg-ink-50 border border-ink-200 rounded-2xl p-7 group hover:border-ink-950 hover:shadow-lg transition-all" data-reveal data-reveal-delay={i + 1}>
+        <div class="display-num text-5xl mb-4 text-gold-500">{i + 1}</div>
+        <h4 class="font-display text-lg text-ink-950">{s.t}</h4>
+        <p class="mt-3 text-sm text-ink-600 leading-relaxed">{s.d}</p>
       </div>
     ))}
+  </div>
+
+  <div class="max-w-3xl mx-auto mt-16 lg:mt-20 text-center" data-reveal>
+    <h3 class="font-display text-2xl lg:text-3xl text-gold-600">{journey.communityTitle}</h3>
+    <div class="mt-5 space-y-4 text-lg text-ink-700 leading-relaxed">
+      {journey.community.map((p) => <p>{p}</p>)}
+    </div>
   </div>
 </Section>
 

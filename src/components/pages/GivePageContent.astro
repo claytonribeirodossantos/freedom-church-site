@@ -73,6 +73,7 @@ const methods = [
   {
     name: 'Zelle',
     color: '#6D1ED4',
+    colorDark: '#4A129A',
     identifier: church.giving.zelle.identifier,
     instructions: {
       pt: 'Abra seu banco, escolha Zelle e envie para o email abaixo. Aparece como "Freedom Church".',
@@ -85,6 +86,7 @@ const methods = [
   {
     name: 'Venmo',
     color: '#008CFF',
+    colorDark: '#0062CC',
     identifier: church.giving.venmo.handle,
     instructions: {
       pt: 'Abra o app Venmo e busque o usuário abaixo. Confirme o nome "Freedom Church" antes de enviar.',
@@ -97,6 +99,7 @@ const methods = [
   {
     name: 'Cash App',
     color: '#00D54B',
+    colorDark: '#00A83B',
     identifier: church.giving.cashapp.handle,
     instructions: {
       pt: 'Abra o Cash App, toque em "Send" e digite o $cashtag abaixo.',
@@ -130,36 +133,40 @@ const methods = [
   <div class="grid md:grid-cols-3 gap-6">
     {methods.map((m, i) => (
       <article
-        class="relative bg-ink-50 rounded-3xl overflow-hidden border border-ink-200 hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col"
+        class="group bg-ink-50 rounded-3xl overflow-hidden border border-ink-200/70 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col"
         data-reveal
         data-reveal-delay={i + 1}
       >
-        <!-- faixa colorida da marca -->
-        <div class="h-1.5 w-full" style={`background: ${m.color};`}></div>
-        <div class="p-8 lg:p-9 flex flex-col flex-1">
-          <div class="flex items-center gap-4">
-            <div class="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-lg" style={`background: ${m.color}; box-shadow: 0 10px 24px -8px ${m.color}88;`}>
-              <svg width="28" height="28" fill="white" viewBox="0 0 24 24"><path d={m.icon} /></svg>
+        <!-- cabeçalho colorido da marca -->
+        <div class="relative overflow-hidden p-7 lg:p-8 text-white" style={`background: linear-gradient(135deg, ${m.color}, ${m.colorDark});`}>
+          <div class="pointer-events-none absolute -top-10 -right-10 w-36 h-36 rounded-full bg-white/10"></div>
+          <div class="pointer-events-none absolute -bottom-12 -left-6 w-28 h-28 rounded-full bg-white/5"></div>
+          <div class="relative flex items-center gap-4">
+            <div class="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-300">
+              <svg width="32" height="32" fill="white" viewBox="0 0 24 24"><path d={m.icon} /></svg>
             </div>
-            <h3 class="font-display text-2xl text-ink-950">{m.name}</h3>
+            <div>
+              <h3 class="font-display text-2xl leading-none">{m.name}</h3>
+              <div class="mt-1.5 text-xs uppercase tracking-[0.18em] text-white/80">{labels.sendVia} {m.name}</div>
+            </div>
           </div>
-          <p class="mt-5 text-sm text-ink-600 leading-relaxed">{m.instructions}</p>
+        </div>
 
-          <div class="mt-6 p-4 rounded-2xl bg-ink-100 border border-ink-200">
-            <div class="text-xs uppercase tracking-widest text-ink-500 mb-2">{labels.sendVia} {m.name}</div>
-            <div class="flex items-center justify-between gap-3">
-              <code class="text-base text-ink-950 font-semibold font-mono truncate" data-copy-target>{m.identifier}</code>
-              <button
-                type="button"
-                class="shrink-0 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-ink-950 bg-gold-500 hover:bg-gold-400 px-3 py-2 rounded-full transition-colors"
-                data-copy={m.identifier}
-                data-label-copy={labels.copy}
-                data-label-copied={labels.copied}
-              >
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10" stroke-linecap="round"/></svg>
-                {labels.copy}
-              </button>
-            </div>
+        <div class="p-7 lg:p-8 flex flex-col flex-1">
+          <p class="text-sm text-ink-600 leading-relaxed">{m.instructions}</p>
+
+          <div class="mt-6 p-4 rounded-2xl bg-ink-100 border border-ink-200 flex items-center justify-between gap-3">
+            <code class="text-base text-ink-950 font-semibold font-mono truncate" data-copy-target>{m.identifier}</code>
+            <button
+              type="button"
+              class="shrink-0 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-ink-950 bg-gold-500 hover:bg-gold-400 px-3 py-2 rounded-full transition-colors"
+              data-copy={m.identifier}
+              data-label-copy={labels.copy}
+              data-label-copied={labels.copied}
+            >
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10" stroke-linecap="round"/></svg>
+              {labels.copy}
+            </button>
           </div>
 
           <div class="flex-1"></div>
@@ -168,8 +175,8 @@ const methods = [
               href={m.url}
               target="_blank"
               rel="noopener"
-              class="mt-5 w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-full text-sm font-semibold text-white hover:-translate-y-0.5 transition-all"
-              style={`background: ${m.color};`}
+              class="mt-5 w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-full text-sm font-semibold text-white hover:-translate-y-0.5 hover:shadow-lg transition-all"
+              style={`background: linear-gradient(135deg, ${m.color}, ${m.colorDark});`}
             >
               {labels.open} {m.name}
               <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
