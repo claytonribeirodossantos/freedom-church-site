@@ -5,6 +5,8 @@ import { getLangFromUrl } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
 const groupsUrl = 'https://ourfreedomchurch.churchcenter.com/groups';
+const hubsUrl = 'https://ourfreedomchurch.churchcenter.com/groups/hubs?enrollment=open_signup%2Crequest_to_join&filter=enrollment';
+const fbcUrl = 'https://ourfreedomchurch.churchcenter.com/groups/fbc/fbc-students';
 
 const copy = {
   pt: {
@@ -81,7 +83,17 @@ const extIcon = '<svg width="16" height="16" fill="none" stroke="currentColor" s
   <div class="text-center max-w-2xl mx-auto" data-reveal>
     <h2 class="mega text-ink-50" style="font-size: clamp(2rem, 5vw, 4rem)">{copy.ctaTitle}</h2>
     <p class="mt-6 text-lg text-ink-300">{copy.ctaNote}</p>
-    <a href={groupsUrl} target="_blank" rel="noopener" class="mt-10 inline-flex items-center gap-2 btn btn-primary !bg-gold-500 !text-ink-950 hover:!bg-gold-400">
+    <div class="mt-10 flex flex-wrap gap-3 justify-center">
+      <a href={hubsUrl} target="_blank" rel="noopener" class="inline-flex items-center gap-2 btn btn-primary !bg-gold-500 !text-ink-950 hover:!bg-gold-400">
+        Hubs
+        <Fragment set:html={extIcon} />
+      </a>
+      <a href={fbcUrl} target="_blank" rel="noopener" class="inline-flex items-center gap-2 btn btn-ghost-light">
+        FBC Students
+        <Fragment set:html={extIcon} />
+      </a>
+    </div>
+    <a href={groupsUrl} target="_blank" rel="noopener" class="mt-6 inline-flex items-center gap-1.5 text-sm text-gold-400 hover:text-gold-300">
       {copy.cta}
       <Fragment set:html={extIcon} />
     </a>

@@ -5,10 +5,12 @@ import { languages, type Lang } from '../i18n/ui';
 const current = getLangFromUrl(Astro.url);
 const entries = Object.entries(languages) as [Lang, string][];
 
+// Imagens de bandeira (SVG) — renderizam em qualquer dispositivo,
+// diferente do emoji de bandeira (que o Windows mostra como "BR"/"US").
 const flagOf: Record<Lang, string> = {
-  pt: '🇧🇷',
-  en: '🇺🇸',
-  es: '🇪🇸',
+  pt: '/flags/br.svg',
+  en: '/flags/us.svg',
+  es: '/flags/es.svg',
 };
 ---
 
@@ -20,7 +22,7 @@ const flagOf: Record<Lang, string> = {
     aria-expanded="false"
     data-lang-toggle
   >
-    <span class="text-base leading-none">{flagOf[current]}</span>
+    <img src={flagOf[current]} alt="" width="20" height="14" class="w-5 h-auto rounded-[3px] shadow-sm shrink-0" />
     <span class="uppercase tracking-wide">{current}</span>
     <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" class="transition-transform" data-lang-chevron>
       <path d="m3 4.5 3 3 3-3" stroke-linecap="round" stroke-linejoin="round" />
@@ -39,7 +41,7 @@ const flagOf: Record<Lang, string> = {
           code === current ? 'text-gold-600 font-medium' : 'text-ink-800',
         ]}
       >
-        <span class="text-base leading-none">{flagOf[code]}</span>
+        <img src={flagOf[code]} alt="" width="20" height="14" class="w-5 h-auto rounded-[3px] shadow-sm shrink-0" />
         <span>{label}</span>
       </a>
     ))}
