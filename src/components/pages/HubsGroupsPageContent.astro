@@ -13,47 +13,42 @@ const copy = {
     eyebrow: 'Conecte-se',
     title: 'Onde a vida acontece',
     body: 'Nos cultos a gente se encontra — mas é nos Hubs e nos grupos que a gente se conhece de verdade. São encontros menores, pela cidade e durante a semana, para orar, estudar a Palavra, comer junto e caminhar em comunidade.',
-    hubTitle: 'Hubs',
-    hubBody: 'Encontros pela cidade, perto de onde você mora — um lugar para pertencer durante a semana.',
-    groupTitle: 'Grupos',
-    groupBody: 'Grupos por fase da vida e interesse: homens, mulheres, jovens, casais e muito mais.',
-    cta: 'Encontrar um grupo',
-    ctaTitle: 'Dê o próximo passo',
-    ctaNote: 'Veja todos os hubs e grupos disponíveis e participe direto pelo Church Center.',
+    join: 'Participar',
+    seeAll: 'Ver todos os grupos',
+    cards: [
+      { num: '01', name: 'Hubs', desc: 'Encontros pela cidade, perto de onde você mora — um lugar para pertencer durante a semana.', url: hubsUrl },
+      { num: '02', name: 'FBC Students', desc: 'Conheça e participe da nossa comunidade de estudantes — cresça na fé em comunidade.', url: fbcUrl },
+    ],
   },
   en: {
     eyebrow: 'Get connected',
     title: 'Where life happens',
     body: 'On Sundays we gather — but it’s in the Hubs and groups that we really get to know each other. Smaller meetings, around the city and during the week, to pray, study the Word, share meals and walk together in community.',
-    hubTitle: 'Hubs',
-    hubBody: 'Gatherings around the city, close to where you live — a place to belong during the week.',
-    groupTitle: 'Groups',
-    groupBody: 'Groups by life stage and interest: men, women, youth, couples and much more.',
-    cta: 'Find a group',
-    ctaTitle: 'Take the next step',
-    ctaNote: 'See all the hubs and groups available and join right through Church Center.',
+    join: 'Join',
+    seeAll: 'See all groups',
+    cards: [
+      { num: '01', name: 'Hubs', desc: 'Gatherings around the city, close to where you live — a place to belong during the week.', url: hubsUrl },
+      { num: '02', name: 'FBC Students', desc: 'Get to know and join our student community — grow in faith together.', url: fbcUrl },
+    ],
   },
   es: {
     eyebrow: 'Conéctate',
     title: 'Donde la vida sucede',
     body: 'Los domingos nos encontramos — pero es en los Hubs y grupos donde de verdad nos conocemos. Encuentros más pequeños, por la ciudad y durante la semana, para orar, estudiar la Palabra, comer juntos y caminar en comunidad.',
-    hubTitle: 'Hubs',
-    hubBody: 'Encuentros por la ciudad, cerca de donde vives — un lugar para pertenecer durante la semana.',
-    groupTitle: 'Grupos',
-    groupBody: 'Grupos por etapa de vida e interés: hombres, mujeres, jóvenes, parejas y mucho más.',
-    cta: 'Encontrar un grupo',
-    ctaTitle: 'Da el siguiente paso',
-    ctaNote: 'Mira todos los hubs y grupos disponibles y participa directo por Church Center.',
+    join: 'Participar',
+    seeAll: 'Ver todos los grupos',
+    cards: [
+      { num: '01', name: 'Hubs', desc: 'Encuentros por la ciudad, cerca de donde vives — un lugar para pertenecer durante la semana.', url: hubsUrl },
+      { num: '02', name: 'FBC Students', desc: 'Conoce y participa de nuestra comunidad de estudiantes — crece en la fe en comunidad.', url: fbcUrl },
+    ],
   },
 }[lang];
-
-const extIcon = '<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 16 16"><path d="M6 3H3.5A1.5 1.5 0 0 0 2 4.5v8A1.5 1.5 0 0 0 3.5 14h8a1.5 1.5 0 0 0 1.5-1.5V10M9.5 2.5H13.5V6.5M13 3l-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 ---
 
 <PageHero pageKey="hubsGroups" image="/cultos/gallery/cultos-09.jpg" />
 
 <Section bg="light" watermark="dark">
-  <div class="grid lg:grid-cols-12 gap-12 lg:gap-16 mb-16 lg:mb-20">
+  <div class="grid lg:grid-cols-12 gap-12 lg:gap-16 mb-14 lg:mb-16">
     <div class="lg:col-span-5" data-reveal>
       <span class="eyebrow">{copy.eyebrow}</span>
       <h2 class="mt-4 font-display text-4xl lg:text-5xl text-ink-950 leading-tight">{copy.title}</h2>
@@ -64,38 +59,40 @@ const extIcon = '<svg width="16" height="16" fill="none" stroke="currentColor" s
   </div>
 
   <div class="grid md:grid-cols-2 gap-6 lg:gap-8">
-    <div class="rounded-3xl bg-ink-950 text-cream-50 p-8 lg:p-10 relative overflow-hidden" data-reveal>
-      <div class="pointer-events-none absolute -top-10 -right-10 w-40 h-40 rounded-full" style="background: radial-gradient(circle, rgba(201,169,97,0.25), transparent 70%);"></div>
-      <div class="text-xs uppercase tracking-[0.22em] text-gold-400">01</div>
-      <h3 class="mt-4 font-display text-3xl">{copy.hubTitle}</h3>
-      <p class="mt-3 text-cream-300 leading-relaxed">{copy.hubBody}</p>
-    </div>
-    <div class="rounded-3xl bg-ink-100 text-ink-950 p-8 lg:p-10 relative overflow-hidden" data-reveal data-reveal-delay="1">
-      <div class="pointer-events-none absolute -top-10 -right-10 w-40 h-40 rounded-full" style="background: radial-gradient(circle, rgba(201,169,97,0.22), transparent 70%);"></div>
-      <div class="text-xs uppercase tracking-[0.22em] text-gold-600">02</div>
-      <h3 class="mt-4 font-display text-3xl">{copy.groupTitle}</h3>
-      <p class="mt-3 text-ink-700 leading-relaxed">{copy.groupBody}</p>
-    </div>
-  </div>
-</Section>
+    {copy.cards.map((c, i) => (
+      <a
+        href={c.url}
+        target="_blank"
+        rel="noopener"
+        class="group relative overflow-hidden rounded-3xl bg-ink-950 text-cream-50 p-8 lg:p-10 min-h-[16rem] flex flex-col justify-between shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300"
+        data-reveal
+        data-reveal-delay={i + 1}
+      >
+        <div class="pointer-events-none absolute -top-16 -right-16 w-56 h-56 rounded-full opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" style="background: radial-gradient(circle, rgba(201,169,97,0.32), transparent 70%);"></div>
 
-<Section bg="dark" watermark="light">
-  <div class="text-center max-w-2xl mx-auto" data-reveal>
-    <h2 class="mega text-ink-50" style="font-size: clamp(2rem, 5vw, 4rem)">{copy.ctaTitle}</h2>
-    <p class="mt-6 text-lg text-ink-300">{copy.ctaNote}</p>
-    <div class="mt-10 flex flex-wrap gap-3 justify-center">
-      <a href={hubsUrl} target="_blank" rel="noopener" class="inline-flex items-center gap-2 btn btn-primary !bg-gold-500 !text-ink-950 hover:!bg-gold-400">
-        Hubs
-        <Fragment set:html={extIcon} />
+        <div class="relative flex items-center justify-between">
+          <span class="text-xs uppercase tracking-[0.28em] text-gold-400">{c.num}</span>
+          <span class="w-10 h-10 rounded-full border border-cream-50/25 flex items-center justify-center text-cream-50 group-hover:bg-gold-500 group-hover:text-ink-950 group-hover:border-gold-500 transition-all duration-300">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 16 16" class="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"><path d="M4 12 12 4M12 4H5M12 4v7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+
+        <div class="relative">
+          <h3 class="font-display text-3xl lg:text-4xl text-cream-50">{c.name}</h3>
+          <p class="mt-3 text-cream-300 leading-relaxed max-w-md">{c.desc}</p>
+          <span class="mt-6 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-gold-400 group-hover:gap-3 transition-all">
+            {c.join}
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
       </a>
-      <a href={fbcUrl} target="_blank" rel="noopener" class="inline-flex items-center gap-2 btn btn-ghost-light">
-        FBC Students
-        <Fragment set:html={extIcon} />
-      </a>
-    </div>
-    <a href={groupsUrl} target="_blank" rel="noopener" class="mt-6 inline-flex items-center gap-1.5 text-sm text-gold-400 hover:text-gold-300">
-      {copy.cta}
-      <Fragment set:html={extIcon} />
+    ))}
+  </div>
+
+  <div class="text-center mt-12" data-reveal>
+    <a href={groupsUrl} target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-sm font-medium text-ink-900 border border-ink-300 hover:border-ink-950 hover:bg-ink-950 hover:text-cream-50 rounded-full py-3 px-7 transition-all">
+      {copy.seeAll}
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 16 16"><path d="M4 12 12 4M12 4H5M12 4v7" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </a>
   </div>
 </Section>
