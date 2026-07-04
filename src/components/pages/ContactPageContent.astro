@@ -12,6 +12,7 @@ const labels = {
     email: 'Email', emailPh: 'voce@email.com',
     subject: 'Assunto', subjectPh: 'Sobre o que é?',
     message: 'Mensagem', messagePh: 'Conte para a gente...',
+    privacyCheck: 'Li e concordo com a Política de Privacidade',
     submit: 'Enviar mensagem',
     sending: 'Enviando...',
     success: 'Recebemos sua mensagem. Respondemos em até 48h.',
@@ -24,6 +25,7 @@ const labels = {
     email: 'Email', emailPh: 'you@email.com',
     subject: 'Subject', subjectPh: 'What is it about?',
     message: 'Message', messagePh: 'Tell us...',
+    privacyCheck: 'I read and agree with the Privacy Policy',
     submit: 'Send message',
     sending: 'Sending...',
     success: 'We received your message. We respond within 48h.',
@@ -36,6 +38,7 @@ const labels = {
     email: 'Correo', emailPh: 'tu@email.com',
     subject: 'Asunto', subjectPh: '¿De qué se trata?',
     message: 'Mensaje', messagePh: 'Cuéntanos...',
+    privacyCheck: 'Leí y acepto la Política de Privacidad',
     submit: 'Enviar mensaje',
     sending: 'Enviando...',
     success: 'Recibimos tu mensaje. Respondemos en hasta 48h.',
@@ -78,6 +81,13 @@ const labels = {
           <label for="c-message" class="block text-sm font-medium text-ink-900 mb-2">{labels.message}</label>
           <textarea id="c-message" name="message" rows="6" required placeholder={labels.messagePh}
             class="w-full px-4 py-3 rounded-lg border border-ink-200 focus:border-ink-950 focus:outline-none focus:ring-2 focus:ring-gold-200 text-ink-900 resize-none"></textarea>
+        </div>
+        <div class="flex items-start gap-3">
+          <input id="c-privacy" type="checkbox" name="privacy_consent" required
+            class="mt-1 w-4 h-4 rounded border-ink-300 text-gold-600 focus:ring-2 focus:ring-gold-200" />
+          <label for="c-privacy" class="text-sm text-ink-700 cursor-pointer">
+            {labels.privacyCheck}
+          </label>
         </div>
         <button type="submit" class="btn btn-primary" data-submit-btn data-label-submit={labels.submit} data-label-sending={labels.sending}>
           {labels.submit}

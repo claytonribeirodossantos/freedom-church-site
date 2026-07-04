@@ -13,6 +13,7 @@ const labels = {
     subject: 'Assunto', subjectPh: 'Resuma seu pedido em uma frase',
     request: 'Seu pedido', requestPh: 'Conte o que está no seu coração. Vamos orar.',
     anon: 'Manter meu pedido em sigilo (apenas pastores)',
+    privacyCheck: 'Li e concordo com a Política de Privacidade',
     submit: 'Enviar pedido',
     sending: 'Enviando...',
     success: 'Recebemos seu pedido. Estamos orando por você.',
@@ -26,6 +27,7 @@ const labels = {
     subject: 'Subject', subjectPh: 'Summarize your request in one sentence',
     request: 'Your request', requestPh: 'Share what is in your heart. We will pray.',
     anon: 'Keep my request confidential (pastors only)',
+    privacyCheck: 'I read and agree with the Privacy Policy',
     submit: 'Send request',
     sending: 'Sending...',
     success: 'We received your request. We are praying for you.',
@@ -39,6 +41,7 @@ const labels = {
     subject: 'Asunto', subjectPh: 'Resume tu petición en una frase',
     request: 'Tu petición', requestPh: 'Comparte lo que hay en tu corazón. Vamos a orar.',
     anon: 'Mantener mi petición en confidencialidad (solo pastores)',
+    privacyCheck: 'Leí y acepto la Política de Privacidad',
     submit: 'Enviar petición',
     sending: 'Enviando...',
     success: 'Recibimos tu petición. Estamos orando por ti.',
@@ -106,6 +109,13 @@ const labels = {
           <input type="checkbox" name="confidential" value="Sim/Yes" class="mt-1 w-4 h-4 accent-gold-500" />
           <span class="text-sm text-ink-700">{labels.anon}</span>
         </label>
+        <div class="flex items-start gap-3">
+          <input id="prayer-privacy" type="checkbox" name="privacy_consent" required
+            class="mt-1 w-4 h-4 rounded border-ink-300 text-gold-600 focus:ring-2 focus:ring-gold-200" />
+          <label for="prayer-privacy" class="text-sm text-ink-700 cursor-pointer">
+            {labels.privacyCheck}
+          </label>
+        </div>
         <button type="submit" class="btn btn-primary" data-submit-btn data-label-submit={labels.submit} data-label-sending={labels.sending}>
           {labels.submit}
           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 8h10m0 0L9 4m4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg>

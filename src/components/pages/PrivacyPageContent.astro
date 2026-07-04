@@ -7,49 +7,58 @@ import { church } from '../../data/church';
 const lang = getLangFromUrl(Astro.url);
 
 const updated = {
-  pt: 'Última atualização: 24 de maio de 2026',
-  en: 'Last updated: May 24, 2026',
-  es: 'Última actualización: 24 de mayo de 2026',
+  pt: 'Última atualização: 4 de julho de 2026',
+  en: 'Last updated: July 4, 2026',
+  es: 'Última actualización: 4 de julio de 2026',
 }[lang];
 
 const sections = {
   pt: [
-    { h: '1. Quais dados coletamos', p: 'Coletamos apenas o necessário: nome e email quando você se cadastra na newsletter, preenche um formulário de contato ou faz um pedido de oração. Pagamentos são processados pelo Stripe (não armazenamos dados de cartão).' },
-    { h: '2. Como usamos seus dados', p: 'Para responder seu contato, enviar a newsletter (se você optar), processar doações e nos comunicar com você como igreja. Nunca vendemos dados.' },
-    { h: '3. Pedidos de oração', p: 'Pedidos marcados como confidenciais são acessados apenas pelos pastores. Pedidos não marcados como confidenciais podem ser compartilhados com a equipe de intercessão.' },
-    { h: '4. Cookies', p: 'Usamos cookies essenciais para o site funcionar. Não usamos cookies de rastreamento de terceiros.' },
-    { h: '5. Seus direitos', p: 'Você pode pedir o acesso, correção ou exclusão dos seus dados a qualquer momento escrevendo para o email abaixo.' },
-    { h: '6. Contato', p: `Dúvidas sobre privacidade: ${church.contact.email}` },
+    { h: '1. Introdução', p: 'A Freedom Church respeita sua privacidade e está comprometida com a proteção de seus dados pessoais. Esta Política de Privacidade explica como coletamos, usamos, armazenamos e protegemos seus dados quando você visita nosso site.' },
+    { h: '2. Dados que coletamos', p: 'Coletamos dados pessoais apenas quando você voluntariamente nos fornece, incluindo: seu nome, email e telefone (formulários de contato), pedidos de oração ou interesse em eventos, e informações que você compartilha conosco no Church Center.' },
+    { h: '3. Como usamos seus dados', p: 'Seus dados são usados apenas para: responder suas mensagens de contato, atender seus pedidos de oração, manter você informado sobre eventos e atividades da Igreja (apenas se você consentir), e melhorar nosso site e serviços.' },
+    { h: '4. Compartilhamento de dados', p: 'Não compartilhamos seus dados pessoais com terceiros, exceto quando necessário para fornecer os serviços solicitados (ex: plataforma Church Center para gerenciamento de eventos).' },
+    { h: '5. Segurança dos dados', p: 'Protegemos seus dados com medidas de segurança técnicas e administrativas. No entanto, nenhum método de transmissão pela internet é 100% seguro. Se você tiver preocupações, entre em contato conosco.' },
+    { h: '6. Seus direitos (LGPD)', p: 'Conforme a Lei Geral de Proteção de Dados (LGPD), você tem direito a: acessar seus dados pessoais, corrigir dados incorretos, solicitar a exclusão de seus dados, e revogar seu consentimento. Para exercer esses direitos, envie um email para contato@ourfreedomchurch.com.' },
+    { h: '7. Cookies e rastreamento', p: 'Nosso site não usa cookies de rastreamento ou Google Analytics. Usamos apenas tecnologias essenciais para manter o site funcionando corretamente.' },
+    { h: '8. Mudanças nesta Política', p: 'Podemos atualizar esta Política de Privacidade periodicamente. Você será notificado de mudanças significativas pelo site.' },
+    { h: '9. Contato', p: 'Se você tiver dúvidas sobre esta Política de Privacidade, entre em contato conosco em contato@ourfreedomchurch.com ou pelo telefone (301) 555-HOPE.' },
   ],
   en: [
-    { h: '1. What data we collect', p: 'We collect only what is needed: name and email when you subscribe to the newsletter, fill a contact form, or submit a prayer request. Payments are processed by Stripe (we do not store card data).' },
-    { h: '2. How we use your data', p: 'To respond to your contact, send the newsletter (if you opt in), process donations, and communicate with you as a church. We never sell data.' },
-    { h: '3. Prayer requests', p: 'Requests marked as confidential are accessed only by pastors. Non-confidential requests may be shared with the intercession team.' },
-    { h: '4. Cookies', p: 'We use essential cookies for the site to work. We do not use third-party tracking cookies.' },
-    { h: '5. Your rights', p: 'You can request access, correction, or deletion of your data at any time by writing to the email below.' },
-    { h: '6. Contact', p: `Privacy questions: ${church.contact.email}` },
+    { h: '1. Introduction', p: 'Freedom Church respects your privacy and is committed to protecting your personal data. This Privacy Policy explains how we collect, use, store, and protect your data when you visit our website.' },
+    { h: '2. Data we collect', p: 'We collect personal data only when you voluntarily provide it, including: your name, email, and phone (contact forms), prayer requests or interest in events, and information you share with us on Church Center.' },
+    { h: '3. How we use your data', p: 'Your data is used only for: responding to your contact messages, honoring your prayer requests, keeping you informed about Church events and activities (only if you consent), and improving our website and services.' },
+    { h: '4. Data sharing', p: 'We do not share your personal data with third parties, except when necessary to provide requested services (e.g., Church Center platform for event management).' },
+    { h: '5. Data security', p: 'We protect your data with technical and administrative security measures. However, no method of transmission over the internet is 100% secure. If you have concerns, please contact us.' },
+    { h: '6. Your rights (LGPD)', p: 'Under Brazil\'s General Data Protection Law (LGPD), you have the right to: access your personal data, correct inaccurate data, request deletion of your data, and withdraw your consent. To exercise these rights, email us at contato@ourfreedomchurch.com.' },
+    { h: '7. Cookies and tracking', p: 'Our website does not use tracking cookies or Google Analytics. We only use essential technologies to keep the site running properly.' },
+    { h: '8. Changes to this Policy', p: 'We may update this Privacy Policy periodically. You will be notified of significant changes via the website.' },
+    { h: '9. Contact', p: 'If you have questions about this Privacy Policy, contact us at contato@ourfreedomchurch.com or by phone (301) 555-HOPE.' },
   ],
   es: [
-    { h: '1. Qué datos recopilamos', p: 'Solo recopilamos lo necesario: nombre y correo cuando te suscribes a la newsletter, llenas un formulario de contacto o envías una petición de oración. Los pagos los procesa Stripe (no guardamos datos de tarjeta).' },
-    { h: '2. Cómo usamos tus datos', p: 'Para responderte, enviar la newsletter (si te suscribes), procesar donaciones y comunicarnos como iglesia. Nunca vendemos datos.' },
-    { h: '3. Peticiones de oración', p: 'Las peticiones marcadas como confidenciales solo son vistas por los pastores. Las no confidenciales pueden compartirse con el equipo de intercesión.' },
-    { h: '4. Cookies', p: 'Usamos cookies esenciales para que el sitio funcione. No usamos cookies de seguimiento de terceros.' },
-    { h: '5. Tus derechos', p: 'Puedes pedir acceso, corrección o eliminación de tus datos en cualquier momento escribiendo al correo de abajo.' },
-    { h: '6. Contacto', p: `Dudas sobre privacidad: ${church.contact.email}` },
+    { h: '1. Introducción', p: 'Freedom Church respeta su privacidad y está comprometida con la protección de sus datos personales. Esta Política de Privacidad explica cómo recopilamos, utilizamos, almacenamos y protegemos sus datos cuando visita nuestro sitio web.' },
+    { h: '2. Datos que recopilamos', p: 'Recopilamos datos personales solo cuando usted nos los proporciona voluntariamente, incluyendo: su nombre, correo electrónico y teléfono (formularios de contacto), solicitudes de oración o interés en eventos, e información que comparte con nosotros en Church Center.' },
+    { h: '3. Cómo usamos sus datos', p: 'Sus datos se utilizan solo para: responder sus mensajes de contacto, honrar sus solicitudes de oración, mantenerlo informado sobre eventos de la Iglesia (solo si usted lo consiente), y mejorar nuestro sitio web y servicios.' },
+    { h: '4. Compartir datos', p: 'No compartimos sus datos personales con terceros, excepto cuando sea necesario para proporcionar servicios solicitados (por ejemplo, la plataforma Church Center para la gestión de eventos).' },
+    { h: '5. Seguridad de datos', p: 'Protegemos sus datos con medidas de seguridad técnicas y administrativas. Sin embargo, ningún método de transmisión por Internet es 100% seguro. Si tiene inquietudes, comuníquese con nosotros.' },
+    { h: '6. Sus derechos (LGPD)', p: 'Conforme a la Ley General de Protección de Datos de Brasil (LGPD), usted tiene derecho a: acceder a sus datos personales, corregir datos inexactos, solicitar la eliminación de sus datos, y revocar su consentimiento. Para ejercer estos derechos, envíenos un correo a contato@ourfreedomchurch.com.' },
+    { h: '7. Cookies y seguimiento', p: 'Nuestro sitio web no utiliza cookies de seguimiento ni Google Analytics. Solo utilizamos tecnologías esenciales para mantener el sitio funcionando correctamente.' },
+    { h: '8. Cambios en esta Política', p: 'Podemos actualizar esta Política de Privacidad periódicamente. Se le notificará de cambios significativos a través del sitio web.' },
+    { h: '9. Contacto', p: 'Si tiene preguntas sobre esta Política de Privacidad, comuníquese con nosotros en contato@ourfreedomchurch.com o llamando al (301) 555-HOPE.' },
   ],
 }[lang];
 ---
 
-<PageHero pageKey="privacy" />
+<PageHero pageKey="privacidade" />
 
-<Section bg="light" watermark="dark">
+<Section>
   <article class="max-w-3xl mx-auto">
-    <p class="text-sm text-ink-500 mb-10">{updated}</p>
+    <p class="text-sm text-cream-400 mb-10">{updated}</p>
     <div class="space-y-10">
       {sections.map((s) => (
         <section>
-          <h2 class="font-display text-2xl text-ink-950 mb-3">{s.h}</h2>
-          <p class="text-ink-700 leading-relaxed">{s.p}</p>
+          <h2 class="font-display text-2xl lg:text-3xl font-bold text-cream-50 mb-4">{s.h}</h2>
+          <p class="text-cream-300 leading-relaxed text-base">{s.p}</p>
         </section>
       ))}
     </div>

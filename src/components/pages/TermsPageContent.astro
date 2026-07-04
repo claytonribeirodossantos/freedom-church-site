@@ -7,52 +7,58 @@ import { church } from '../../data/church';
 const lang = getLangFromUrl(Astro.url);
 
 const updated = {
-  pt: 'Última atualização: 24 de maio de 2026',
-  en: 'Last updated: May 24, 2026',
-  es: 'Última actualización: 24 de mayo de 2026',
+  pt: 'Última atualização: 4 de julho de 2026',
+  en: 'Last updated: July 4, 2026',
+  es: 'Última actualización: 4 de julio de 2026',
 }[lang];
 
 const sections = {
   pt: [
-    { h: '1. Sobre este site', p: 'Este site é mantido pela Freedom Church (Kensington, MD) para informar a comunidade, divulgar cultos e eventos, receber pedidos de oração, ofertas e contatos.' },
+    { h: '1. Sobre este site', p: 'Este site é mantido pela Freedom Church (Kensington, MD, USA) para informar a comunidade, divulgar cultos e eventos, receber pedidos de oração, ofertas e contatos.' },
     { h: '2. Uso permitido', p: 'Você pode usar o site para fins pessoais, devocionais e de informação. Compartilhar links é encorajado. Copiar conteúdos extensos requer crédito à Freedom Church.' },
-    { h: '3. Doações', p: 'As doações são processadas via Stripe em USD. Doações não são reembolsáveis após processadas, exceto em caso de erro técnico comprovado. Para questões, escreva ao email abaixo.' },
-    { h: '4. Conteúdo de terceiros', p: 'Embeds de YouTube, Spotify, Google Maps e outras integrações seguem as políticas dos respectivos serviços.' },
-    { h: '5. Limitação de responsabilidade', p: 'O conteúdo é oferecido como é. Buscamos precisão, mas não garantimos que o site esteja sempre disponível ou livre de erros.' },
-    { h: '6. Mudanças', p: 'Podemos atualizar estes termos. Mudanças relevantes serão comunicadas no site.' },
-    { h: '7. Contato', p: `Dúvidas: ${church.contact.email}` },
+    { h: '3. Consentimento com Privacidade', p: 'Ao preencher qualquer formulário (contato, oração, inscrição), você concorda com nossa Política de Privacidade e com o tratamento dos seus dados conforme nela descrito.' },
+    { h: '4. Doações e Pagamentos', p: 'As doações são processadas via Zelle, Venmo, Cash App ou presencialmente em USD. Não processamos pagamentos online neste site. Doações são processos de fé e generosidade.' },
+    { h: '5. Conteúdo de terceiros', p: 'Embeds de YouTube, Church Center, Google Maps e outras integrações seguem as políticas dos respectivos serviços. Não somos responsáveis por seus conteúdos ou políticas.' },
+    { h: '6. Limitação de responsabilidade', p: 'O conteúdo é oferecido como é. Buscamos precisão, mas não garantimos que o site esteja sempre disponível, seguro ou livre de erros. A Freedom Church não é responsável por danos causados pelo uso do site.' },
+    { h: '7. Propriedade intelectual', p: 'Todo o conteúdo original deste site (textos, fotos, design) é propriedade da Freedom Church. Você pode compartilhar com crédito, mas não pode comercializar ou alterar sem permissão.' },
+    { h: '8. Mudanças nestes Termos', p: 'Podemos atualizar estes termos. Mudanças relevantes serão comunicadas no site. Seu uso contínuo do site após mudanças constitui aceita dos novos termos.' },
+    { h: '9. Contato e Reclamações', p: 'Se você tiver dúvidas, reclamações ou quiser exercer direitos de dados, entre em contato conosco em contato@ourfreedomchurch.com ou (301) 555-HOPE.' },
   ],
   en: [
-    { h: '1. About this site', p: 'This site is maintained by Freedom Church (Kensington, MD) to inform the community, share services and events, and receive prayer requests, offerings, and contacts.' },
+    { h: '1. About this site', p: 'This site is maintained by Freedom Church (Kensington, MD, USA) to inform the community, share services and events, and receive prayer requests, offerings, and contacts.' },
     { h: '2. Permitted use', p: 'You may use the site for personal, devotional, and informational purposes. Sharing links is encouraged. Copying extensive content requires credit to Freedom Church.' },
-    { h: '3. Donations', p: 'Donations are processed via Stripe in USD. Donations are non-refundable once processed, except in cases of verified technical error. For questions, email below.' },
-    { h: '4. Third-party content', p: 'YouTube, Spotify, Google Maps and other embeds follow the respective service policies.' },
-    { h: '5. Liability', p: 'Content is provided as-is. We aim for accuracy but do not guarantee constant availability or error-free site.' },
-    { h: '6. Changes', p: 'We may update these terms. Relevant changes will be announced on the site.' },
-    { h: '7. Contact', p: `Questions: ${church.contact.email}` },
+    { h: '3. Privacy consent', p: 'By filling any form (contact, prayer, signup), you agree to our Privacy Policy and consent to the processing of your data as described there.' },
+    { h: '4. Donations and payments', p: 'Donations are accepted via Zelle, Venmo, Cash App, or in person in USD. We do not process online payments on this site. Donations are an act of faith and generosity.' },
+    { h: '5. Third-party content', p: 'YouTube, Church Center, Google Maps, and other embeds follow the respective service policies. Freedom Church is not responsible for their content or policies.' },
+    { h: '6. Limitation of liability', p: 'Content is provided as-is. We aim for accuracy but do not guarantee constant availability, security, or error-free site. Freedom Church is not liable for damages caused by site use.' },
+    { h: '7. Intellectual property', p: 'All original content on this site (texts, photos, design) is owned by Freedom Church. You may share with credit, but cannot commercialize or alter without permission.' },
+    { h: '8. Changes to these Terms', p: 'We may update these Terms. Relevant changes will be announced on the site. Your continued use of the site after changes constitutes acceptance of the new Terms.' },
+    { h: '9. Contact and complaints', p: 'If you have questions, complaints, or wish to exercise data rights, contact us at contato@ourfreedomchurch.com or (301) 555-HOPE.' },
   ],
   es: [
-    { h: '1. Sobre este sitio', p: 'Este sitio es mantenido por Freedom Church (Kensington, MD) para informar a la comunidad, divulgar cultos y eventos, y recibir peticiones de oración, ofrendas y contactos.' },
+    { h: '1. Sobre este sitio', p: 'Este sitio es mantenido por Freedom Church (Kensington, MD, USA) para informar a la comunidad, divulgar cultos y eventos, y recibir peticiones de oración, ofrendas y contactos.' },
     { h: '2. Uso permitido', p: 'Puedes usar el sitio para fines personales, devocionales e informativos. Compartir enlaces es alentado. Copiar contenidos extensos requiere crédito a Freedom Church.' },
-    { h: '3. Donaciones', p: 'Las donaciones se procesan vía Stripe en USD. No son reembolsables una vez procesadas, salvo error técnico comprobado. Para dudas, escribe al correo abajo.' },
-    { h: '4. Contenido de terceros', p: 'Los embeds de YouTube, Spotify, Google Maps y otras integraciones siguen las políticas de los respectivos servicios.' },
-    { h: '5. Responsabilidad', p: 'El contenido se ofrece como está. Buscamos precisión, pero no garantizamos disponibilidad constante o ausencia de errores.' },
-    { h: '6. Cambios', p: 'Podemos actualizar estos términos. Los cambios relevantes serán anunciados en el sitio.' },
-    { h: '7. Contacto', p: `Dudas: ${church.contact.email}` },
+    { h: '3. Consentimiento de privacidad', p: 'Al llenar cualquier formulario (contacto, oración, inscripción), aceptas nuestra Política de Privacidad y consenties el tratamiento de tus datos como allí se describe.' },
+    { h: '4. Donaciones y pagos', p: 'Las donaciones se aceptan vía Zelle, Venmo, Cash App, o en persona en USD. No procesamos pagos en línea en este sitio. Las donaciones son un acto de fe y generosidad.' },
+    { h: '5. Contenido de terceros', p: 'YouTube, Church Center, Google Maps, y otros embeds siguen las políticas de los respectivos servicios. Freedom Church no es responsable por su contenido o políticas.' },
+    { h: '6. Limitación de responsabilidad', p: 'El contenido se ofrece como está. Buscamos precisión, pero no garantizamos disponibilidad constante, seguridad, o ausencia de errores. Freedom Church no es responsable por daños causados por el uso del sitio.' },
+    { h: '7. Propiedad intelectual', p: 'Todo el contenido original en este sitio (textos, fotos, diseño) es propiedad de Freedom Church. Puedes compartir con crédito, pero no puedes comercializar o alterar sin permiso.' },
+    { h: '8. Cambios en estos Términos', p: 'Podemos actualizar estos Términos. Los cambios relevantes serán anunciados en el sitio. Tu uso continuo del sitio después de cambios constituye aceptación de los nuevos Términos.' },
+    { h: '9. Contacto y reclamaciones', p: 'Si tienes preguntas, reclamaciones, o deseas ejercer derechos de datos, comunícate con nosotros en contato@ourfreedomchurch.com o (301) 555-HOPE.' },
   ],
 }[lang];
 ---
 
-<PageHero pageKey="terms" />
+<PageHero pageKey="termos" />
 
-<Section bg="light" watermark="dark">
+<Section>
   <article class="max-w-3xl mx-auto">
-    <p class="text-sm text-ink-500 mb-10">{updated}</p>
+    <p class="text-sm text-cream-400 mb-10">{updated}</p>
     <div class="space-y-10">
       {sections.map((s) => (
         <section>
-          <h2 class="font-display text-2xl text-ink-950 mb-3">{s.h}</h2>
-          <p class="text-ink-700 leading-relaxed">{s.p}</p>
+          <h2 class="font-display text-2xl lg:text-3xl font-bold text-cream-50 mb-4">{s.h}</h2>
+          <p class="text-cream-300 leading-relaxed text-base">{s.p}</p>
         </section>
       ))}
     </div>
