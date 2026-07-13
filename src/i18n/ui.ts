@@ -38,7 +38,7 @@ export const ui = {
     'section.about.title': 'Uma igreja para todos',
     'section.about.cta': 'Conheça nossa história',
 
-    'footer.tagline': 'Seja livre em Cristo.',
+    'footer.tagline': 'Liberdade em Cristo.',
     'footer.rights': 'Todos os direitos reservados.',
     'footer.address': 'Endereço',
     'footer.contact': 'Contato',

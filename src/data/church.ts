@@ -2,7 +2,7 @@ export const church = {
   name: 'Freedom Church',
   brandHandle: 'OurFreedomChurch',
   tagline: {
-    pt: 'Seja livre em Cristo.',
+    pt: 'Liberdade em Cristo.',
     en: 'Find freedom in Christ.',
     es: 'Libérate en Cristo.',
   },

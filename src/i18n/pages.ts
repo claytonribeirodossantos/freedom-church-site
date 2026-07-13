@@ -40,9 +40,9 @@ export const pages: PagesMap = {
     es: { eyebrow: 'Ofrendar', title: 'Cada semilla\nhace historia.', subtitle: 'Tu generosidad sostiene el ministerio, transforma vidas y lleva el Evangelio más lejos.' },
   },
   newHere: {
-    pt: { eyebrow: 'Sou novo aqui', title: 'Bem-vindo\nem casa.', subtitle: 'Sabemos que dar o primeiro passo pode ser difícil. Aqui você é esperado com café, abraço e zero pressão.' },
-    en: { eyebrow: "I'm new here", title: 'Welcome\nhome.', subtitle: 'We know taking the first step can be hard. Here you are expected with coffee, a hug, and zero pressure.' },
-    es: { eyebrow: 'Soy nuevo aquí', title: 'Bienvenido\na casa.', subtitle: 'Sabemos que dar el primer paso puede ser difícil. Aquí te esperamos con café, abrazo y cero presión.' },
+    pt: { eyebrow: 'Sou novo aqui', title: 'Bem-vindo\nà família.', subtitle: 'Sabemos que dar o primeiro passo pode ser difícil. Aqui você é esperado com café, abraço e zero pressão.' },
+    en: { eyebrow: "I'm new here", title: 'Welcome to\nthe family.', subtitle: 'We know taking the first step can be hard. Here you are expected with coffee, a hug, and zero pressure.' },
+    es: { eyebrow: 'Soy nuevo aquí', title: 'Bienvenido\na la familia.', subtitle: 'Sabemos que dar el primer paso puede ser difícil. Aquí te esperamos con café, abrazo y cero presión.' },
   },
   prayer: {
     pt: { eyebrow: 'Pedidos de oração', title: 'Oramos\npor você.', subtitle: 'Compartilhe seu pedido. Nossa equipe de intercessão orará em sigilo e com fé.' },
