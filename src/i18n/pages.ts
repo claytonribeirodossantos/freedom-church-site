@@ -50,9 +50,9 @@ export const pages: PagesMap = {
     es: { eyebrow: 'Peticiones de oración', title: 'Oramos\npor ti.', subtitle: 'Comparte tu petición. Nuestro equipo de intercesión orará en confianza y con fe.' },
   },
   contact: {
-    pt: { eyebrow: 'Contato', title: 'Fale com\na gente.', subtitle: 'Dúvidas, parcerias, batismo, casamento, visita pastoral. Estamos aqui.' },
-    en: { eyebrow: 'Contact', title: 'Get in\ntouch.', subtitle: 'Questions, partnerships, baptism, weddings, pastoral visit. We are here.' },
-    es: { eyebrow: 'Contacto', title: 'Habla con\nnosotros.', subtitle: 'Dudas, alianzas, bautismo, bodas, visita pastoral. Estamos aquí.' },
+    pt: { eyebrow: 'Contato', title: 'Fale com\na gente.', subtitle: 'Envie sua mensagem. Vamos responder o quanto antes.' },
+    en: { eyebrow: 'Contact', title: 'Get in\ntouch.', subtitle: 'Send us a message. We\'ll get back to you soon.' },
+    es: { eyebrow: 'Contacto', title: 'Habla con\nnosotros.', subtitle: 'Envíanos tu mensaje. Te responderemos pronto.' },
   },
   leadership: {
     pt: { eyebrow: 'Liderança', title: 'Pastores.', subtitle: 'Conheça quem caminha à frente da Freedom Church servindo, ensinando e amando esta família.' },

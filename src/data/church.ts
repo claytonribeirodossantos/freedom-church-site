@@ -2,7 +2,7 @@ export const church = {
   name: 'Freedom Church',
   brandHandle: 'OurFreedomChurch',
   tagline: {
-    pt: 'Liberte-se em Cristo.',
+    pt: 'Seja livre em Cristo.',
     en: 'Find freedom in Christ.',
     es: 'Libérate en Cristo.',
   },
@@ -19,19 +19,19 @@ export const church = {
 
   services: {
     pt: [
-      { day: 'Domingo', time: '10:30 AM', name: 'Culto principal', desc: 'Café da manhã começa às 9h.' },
-      { day: 'Quinta', time: '8 PM', name: 'Overflow', desc: 'Quinzenal.' },
-      { day: 'Sexta', time: '8 PM', name: 'Hubs', desc: 'Quinzenal.' },
+      { day: 'Domingo', time: '9 AM', name: 'Café da manhã', desc: 'Comunhão antes do culto.' },
+      { day: 'Domingo', time: '10:30 AM', name: 'Culto principal', desc: 'Louvor, palavra e comunhão.' },
+      { day: 'Sexta', time: '8 PM', name: 'Hubs', desc: 'Encontros quinzenais às 8 PM.' },
     ],
     en: [
-      { day: 'Sunday', time: '10:30 AM', name: 'Main service', desc: 'Breakfast starts at 9 AM.' },
-      { day: 'Thursday', time: '8 PM', name: 'Overflow', desc: 'Every other week.' },
-      { day: 'Friday', time: '8 PM', name: 'Hubs', desc: 'Every other week.' },
+      { day: 'Sunday', time: '9 AM', name: 'Breakfast', desc: 'Fellowship before the service.' },
+      { day: 'Sunday', time: '10:30 AM', name: 'Main service', desc: 'Worship, word and fellowship.' },
+      { day: 'Friday', time: '8 PM', name: 'Hubs', desc: 'Every other week at 8 PM.' },
     ],
     es: [
-      { day: 'Domingo', time: '10:30 AM', name: 'Culto principal', desc: 'El desayuno comienza a las 9 AM.' },
-      { day: 'Jueves', time: '8 PM', name: 'Overflow', desc: 'Quincenal.' },
-      { day: 'Viernes', time: '8 PM', name: 'Hubs', desc: 'Quincenal.' },
+      { day: 'Domingo', time: '9 AM', name: 'Desayuno', desc: 'Comunión antes del culto.' },
+      { day: 'Domingo', time: '10:30 AM', name: 'Culto principal', desc: 'Alabanza, palabra y comunión.' },
+      { day: 'Viernes', time: '8 PM', name: 'Hubs', desc: 'Quincenal a las 8 PM.' },
     ],
   },
 

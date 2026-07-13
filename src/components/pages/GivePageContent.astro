@@ -12,24 +12,6 @@ const verse = {
   es: { ref: '2 Corintios 9:7', text: 'Cada uno dé como propuso en su corazón: no con tristeza, ni por necesidad, porque Dios ama al dador alegre.' },
 }[lang];
 
-const purposes = {
-  pt: [
-    { t: 'Ministério geral', d: 'Sustento da igreja, equipe, manutenção e comunidade.' },
-    { t: 'Missões', d: 'Levar o Evangelho dentro e fora da nossa cidade.' },
-    { t: 'Ação social', d: 'Cuidado prático com famílias em necessidade.' },
-  ],
-  en: [
-    { t: 'General ministry', d: 'Supporting the church, team, maintenance and community.' },
-    { t: 'Missions', d: 'Bringing the Gospel inside and beyond our city.' },
-    { t: 'Outreach', d: 'Practical care for families in need.' },
-  ],
-  es: [
-    { t: 'Ministerio general', d: 'Sostenimiento de la iglesia, equipo, mantenimiento y comunidad.' },
-    { t: 'Misiones', d: 'Llevar el Evangelio dentro y fuera de nuestra ciudad.' },
-    { t: 'Acción social', d: 'Cuidado práctico con familias en necesidad.' },
-  ],
-}[lang];
-
 const labels = {
   pt: {
     intro: 'Sua oferta sustenta vidas',
@@ -38,10 +20,7 @@ const labels = {
     copy: 'Copiar',
     copied: 'Copiado!',
     open: 'Abrir app',
-    note: 'Nenhuma taxa adicional. Todo recurso vai direto pro ministério.',
-    purpose: 'Para onde vai sua oferta',
-    questions: 'Dúvidas sobre dízimos e ofertas?',
-    talk: 'Falar com a pastoria',
+    note: 'Nenhuma taxa adicional.',
   },
   en: {
     intro: 'Your gift sustains lives',
@@ -50,10 +29,7 @@ const labels = {
     copy: 'Copy',
     copied: 'Copied!',
     open: 'Open app',
-    note: 'No extra fees. Every resource goes directly to the ministry.',
-    purpose: 'Where your gift goes',
-    questions: 'Questions about tithes and offerings?',
-    talk: 'Talk to the pastoral team',
+    note: 'No extra fees.',
   },
   es: {
     intro: 'Tu ofrenda sostiene vidas',
@@ -62,10 +38,7 @@ const labels = {
     copy: 'Copiar',
     copied: '¡Copiado!',
     open: 'Abrir app',
-    note: 'Sin tarifas adicionales. Todo recurso va directo al ministerio.',
-    purpose: 'A dónde va tu ofrenda',
-    questions: '¿Dudas sobre diezmos y ofrendas?',
-    talk: 'Hablar con el pastorado',
+    note: 'Sin tarifas adicionales.',
   },
 }[lang];
 
@@ -188,32 +161,6 @@ const methods = [
   </div>
 
   <p class="mt-10 text-center text-sm text-ink-500">{labels.note}</p>
-</Section>
-
-<Section bg="light">
-  <div class="max-w-2xl mb-12">
-    <span class="eyebrow">{labels.purpose}</span>
-    <h2 class="mt-4 text-3xl lg:text-4xl text-ink-950 leading-tight">{labels.purpose}</h2>
-  </div>
-  <div class="grid md:grid-cols-3 gap-px bg-ink-200 rounded-2xl overflow-hidden">
-    {purposes.map((p, i) => (
-      <div class="bg-ink-50 p-8 group hover:bg-ink-950 transition-colors duration-300" data-reveal data-reveal-delay={i + 1}>
-        <div class="text-gold-500 text-3xl font-display font-light mb-3">{String(i + 1).padStart(2, '0')}</div>
-        <h3 class="text-xl text-ink-950 group-hover:text-ink-50 transition-colors">{p.t}</h3>
-        <p class="mt-3 text-sm text-ink-600 group-hover:text-ink-300 leading-relaxed transition-colors">{p.d}</p>
-      </div>
-    ))}
-  </div>
-</Section>
-
-<Section bg="dark">
-  <div class="text-center max-w-2xl mx-auto">
-    <h2 class="text-3xl lg:text-4xl text-ink-50 leading-tight">{labels.questions}</h2>
-    <a href={`mailto:${church.contact.email}`} class="mt-8 inline-flex btn btn-primary">
-      {labels.talk}
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 3 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </a>
-  </div>
 </Section>
 
 <script>
